@@ -8,12 +8,14 @@ export interface WishlistFollow {
   wishlistId: any;
   notifiedOnAddItem?: boolean;
   notifiedOnRemoveItem?: boolean;
-  notifyOnCompletion?: boolean;
+  notifiedOnCompletion?: boolean;
   endpoint?: string;
   expirationTime?: string;
   keys?: NotificationKey;
   device?: any;
   dateCreated?: Date;
   dateModified?: Date;
-  wishlist?: Wishlist
+  wishlist?: Wishlist;
+  pushToken?: any;
+  schemaType?: string;
 }

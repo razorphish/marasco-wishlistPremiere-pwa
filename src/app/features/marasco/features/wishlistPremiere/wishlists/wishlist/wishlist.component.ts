@@ -153,6 +153,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       takeUntil(this.unsubscribe2$)
     );
 
+    //Set current user, if applicable
     currentState.subscribe((data) => {
       if (!!data) {
         this.user = data.user;
@@ -162,7 +163,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
     //Sets mobile
     this.isMobile = this._layoutService.store.isMobile;
 
-    //Set album
+    //Set wishlist items
     this.wishlist.items.forEach((item, index) => {
       const album = {
         thumb: item.image || 'assets/icons/icon-72x72_grey_out.png',

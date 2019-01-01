@@ -49,6 +49,7 @@ export class PwaService {
       console.log('display-mode is standalone');
     }
   }
+  
   /**
    * @description Initializes whether this device can and will accept push notifications
    * @author Antonio Marasco

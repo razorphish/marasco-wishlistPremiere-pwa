@@ -42,7 +42,12 @@ export const environment = {
   // apiUrlAuth: 'http://localhost:3002/oauth/',
   application: '5c4b1303fc13ae60b4000002',
   devicekey: 'device',
+  pushTokenKey: 'pushNotificationToken',
   pushNotificationkey: 'pushNotification',
+  notificationSchema: {
+    mobile: 'capacitor',
+    web: 'serviceWorker'
+  },
   redirectUrl: '/home/landing',
   loginUrl:  '/auth/login',
   registerUrl: '/auth/register',
