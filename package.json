@@ -100,10 +100,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/grigson/smartadmin-angular-2"
+    "url": "https://github.com/razorphish/marasco-wishlistPremiere-pwa"
   },
   "bugs": {
-    "url": "https://bitbucket.org/grigson/smartadmin-angular-2/issues"
+    "url": "https://github.com/razorphish/marasco-wishlistPremiere-pwa/issues"
   },
   "engines": {
     "node": ">= 4.2.1",
