@@ -1,0 +1,7 @@
+<div class="login-info" *ngIf="user$ | async as user">
+  <span><a (click)="toggleShortcut()">
+	   <img *ngIf="user.avatar" [src]="user.avatar" alt="me"
+          class="online"/><span >{{user.username }}</span>&nbsp;<i class="fa fa-angle-down"></i>
+    </a>
+   </span>
+</div>

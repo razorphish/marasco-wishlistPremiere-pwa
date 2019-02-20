@@ -1,0 +1,87 @@
+<aside id="left-panel">
+
+  <!-- User info -->
+  <sa-login-info></sa-login-info>
+  <!-- end user info -->
+
+  <nav>
+    <!-- NOTE: Notice the gaps after each icon usage <i></i>..
+    Please note that these links work a bit different than
+    traditional href="" links. See documentation for details.
+    -->
+
+    <ul saSmartMenu>
+      <li>
+        <a title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span
+          class="menu-item-parent">{{'Dashboard' | i18n}}</span></a>
+        <ul>
+          <li routerLinkActive="active">
+            <a routerLink="/dashboard/analytics">{{'Analytics Dashboard' | i18n}}</a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/dashboard/social">{{'Social Wall' | i18n}}</a>
+          </li>
+        </ul>
+      </li>
+
+      <!--Wishlist-->
+      <li>
+        <a href="#"><i class="fa fa-lg fa-fw fa-list"></i> <span
+          class="menu-item-parent">{{'Wishlist' | i18n}}</span></a>
+        <ul>
+          <li routerLinkActive="active">
+            <a routerLink="/wishlistPremiere/wishlists">
+              <i class="fa fa-lg fa-fw fa-gift"></i> 
+              {{'Wishlists' | i18n}}
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/wishlistPremiere/settings">
+              <i class="fa fa-lg fa-fw fa-cog"></i> 
+              {{'Settings' | i18n}}
+            </a>
+          </li>
+        </ul>
+      </li>
+      <!--Admin-->
+      <li>
+        <a href="#"><i class="fa fa-lg fa-fw fa-lock"></i> <span
+          class="menu-item-parent">{{'Admin' | i18n}}</span></a>
+        <ul>
+          <li routerLinkActive="active">
+            <a routerLink="/account/users">
+              <i class="fa fa-lg fa-fw fa-users"></i> 
+              {{'Users' | i18n}}
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/account/roles">
+              <i class="fa fa-lg fa-fw fa-legal"></i> 
+              {{'Roles' | i18n}}
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/account/tokens">
+              <i class="fa fa-lg fa-fw fa-key"></i> 
+              {{'Tokens' | i18n}}
+              <span
+              class="badge inbox-badge bg-color-redLight">unsafe</span>
+            </a>
+          </li>
+          <li routerLinkActive="active">
+            <a routerLink="/account/api-clients">
+              <i class="fa fa-lg fa-fw fa-lock"></i> 
+              {{'Api Clients' | i18n}}
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- <li aside-chat></li> -->
+    </ul>
+
+  </nav>
+
+  <sa-minify-menu></sa-minify-menu>
+
+</aside>
