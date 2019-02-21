@@ -203,3 +203,28 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [angular-cli docs](https://github.com/angular/angular-cli)
 
 ng add @angular/pwa --project app
+
+## Verion Numbers
+> Use following commands to update version number 
+```
+$ npm version patch|major|minor|premajor|preminor| -m "Version %s - add sweet badges"
+$git push && git push --tags
+$ npm publis
+
+npx cap add ios
+npx cap add android
+npx cap add electron
+
+npx cap open ios
+npx cap open android
+
+ngx cap copy - after every build
+
+npx cap update - updates plugins : run after new plugin installation
+
+npx cap sync - does both update plugins and copy
+
+npm install your-cordova-plugin
+npx cap update
+
+npm i electron-packager -g

@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port=4201",
+    "start:prod": "http-server -p 8080 -c-1 www",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -25,6 +26,7 @@
     "@angular/pwa": "^0.13.2",
     "@angular/router": "^7.2.1",
     "@angular/service-worker": "^7.2.6",
+    "@capacitor/android": "^1.0.0-beta.17",
     "@capacitor/cli": "^1.0.0-beta.17",
     "@capacitor/core": "^1.0.0-beta.17",
     "@ionic/storage": "^2.1.3",

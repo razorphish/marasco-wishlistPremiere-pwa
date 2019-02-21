@@ -1,0 +1,6 @@
+{
+  "appId": "com.wishlistPremiere.marasco",
+  "appName": "Wishlist Premiere",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}
