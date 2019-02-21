@@ -201,3 +201,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## resources
 - [angular-cli docs](https://github.com/angular/angular-cli)
+
+ng add @angular/pwa --project app

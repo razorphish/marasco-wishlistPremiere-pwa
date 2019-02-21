@@ -41,6 +41,8 @@ import { MarascoRoutingModule } from './features/marasco/marasco-routing.module'
 import { MarascoComponent } from './features/marasco/marasco.component';
 import { CoreModule } from './features/marasco/core/core.module';
 import { SharedModule } from './features/marasco/shared/shared.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,8 @@ import { SharedModule } from './features/marasco/shared/shared.module';
     MarascoRoutingModule,
     SharedModule,
     CoreModule,
-    SocialLoginModule
+    SocialLoginModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     {
