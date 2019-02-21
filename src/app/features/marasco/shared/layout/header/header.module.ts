@@ -17,7 +17,6 @@ import { UtilsModule } from "@app/features/marasco/shared/utils/utils.module";
 import { PipesModule } from "@app/features/marasco/shared/pipes/pipes.module";
 import { I18nModule } from "@app/features/marasco/shared/i18n/i18n.module";
 import { UserModule } from "@app/features/marasco/shared/user/user.module";
-import { VoiceControlModule } from "@app/features/marasco/shared/voice-control/voice-control.module";
 import { BsDropdownModule, PopoverModule } from "ngx-bootstrap";
 
 
@@ -26,8 +25,6 @@ import { BsDropdownModule, PopoverModule } from "ngx-bootstrap";
     CommonModule,
 
     FormsModule,
-
-    VoiceControlModule,
 
     BsDropdownModule,
 

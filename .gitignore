@@ -38,6 +38,7 @@ jspm_packages/
 
 # Distribution
 dist
+www
 
 # TypeScript v1 declaration files
 typings/

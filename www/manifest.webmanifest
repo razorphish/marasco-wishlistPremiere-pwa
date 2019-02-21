@@ -1,11 +1,25 @@
 {
-  "name": "app",
-  "short_name": "app",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "Wishlist Premiere",
+  "short_name": "Wishlist",
+  "apple-mobile-web-app-title": "Wishlist Premiere",
+  "apple-mobile-web-app-capable": "yes",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "orientation": "any",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
+  "dir": "ltr",
+  "lang": "en-US",
+  "screenshot": [{
+    "src": ""
+  }],
+  "related_applications": [{
+    "platform": "play",
+    "url": "",
+    "id": ""
+  }],
+  "prefer_related_applications": true,
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",

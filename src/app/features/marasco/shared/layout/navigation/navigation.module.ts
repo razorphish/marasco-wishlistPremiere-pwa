@@ -9,15 +9,13 @@ import { NavigationComponent } from "./navigation.component";
 import { SmartMenuDirective } from "./smart-menu.directive";
 import { UserModule } from "../../user/user.module";
 import { RouterModule } from "@angular/router";
-import { ChatModule } from "../../chat/chat.module";
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule,
     I18nModule,
-    UserModule,
-    ChatModule
+    UserModule
   ],
   declarations: [
     BigBreadcrumbsComponent,

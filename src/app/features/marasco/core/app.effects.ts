@@ -18,7 +18,7 @@ export class AppEffects {
     this.store.select(state => state)
       .pipe(filter(_ => environment.debug))
       .subscribe(_ => {
-        window['SMARTADMIN_APP_STATE'] = _
+        window['WISHLIST_APP_STATE'] = _
       })
   }
 

@@ -13,14 +13,14 @@ import * as auth from "./auth";
 import * as notify from "./notify";
 import * as profile from "./profile";
 import * as layout from "./layout";
-import * as calendar from "./calendar";
+import * as menu from './menu';
 
 export interface AppState {
   auth: auth.AuthState;
   notify: notify.NotifyState;
   profile: profile.ProfileState;
   layout: layout.LayoutState;
-  calendar: calendar.CalendarState;
+  menu: menu.MenuState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -28,7 +28,7 @@ export const reducers: ActionReducerMap<AppState> = {
   notify: notify.notifyReducer,
   profile: profile.profileReducer,
   layout: layout.layoutReducer,
-  calendar: calendar.calendarReducer,
+  menu: menu.menuReducer
 };
 
 // console.log all actions
@@ -58,7 +58,7 @@ export const effects = [
   notify.NotifyEffects,
   profile.ProfileEffects,
   layout.LayoutEffects,
-  calendar.CalendarEffects,
+  menu.MenuEffects
 ];
 
 export const services = [notify.NotifyService];

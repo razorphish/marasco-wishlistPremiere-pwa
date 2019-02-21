@@ -453,14 +453,14 @@ MIT
 @angular/platform-browser
 MIT
 
-ngx-bootstrap/popover
-
-ngx-bootstrap/modal
-
 @angular/router
 MIT
 
+ngx-bootstrap/popover
+
 ngx-bootstrap/tooltip
+
+ngx-bootstrap/modal
 
 ngx-bootstrap/alert
 
@@ -544,10 +544,10 @@ MIT
 @ngrx/effects
 MIT
 
-@angular/forms
+@angular/core
 MIT
 
-@angular/core
+@angular/forms
 MIT
 
 core-js

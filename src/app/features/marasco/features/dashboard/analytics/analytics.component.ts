@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
-import * as fromCalendar from "@app/features/marasco/core/store/calendar";
 
 @Component({
   selector: 'sa-analytics',
@@ -13,7 +12,7 @@ export class AnalyticsComponent implements OnInit {
   constructor(
     private store: Store<any>
   ) {
-    this.calendar$ = this.store.select(fromCalendar.getCalendarState);
+    
   }
 
   ngOnInit() {

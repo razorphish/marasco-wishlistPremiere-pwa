@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port=4201",
+    "start": "ng serve --port=4203",
     "start:prod": "http-server -p 8080 -c-1 www",
     "build": "ng build",
     "test": "ng test",

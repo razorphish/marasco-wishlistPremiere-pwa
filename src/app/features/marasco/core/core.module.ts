@@ -13,6 +13,7 @@ import { AuthGuard } from "./guards/auth.guard";
 
 import { services, AuthTokenFactory, AuthTokenService, TokenInterceptor } from '@app/features/marasco/core/services'
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
+import { MenuService, MenuFactory } from './services/menu.service';
 
 
 @NgModule({
@@ -39,6 +40,13 @@ import { throwIfAlreadyLoaded } from './guards/module-import.guard';
       provide: APP_INITIALIZER,
       useFactory: AuthTokenFactory,
       deps: [AuthTokenService],
+      multi: true
+    },
+
+    {
+      provide: APP_INITIALIZER,
+      useFactory: MenuFactory,
+      deps: [MenuService],
       multi: true
     },
 
