@@ -3,78 +3,79 @@ import * as $ from 'jquery' // required for voice command windo scroll animation
 
 export const config: any = {
 
-  defaultLocale: "us",
+  defaultLocale: 'us',
 
-  API_URL: "assets/api",
+  API_URL: 'assets/api',
 
   menu_speed: 200,
 
-  smartSkin: "smart-style-0",
+  smartSkin: 'smart-style-0',
 
+  mobileSmartSkin: 'smart-style-1',
 
   skins: [
     {
-      name: "smart-style-0",
-      logo: "assets/img/268x67.png",
-      skinBtnClass: "btn btn-block btn-xs txt-color-white margin-right-5",
+      name: 'smart-style-0',
+      logo: 'assets/img/268x67.png',
+      skinBtnClass: 'btn btn-block btn-xs txt-color-white margin-right-5',
       style: {
         backgroundColor: '#4E463F'
       },
-      label: "Smart Default"
+      label: 'Smart Default'
     },
 
     {
-      name: "smart-style-1",
-      logo: "assets/img/268x67.png",
-      skinBtnClass: "btn btn-block btn-xs txt-color-white",
+      name: 'smart-style-1',
+      logo: 'assets/img/268x67.png',
+      skinBtnClass: 'btn btn-block btn-xs txt-color-white',
       style: {
         background: '#3A4558'
       },
-      label: "Dark Elegance"
+      label: 'Dark Elegance'
     },
 
     {
-      name: "smart-style-2",
-      logo: "assets/img/268x67.png",
-      skinBtnClass: "btn btn-xs btn-block txt-color-darken margin-top-5",
+      name: 'smart-style-2',
+      logo: 'assets/img/268x67.png',
+      skinBtnClass: 'btn btn-xs btn-block txt-color-darken margin-top-5',
       style: {
         background: '#fff'
       },
-      label: "Ultra Light"
+      label: 'Ultra Light'
     },
 
     {
-      name: "smart-style-3",
-      logo: "assets/img/268x67.png",
-      skinBtnClass: "btn btn-xs btn-block txt-color-white margin-top-5",
+      name: 'smart-style-3',
+      logo: 'assets/img/268x67.png',
+      skinBtnClass: 'btn btn-xs btn-block txt-color-white margin-top-5',
       style: {
         background: '#f78c40'
       },
-      label: "Google Skin"
+      label: 'Google Skin'
     },
 
     {
-      name: "smart-style-4",
-      logo: "assets/img/268x67.png",
-      skinBtnClass: "btn btn-xs btn-block txt-color-white margin-top-5",
+      name: 'smart-style-4',
+      logo: 'assets/img/268x67.png',
+      skinBtnClass: 'btn btn-xs btn-block txt-color-white margin-top-5',
       style: {
         background: '#bbc0cf',
         border: '1px solid #59779E',
         color: '#17273D !important'
       },
-      label: "PixelSmash"
+      label: 'PixelSmash'
     },
 
     {
-      name: "smart-style-5",
-      logo: "assets/img/268x67.png",
-      skinBtnClass: "btn btn-xs btn-block txt-color-white margin-top-5",
+      name: 'smart-style-5',
+      logo: 'assets/img/268x67.png',
+      skinBtnClass: 'btn btn-xs btn-block txt-color-white margin-top-5',
       style: {
         background: 'rgba(153, 179, 204, 0.2)',
         border: '1px solid rgba(121, 161, 221, 0.8)',
         color: '#17273D !important'
       },
-      label: "Glass"
+      label: 'Glass'
     },
 
 
@@ -82,7 +83,7 @@ export const config: any = {
 
   GOOGLE_API_KEY: 'AIzaSyDd8YW8k_J-Jkti-W4QNk5dL8O_5_2QUWY',
 
-  sound_path: "assets/sound/",
+  sound_path: 'assets/sound/',
   sound_on: true,
 
 
@@ -290,10 +291,10 @@ export const config: any = {
       history.back();
     },
     'scroll up': (): any => {
-      $('html, body').animate({scrollTop: 0}, 100);
+      $('html, body').animate({ scrollTop: 0 }, 100);
     },
     'scroll down': (): any => {
-      $('html, body').animate({scrollTop: $(document).height()}, 100);
+      $('html, body').animate({ scrollTop: $(document).height() }, 100);
     },
     'hide navigation': {
       type: 'layout',

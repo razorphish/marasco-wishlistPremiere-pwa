@@ -1,0 +1,56 @@
+import { config } from '@app/features/marasco/core/smartadmin.config';
+
+export class LayoutModel {
+    smartSkin: any;
+    skin: any;
+    skins: any
+    fixedHeader: boolean;
+    fixedNavigation: boolean;
+    fixedRibbon: boolean;
+    fixedPageFooter: boolean;
+    insideContainer: boolean;
+    rtl: boolean;
+    menuOnTop: boolean;
+    colorblindFriendly: boolean;
+
+    shortcutOpen: boolean;
+    isMobile: boolean = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+    device: any;
+    mobileViewActivated: boolean;
+    menuCollapsed: boolean;
+    menuMinified: boolean;
+    hideRibbon?: boolean;
+    hideBreadcrumbs?: boolean;
+
+    constructor() {
+        this.init();
+    }
+
+    private init() {
+
+        let isMobile = this.isMobile ? 'true' : null;
+        let smartSkin = this.isMobile ? config.mobileSmartSkin : config.smartSkin;
+
+        this.smartSkin = localStorage.getItem('sm-skin') || smartSkin;
+        this.skin = config.skins.find((_skin: any) => {
+            return _skin.name === (localStorage.getItem('sm-skin') || smartSkin)
+        });
+        this.skins = config.skins;
+        this.fixedHeader = localStorage.getItem('sm-fixed-header') !== isMobile;
+        this.fixedNavigation = localStorage.getItem('sm-fixed-navigation') !== isMobile;
+        this.fixedRibbon = localStorage.getItem('sm-fixed-ribbon') === 'true';
+        this.fixedPageFooter = localStorage.getItem('sm-fixed-page-footer') !== isMobile;
+        this.insideContainer = localStorage.getItem('sm-inside-container') === 'true';
+        this.rtl = localStorage.getItem('sm-rtl') === 'true';
+        this.menuOnTop = localStorage.getItem('sm-menu-on-top') === 'true';
+        this.colorblindFriendly = localStorage.getItem('sm-colorblind-friendly') === 'true';
+        this.shortcutOpen = false;
+        this.isMobile = (/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase()));
+        this.device = '';
+        this.mobileViewActivated = false;
+        this.menuCollapsed = false;
+        this.menuMinified = false;
+        this.hideBreadcrumbs = false;
+        this.hideRibbon = false;
+    }
+}

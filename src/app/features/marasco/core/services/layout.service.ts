@@ -1,42 +1,20 @@
-import {Component, OnInit, Injectable} from '@angular/core';
-import {config} from '@app/features/marasco/core/smartadmin.config';
-import {NotificationService} from "./notification.service";
+import { Component, OnInit, Injectable } from '@angular/core';
+import { NotificationService } from "./notification.service";
 import { Subject, fromEvent } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
+import { LayoutModel } from '../models/layout.model';
 
-const store = {
-  smartSkin: localStorage.getItem('sm-skin') || config.smartSkin,
-  skin: config.skins.find((_skin) => {
-    return _skin.name == (localStorage.getItem('sm-skin') || config.smartSkin)
-  }),
-  skins: config.skins,
-  fixedHeader: localStorage.getItem('sm-fixed-header') == 'true',
-  fixedNavigation: localStorage.getItem('sm-fixed-navigation') == 'true',
-  fixedRibbon: localStorage.getItem('sm-fixed-ribbon') == 'true',
-  fixedPageFooter: localStorage.getItem('sm-fixed-page-footer') == 'true',
-  insideContainer: localStorage.getItem('sm-inside-container') == 'true',
-  rtl: localStorage.getItem('sm-rtl') == 'true',
-  menuOnTop: localStorage.getItem('sm-menu-on-top') == 'true',
-  colorblindFriendly: localStorage.getItem('sm-colorblind-friendly') == 'true',
-
-  shortcutOpen: false,
-  isMobile: 	(/iphone|ipad|ipod|android|blackberry|mini|windows\sce|palm/i.test(navigator.userAgent.toLowerCase())),
-  device: '',
-
-  mobileViewActivated: false,
-  menuCollapsed: false,
-  menuMinified: false,
-};
-
+//Default Layout (Web/UI)
+const store = new LayoutModel();
 
 @Injectable()
 export class LayoutService {
-  isActivated:boolean;
-  smartSkin:string;
+  isActivated: boolean;
+  smartSkin: string;
 
-  store:any;
+  store: LayoutModel;
 
-  private subject:Subject<any>;
+  private subject: Subject<any>;
 
   trigger() {
     this.processBody(this.store);
@@ -50,16 +28,17 @@ export class LayoutService {
   constructor(private notificationService: NotificationService) {
     this.subject = new Subject();
     this.store = store;
+    this.dumpStorage();
     this.trigger();
 
     fromEvent(window, 'resize').
       pipe(
         debounceTime(100),
-        map(()=>{
+        map(() => {
           this.trigger()
         })
       )
-    .subscribe()
+      .subscribe()
   }
 
 
@@ -73,7 +52,7 @@ export class LayoutService {
 
   onFixedHeader() {
     this.store.fixedHeader = !this.store.fixedHeader;
-    if (this.store.fixedHeader == false) {
+    if (this.store.fixedHeader === false) {
       this.store.fixedRibbon = false;
       this.store.fixedNavigation = false;
     }
@@ -146,8 +125,8 @@ export class LayoutService {
     this.trigger()
   }
 
-  onCollapseMenu(value?){
-    if(typeof value !== 'undefined'){
+  onCollapseMenu(value?) {
+    if (typeof value !== 'undefined') {
       this.store.menuCollapsed = value
     } else {
       this.store.menuCollapsed = !this.store.menuCollapsed;
@@ -157,13 +136,13 @@ export class LayoutService {
   }
 
 
-  onMinifyMenu(){
+  onMinifyMenu() {
     this.store.menuMinified = !this.store.menuMinified;
     this.trigger();
   }
 
-  onShortcutToggle(condition?: any){
-    if(condition == null){
+  onShortcutToggle(condition?: any) {
+    if (condition === null) {
       this.store.shortcutOpen = !this.store.shortcutOpen;
     } else {
       this.store.shortcutOpen = !!condition;
@@ -175,14 +154,16 @@ export class LayoutService {
 
   dumpStorage() {
     localStorage.setItem('sm-skin', this.store.smartSkin);
-    localStorage.setItem('sm-fixed-header', this.store.fixedHeader);
-    localStorage.setItem('sm-fixed-navigation', this.store.fixedNavigation);
-    localStorage.setItem('sm-fixed-ribbon', this.store.fixedRibbon);
-    localStorage.setItem('sm-fixed-page-footer', this.store.fixedPageFooter);
-    localStorage.setItem('sm-inside-container', this.store.insideContainer);
-    localStorage.setItem('sm-rtl', this.store.rtl);
-    localStorage.setItem('sm-menu-on-top', this.store.menuOnTop);
-    localStorage.setItem('sm-colorblind-friendly', this.store.colorblindFriendly);
+    localStorage.setItem('sm-fixed-header', this.store.fixedHeader.toString());
+    localStorage.setItem('sm-fixed-navigation', this.store.fixedNavigation.toString());
+    localStorage.setItem('sm-fixed-ribbon', this.store.fixedRibbon.toString());
+    localStorage.setItem('sm-fixed-page-footer', this.store.fixedPageFooter.toString());
+    localStorage.setItem('sm-inside-container', this.store.insideContainer.toString());
+    localStorage.setItem('sm-rtl', this.store.rtl.toString());
+    localStorage.setItem('sm-menu-on-top', this.store.menuOnTop.toString());
+    localStorage.setItem('sm-colorblind-friendly', this.store.colorblindFriendly.toString());
+    localStorage.setItem('sm-hide-breadcrumbs', this.store.hideBreadcrumbs.toString());
+    localStorage.setItem('sm-hide-ribbon', this.store.hideRibbon.toString());
   }
 
   factoryReset() {
@@ -191,7 +172,7 @@ export class LayoutService {
       content: "Would you like to RESET all your saved widgets and clear LocalStorage?",
       buttons: '[No][Yes]'
     }, (ButtonPressed) => {
-      if (ButtonPressed == "Yes" && localStorage) {
+      if (ButtonPressed === "Yes" && localStorage) {
         localStorage.clear();
         location.reload()
       }
@@ -201,7 +182,7 @@ export class LayoutService {
 
   processBody(state) {
     let $body = $('body');
-    $body.removeClass(state.skins.map((it)=>(it.name)).join(' '));
+    $body.removeClass(state.skins.map((it) => (it.name)).join(' '));
     $body.addClass(state.skin.name);
     $("#logo img").attr('src', state.skin.logo);
 
@@ -214,6 +195,8 @@ export class LayoutService {
     $body.toggleClass('menu-on-top', state.menuOnTop);
     $body.toggleClass('colorblind-friendly', state.colorblindFriendly);
     $body.toggleClass('shortcut-on', state.shortcutOpen);
+    $body.toggleClass('hide-breadcrumbs', state.hideBreadcrumbs);
+    $body.toggleClass('hide-ribbon', state.hideRibbon);
 
 
     state.mobileViewActivated = $(window).width() < 979;
@@ -222,7 +205,7 @@ export class LayoutService {
       $body.removeClass('minified');
     }
 
-    if(state.isMobile){
+    if (state.isMobile) {
       $body.addClass("mobile-detected");
     } else {
       //AM
@@ -242,10 +225,10 @@ export class LayoutService {
       $body.removeClass("minified");
     }
 
-    if(state.menuMinified && !state.menuOnTop && !state.mobileViewActivated){
-       $body.addClass("minified");
-       $body.removeClass("hidden-menu");
-       $body.removeClass("hidden-menu-mobile-lock");
+    if (state.menuMinified && !state.menuOnTop && !state.mobileViewActivated) {
+      $body.addClass("minified");
+      $body.removeClass("hidden-menu");
+      $body.removeClass("hidden-menu-mobile-lock");
     }
   }
 }

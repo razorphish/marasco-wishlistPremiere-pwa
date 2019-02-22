@@ -17,16 +17,13 @@ const routes: Routes = [
         redirectTo: "dashboard/analytics",
         pathMatch: "full"
       },
+      
       {
         path: "dashboard",
         loadChildren: "./features/dashboard/dashboard.module#DashboardModule",
         data: { pageTitle: "Dashboard" }
       },
-      {
-        path: "account",
-        loadChildren: "./features/account/account.module#AccountModule",
-        data: { pageTitle: "Account" }
-      },
+
       {
         path: "wishlistPremiere",
         loadChildren: "./features/wishlistPremiere/wishlistPremiere.module#WishlistPremiereModule",
