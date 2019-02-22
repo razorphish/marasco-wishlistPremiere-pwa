@@ -26,6 +26,10 @@ export class MenuService {
      */
     public menu$ = this.menuSubject.asObservable();
 
+    subscribe(next, err?, complete?) {
+        return this.menuSubject.subscribe(next, err, complete)
+    }
+
     constructor(
         private _storage: StorageService,
         private _store: Store<AuthState>
@@ -97,8 +101,17 @@ export class MenuService {
         return this.menuSubject.value;
     }
 
+    trigger() {
+       // this.processMenu(this.store);
+        // this.menuSubject.next(this.store)
+    }
+
     readPayload(menu) {
         return menu;
+    }
+
+    private processMenu(state) {
+
     }
 }
 

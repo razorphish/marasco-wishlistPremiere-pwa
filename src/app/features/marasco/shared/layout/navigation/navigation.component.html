@@ -13,7 +13,7 @@
     <ul saSmartMenu>
       <li>
         <a title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span
-          class="menu-item-parent">{{'Dashboard' | i18n}}</span></a>
+            class="menu-item-parent">{{'Dashboard' | i18n}}</span></a>
         <ul>
           <li routerLinkActive="active">
             <a routerLink="/dashboard/analytics">{{'Analytics Dashboard' | i18n}}</a>
@@ -25,7 +25,7 @@
       </li>
 
       <!--Wishlist-->
-      <li>
+      <!-- <li>
         <a href="#"><i class="fa fa-lg fa-fw fa-list"></i> <span
           class="menu-item-parent">{{'Wishlist' | i18n}}</span></a>
         <ul>
@@ -39,6 +39,24 @@
             <a routerLink="/wishlistPremiere/settings">
               <i class="fa fa-lg fa-fw fa-cog"></i> 
               {{'Settings' | i18n}}
+            </a>
+          </li>
+        </ul>
+      </li> -->
+
+      <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
+        <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}" title="{{wishlist.name}}"><i
+            class="fa fa-lg fa-fw fa-list-alt"></i><span class="menu-item-parent">{{wishlist.name}}</span></a>
+      </li>
+
+      <li>
+        <a href="#"><i class="fa fa-lg fa-fw fa-list"></i> <span
+            class="menu-item-parent">{{'Wishlist' | i18n}}</span></a>
+        <ul>
+          <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
+            <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}">
+              <i class="fa fa-lg fa-fw fa-gift"></i>
+              {{wishlist.name}}
             </a>
           </li>
         </ul>

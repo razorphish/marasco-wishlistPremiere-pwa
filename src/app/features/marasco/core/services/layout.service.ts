@@ -28,7 +28,6 @@ export class LayoutService {
   constructor(private notificationService: NotificationService) {
     this.subject = new Subject();
     this.store = store;
-    this.dumpStorage();
     this.trigger();
 
     fromEvent(window, 'resize').
@@ -154,7 +153,7 @@ export class LayoutService {
 
   dumpStorage() {
     localStorage.setItem('sm-skin', this.store.smartSkin);
-    localStorage.setItem('sm-fixed-header', this.store.fixedHeader.toString());
+    localStorage.setItem('sm-fixed-header', this.store.fixedHeader);
     localStorage.setItem('sm-fixed-navigation', this.store.fixedNavigation.toString());
     localStorage.setItem('sm-fixed-ribbon', this.store.fixedRibbon.toString());
     localStorage.setItem('sm-fixed-page-footer', this.store.fixedPageFooter.toString());
