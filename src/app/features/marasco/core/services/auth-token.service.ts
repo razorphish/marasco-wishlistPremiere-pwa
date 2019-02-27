@@ -61,8 +61,9 @@ export class AuthTokenService {
 
           this.token$
             .pipe(
-              switchMap(this.dumpToken),
-              switchMap(this.updateLoggedOnce))
+              switchMap(this.updateLoggedOnce),
+              switchMap(this.dumpToken)
+            )
             .subscribe(() => { });
 
           resolve(token);
@@ -83,6 +84,7 @@ export class AuthTokenService {
   };
 
   updateLoggedOnce = token => {
+
     return this._storage.get(USER_LOGGED_ONCE).then(loggedOnce => {
       if (token || loggedOnce) {
         this._store.dispatch(new LoggedOnce(true));

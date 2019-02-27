@@ -32,18 +32,18 @@ import { User } from '../interfaces/UserInfo.interface';
 const USER_TOKEN = 'token';
 const USER_LOGGED_ONCE = 'logged_once';
 
-const defaultUser : User = new UserInfo(); 
-  defaultUser._id = '';
-  defaultUser.username = 'Guest';
-  defaultUser.firstName= 'Guest';
-  defaultUser.lastName= '';
-  defaultUser.email= '@';
+const defaultUser: User = new UserInfo();
+defaultUser._id = '';
+defaultUser.username = 'Guest';
+defaultUser.firstName = 'Guest';
+defaultUser.lastName = '';
+defaultUser.email = '@';
 
 @Injectable()
 export class AuthService {
   private userSource: UserInfo;
 
-  private _loginSubject = new BehaviorSubject<boolean>(this.hasToken());
+  private _loginSubject = new BehaviorSubject<boolean>(false);
 
   private _authUrl: string = environment.apiUrlAuth;
   private _apiUrl: string = environment.apiUrl;
@@ -68,6 +68,12 @@ export class AuthService {
 
     this.tokenIsBeingRefreshed = new Subject<boolean>();
     this.tokenIsBeingRefreshed.next(false);
+    
+    this.hasToken()
+      .then(token => {
+        let isToken = token ? true : false;
+        this._loginSubject.next(isToken);
+      })
   }
 
   //createUserAndRetrieveDataWithEmailAndPassword(
@@ -349,8 +355,8 @@ export class AuthService {
   /**
    * True if token exists, otherwise false;
    */
-  private hasToken(): boolean {
-    return !!this._storage.get(USER_TOKEN);
+  private hasToken(): Promise<boolean> {
+    return this._storage.get(USER_TOKEN);
   }
 
   /**

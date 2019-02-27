@@ -186,6 +186,14 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
+  appUserInitRedirect$ = this.actions$.pipe(
+    ofType(actions.AuthActionTypes.AppUserInitRedirect),
+    tap((data: any) => {
+      this.router.navigate([data.payload]);
+    })
+  );
+
+  @Effect({ dispatch: false })
   authRedirect$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.AuthTokenPayload),
     filter(_ =>

@@ -14,6 +14,7 @@ import { AuthGuard } from "./guards/auth.guard";
 import { services, AuthTokenFactory, AuthTokenService, TokenInterceptor } from '@app/features/marasco/core/services'
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { MenuService, MenuFactory } from './services/menu.service';
+import { AppGuard } from './guards/app.guard';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { MenuService, MenuFactory } from './services/menu.service';
   exports: [],
   providers: [
     AuthGuard,
+    AppGuard,
 
     ...services,
     ...fromStore.services,

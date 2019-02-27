@@ -1,10 +1,10 @@
+import { RecentWishlistsComponent } from './recent-wishlists/recent-wishlists.component';
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { NgModule } from "@angular/core";
 
 
 import { CollapseMenuComponent } from "./collapse-menu/collapse-menu.component";
-import { RecentProjectsComponent } from "./recent-projects/recent-projects.component";
 import { FullScreenComponent } from "./full-screen/full-screen.component";
 
 import { ActivitiesComponent } from "./activities/activities.component";
@@ -34,7 +34,7 @@ import { BsDropdownModule, PopoverModule } from "ngx-bootstrap";
     ActivitiesMessageComponent,
     ActivitiesNotificationComponent,
     ActivitiesTaskComponent,
-    RecentProjectsComponent,
+    RecentWishlistsComponent,
     FullScreenComponent,
     CollapseMenuComponent,
     ActivitiesComponent,

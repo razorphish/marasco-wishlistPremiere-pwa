@@ -8,4 +8,5 @@ export const getAuthError = createSelector(getAuthState, (state: fromAuth.AuthSt
 export const getUser = createSelector(getAuthState, (state: fromAuth.AuthState) => state.user);
 
 export const getLoggedIn = createSelector(getAuthState, (state: fromAuth.AuthState) => !!state.user);
+export const getLoggedOnce = createSelector(getAuthState, (state: fromAuth.AuthState) => state.loggedOnce);
 

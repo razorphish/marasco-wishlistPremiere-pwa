@@ -1,30 +1,36 @@
-import { Action } from "@ngrx/store";
+import { Action } from '@ngrx/store';
 
 export enum AuthActionTypes {
-  AppInit = "[App] Init",
-  AuthInit = "[Auth] Init",
-  LoggedOnce = "[Auth] Logged Once",
-  LoginAction = "[Auth] Login Action",
-  LogoutAction = "[Auth] Logout Action",
-  LoginRedirect = "[Auth] Login Redirect Action",
-  SignupAction = "[Auth] Signup Action",
-  ForgotPasswordAction = "[Auth] Forgot Password Action",
-  ResetPasswordAction = "[Auth] Reset Password Action",
-  ResetPasswordRequestAction = "[Auth] Reset Password Request Action",
-  GoogleSign = "[Auth] Google Sign Action",
-  FacebookSign = "[Auth] Facebook Sign Action",
-  LinkedInSign = "[Auth] LinkedIn Sign Action",
-  AuthFailure = "[Auth] Failure Action",
-  AuthUserChange = "[Auth] User Change",
-  AuthTokenPayload = "[Auth] Token Payload",
-  NullToken = "[Auth] Null Token",
-  TokenRestore = "[Auth] Token Restore",
-  TokenRefresh = "[Auth] Token Refresh",
-  TokenRefreshSuccess = "[Auth] Token Refresh Success"
+  AppInit = '[App] Init',
+  AppUserInitRedirect = '[App] User Init Redirect',
+  AuthInit = '[Auth] Init',
+  LoggedOnce = '[Auth] Logged Once',
+  LoginAction = '[Auth] Login Action',
+  LogoutAction = '[Auth] Logout Action',
+  LoginRedirect = '[Auth] Login Redirect Action',
+  SignupAction = '[Auth] Signup Action',
+  ForgotPasswordAction = '[Auth] Forgot Password Action',
+  ResetPasswordAction = '[Auth] Reset Password Action',
+  ResetPasswordRequestAction = '[Auth] Reset Password Request Action',
+  GoogleSign = '[Auth] Google Sign Action',
+  FacebookSign = '[Auth] Facebook Sign Action',
+  LinkedInSign = '[Auth] LinkedIn Sign Action',
+  AuthFailure = '[Auth] Failure Action',
+  AuthUserChange = '[Auth] User Change',
+  AuthTokenPayload = '[Auth] Token Payload',
+  NullToken = '[Auth] Null Token',
+  TokenRestore = '[Auth] Token Restore',
+  TokenRefresh = '[Auth] Token Refresh',
+  TokenRefreshSuccess = '[Auth] Token Refresh Success'
 }
 
 export class AppInit implements Action {
   readonly type = AuthActionTypes.AppInit;
+}
+
+export class AppUserInitRedirect implements Action {
+  readonly type = AuthActionTypes.AppUserInitRedirect;
+  constructor(readonly payload: any) { }
 }
 
 export class AuthInit implements Action {
@@ -33,7 +39,8 @@ export class AuthInit implements Action {
 
 export class LoggedOnce implements Action {
   readonly type = AuthActionTypes.LoggedOnce;
-  constructor(readonly payload: boolean) { }
+  constructor(readonly payload: boolean) { 
+  }
 }
 
 export class LoginAction implements Action {
@@ -126,6 +133,7 @@ export class TokenRefreshSuccess implements Action {
 
 export type AuthActions =
   | AppInit
+  | AppUserInitRedirect
   | AuthInit
   | LoggedOnce
   | LoginAction

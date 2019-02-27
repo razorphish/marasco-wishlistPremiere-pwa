@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable()
-export class RecentProjectsService {
-  projects:any;
+export class RecentWishlistsService {
+  wishlists: any;
 
   constructor() {
-    this.projects = [
+    this.wishlists = [
       {
         "href": "/",
         "title": "Online e-merchant management system - attaching integration with the iOS"
@@ -22,12 +22,12 @@ export class RecentProjectsService {
 
   }
 
-  getProjects() {
-    return this.projects
+  getWishlists() {
+    return this.wishlists;
   }
 
-  clearProjects() {
-    this.projects = []
+  clearWishlists() {
+    this.wishlists = [];
   }
 
 }
