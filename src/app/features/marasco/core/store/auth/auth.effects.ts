@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
+import { from } from 'rxjs';
 import { tap, filter, map, switchMap } from 'rxjs/operators';
 import { AuthState } from './auth.reducer';
 import { Store } from '@ngrx/store';
@@ -142,7 +143,7 @@ export class AuthEffects {
             true);
           this.router.navigate([this.loginUrl, _]);
         },
-          (error: any) => { this.dispatchError(error); })
+          (error: any) => { this.dispatchError(error); });
     })
   );
 
