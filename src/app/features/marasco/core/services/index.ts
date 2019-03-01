@@ -15,6 +15,7 @@ import { LayoutService } from './layout.service';
 import { MenuService, MenuFactory } from './menu.service';
 import { MenuItemService } from './menuItem.service';
 
+import { PwaService, PwaFactory } from '@app/features/marasco/core/services/pwa.service';
 
 export const services = [
   StorageService,
@@ -29,7 +30,8 @@ export const services = [
   NotificationService,
   MenuItemService,
   BodyService,
-  LayoutService
+  LayoutService,
+  PwaService
 ];
 
 export * from './storage.service';
@@ -44,3 +46,4 @@ export * from './body.service';
 export * from './layout.service';
 export * from './menu.service';
 export * from './menuItem.service';
+export * from './pwa.service';

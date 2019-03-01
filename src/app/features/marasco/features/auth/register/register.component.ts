@@ -8,6 +8,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { environment } from '@env/environment';
+import { PwaService } from '@app/features/marasco/core/services/pwa.service';
 
 @Component({
   selector: 'app-register',
@@ -117,8 +118,13 @@ export class RegisterComponent implements OnInit {
   constructor(
     private _store: Store<any>,
     private _layoutService: LayoutService,
-    private modalService: BsModalService) {
+    private _modalService: BsModalService,
+    private _pwaService: PwaService) {
 
+  }
+
+  addToHome($event){
+    this._pwaService.prompt();
   }
 
   ngOnInit() {
@@ -151,7 +157,7 @@ export class RegisterComponent implements OnInit {
 
   openModal(event, template: TemplateRef<any>) {
     event.preventDefault();
-    this.bsModalRef = this.modalService.show(template);
+    this.bsModalRef = this._modalService.show(template);
   }
 
   onTermsAgree() {

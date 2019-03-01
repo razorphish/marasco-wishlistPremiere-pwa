@@ -15,6 +15,7 @@ import { services, AuthTokenFactory, AuthTokenService, TokenInterceptor } from '
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { MenuService, MenuFactory } from './services/menu.service';
 import { AppGuard } from './guards/app.guard';
+import { PwaFactory, PwaService } from './services/pwa.service';
 
 
 @NgModule({
@@ -49,6 +50,13 @@ import { AppGuard } from './guards/app.guard';
       provide: APP_INITIALIZER,
       useFactory: MenuFactory,
       deps: [MenuService],
+      multi: true
+    },
+
+    {
+      provide: APP_INITIALIZER,
+      useFactory: PwaFactory,
+      deps: [PwaService],
       multi: true
     },
 
