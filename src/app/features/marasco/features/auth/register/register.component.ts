@@ -1,3 +1,4 @@
+import { LayoutService } from './../../../core/services/layout.service';
 import { UserRegistration } from './../../../core/models/userRegistration.model';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 
@@ -14,17 +15,21 @@ import { environment } from '@env/environment';
 })
 export class RegisterComponent implements OnInit {
 
+  public isMobile: boolean = false;
   public termsAgreed: boolean = false;
 
-  public validationOptions: any = {
+  public validationOptions: any;
+
+  public validationOptionsDesktop: any = {
 
     //Custom method
     store: this._store,
+    isMobile: false,
     // Rules for form validation
     rules: {
-      username: {
-        required: true
-      },
+      // username: {
+      //   required: true
+      // },
       email: {
         required: true,
         email: true
@@ -51,9 +56,9 @@ export class RegisterComponent implements OnInit {
 
     // Messages for form validation
     messages: {
-      username: {
-        required: 'Please enter a username or email'
-      },
+      // username: {
+      //   required: 'Please enter a username or email'
+      // },
       email: {
         required: 'Please enter your email address',
         email: 'Please enter a VALID email address'
@@ -78,31 +83,70 @@ export class RegisterComponent implements OnInit {
     , submitHandler: this.register
   };
 
+  public validationOptionsMobile: any = {
+
+    //Custom method
+    store: this._store,
+    isMobile: true,
+    // Rules for form validation
+    rules: {
+      // username: {
+      //   required: true
+      // },
+      email: {
+        required: true,
+        email: true
+      }
+    },
+
+    // Messages for form validation
+    messages: {
+      // username: {
+      //   required: 'Please enter a username or email'
+      // },
+      email: {
+        required: 'Please enter your email address',
+        email: 'Please enter a VALID email address'
+      }
+    }
+    , submitHandler: this.register
+  };
+
   bsModalRef: BsModalRef;
 
   constructor(
     private _store: Store<any>,
+    private _layoutService: LayoutService,
     private modalService: BsModalService) {
+
   }
 
   ngOnInit() {
-
-   }
+    this.isMobile = this._layoutService.store.isMobile;
+    this.validationOptions = this.isMobile ? this.validationOptionsMobile : this.validationOptionsDesktop;
+  }
 
   register($event) {
 
-    let model: UserRegistration = {
-      email: $event.elements.email.value,
-      firstName: $event.elements.firstName.value,
-      lastName: $event.elements.lastName.value,
-      username: $event.elements.username.value,
-      password: $event.elements.password.value,
-      passwordConfirm: $event.elements.passwordConfirm.value,
-      termsAgreed: $event.elements.termsAgreed.value,
-      applicationId: environment.application
-    };
-
-    this['settings'].store.dispatch(new fromAuth.SignupAction(model));
+    if (this['settings'].isMobile) {
+      let model: UserRegistration = {
+        email: $event.elements.email.value,
+        applicationId: environment.application
+      };
+      this['settings'].store.dispatch(new fromAuth.SignupMobileAction(model));
+    } else {
+      let model: UserRegistration = {
+        email: $event.elements.email.value,
+        firstName: $event.elements.firstName.value,
+        lastName: $event.elements.lastName.value,
+        username: $event.elements.email.value,
+        password: $event.elements.password.value,
+        passwordConfirm: $event.elements.passwordConfirm.value,
+        termsAgreed: $event.elements.termsAgreed.value,
+        applicationId: environment.application
+      };
+      this['settings'].store.dispatch(new fromAuth.SignupAction(model));
+    }
   }
 
   openModal(event, template: TemplateRef<any>) {

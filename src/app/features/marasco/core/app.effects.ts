@@ -21,7 +21,5 @@ export class AppEffects {
         window['WISHLIST_APP_STATE'] = _
       })
   }
-
-
 }
 

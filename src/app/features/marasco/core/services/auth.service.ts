@@ -97,6 +97,22 @@ export class AuthService {
       );
   };
 
+  createUserWithEmail(
+    user: UserInfo
+  ): Observable<any> {
+
+    const url = this._apiUrl + 'auth/register-with-email';
+
+    return this._http
+      .post<any>(url, user)
+      .pipe(map((user: UserInfo) => {
+        // login successful if there's a jwt token in the response
+        return user;
+      }),
+        catchError(this.handleError)
+      );
+  };
+
   //confirmPasswordReset(code: string, newPassword: string): Promise<void>;
 
   isLoggedIn(): Observable<boolean> {
@@ -318,7 +334,7 @@ export class AuthService {
   private handleError(errorResponse: HttpErrorResponse) {
     let errorInfo = {
       code: '',
-      message: ''
+      errmsg: ''
     };
 
     if (errorResponse.error instanceof ErrorEvent) {
@@ -342,8 +358,8 @@ export class AuthService {
       //  `Backend returned code ${errorResponse.status}, ` +
       // `body was:`, errorResponse.error);
       if (errorResponse.error) {
-        errorInfo.code = errorResponse.error.error.code || errorResponse.error.error;
-        errorInfo.message = errorResponse.error.error_description || errorResponse.error.error.message;
+        errorInfo.code = errorResponse.error.code || errorResponse.error.error.code || errorResponse.error.error;
+        errorInfo.errmsg = errorResponse.error.errmsg || errorResponse.error.error_description || errorResponse.error.error.message;
         //console.log(errorResponse.error.error)
       }
     }

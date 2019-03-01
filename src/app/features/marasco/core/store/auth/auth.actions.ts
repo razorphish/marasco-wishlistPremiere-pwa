@@ -9,6 +9,7 @@ export enum AuthActionTypes {
   LogoutAction = '[Auth] Logout Action',
   LoginRedirect = '[Auth] Login Redirect Action',
   SignupAction = '[Auth] Signup Action',
+  SignupMobileAction = '[Auth] Signup Mobile Action',
   ForgotPasswordAction = '[Auth] Forgot Password Action',
   ResetPasswordAction = '[Auth] Reset Password Action',
   ResetPasswordRequestAction = '[Auth] Reset Password Request Action',
@@ -78,6 +79,11 @@ export class SignupAction implements Action {
   constructor(readonly payload: any) { }
 }
 
+export class SignupMobileAction implements Action {
+  readonly type = AuthActionTypes.SignupMobileAction;
+  constructor(readonly payload: any) { }
+}
+
 export class GoogleSign implements Action {
   readonly type = AuthActionTypes.GoogleSign;
 }
@@ -140,6 +146,7 @@ export type AuthActions =
   | LogoutAction
   | LoginRedirect
   | SignupAction
+  | SignupMobileAction
   | ForgotPasswordAction
   | ResetPasswordRequestAction
   | ResetPasswordAction

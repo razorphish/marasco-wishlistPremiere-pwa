@@ -41,7 +41,8 @@ import { MarascoRoutingModule } from './features/marasco/marasco-routing.module'
 import { MarascoComponent } from './features/marasco/marasco.component';
 import { CoreModule } from './features/marasco/core/core.module';
 import { SharedModule } from './features/marasco/shared/shared.module';
-import { ServiceWorkerModule } from '@angular/service-worker';
+import { ServiceWorkerModule, SwUpdate, SwPush } from '@angular/service-worker';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material';
 import { environment } from '../environments/environment';
 
 @NgModule({
@@ -53,6 +54,7 @@ import { environment } from '../environments/environment';
     BrowserAnimationsModule,
     MarascoRoutingModule,
     SharedModule,
+    MatSnackBarModule,
     CoreModule,
     SocialLoginModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
@@ -65,4 +67,37 @@ import { environment } from '../environments/environment';
   ],
   bootstrap: [MarascoComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(swUpdate: SwUpdate, swPush: SwPush, snackbar: MatSnackBar){
+    swUpdate.available.subscribe((update) => {
+
+      environment.log.auth &&
+            console.log('update available', update);
+
+      // Allow the user to refresh
+      const snack = snackbar.open('Update Available', 'Reload');
+
+      snack
+        .onAction()
+        .subscribe(() => {
+          window.location.reload();
+        });
+
+      swPush.messages.subscribe((message) => {
+        console.log(message);
+        snackbar.open(JSON.stringify(message));
+      });
+
+      environment.log.auth &&
+        console.log('public key', environment.serviceWorkerOptions.vap.publicKey);
+
+      swPush.requestSubscription({
+        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
+      })
+        .then(pushSubscription => {
+          // Save to 
+          console.log(pushSubscription.toJSON());
+        });
+    });
+  }
+}

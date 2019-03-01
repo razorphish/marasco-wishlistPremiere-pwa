@@ -24,6 +24,7 @@ export function authReducer(
   switch (action.type) {
     case AuthActionTypes.LoginAction:
     case AuthActionTypes.SignupAction:
+    case AuthActionTypes.SignupMobileAction:
     case AuthActionTypes.GoogleSign:
     case AuthActionTypes.LinkedInSign:
     case AuthActionTypes.FacebookSign:

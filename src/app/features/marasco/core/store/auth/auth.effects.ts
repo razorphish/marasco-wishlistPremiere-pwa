@@ -124,6 +124,29 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
+  signupMobile$ = this.actions$.pipe(
+    ofType(actions.AuthActionTypes.SignupMobileAction),
+    tap((data: any) => {
+
+      this.auth
+        .createUserWithEmail(data.payload)
+        .subscribe((_: any) => {
+          if (!!_.error) {
+            this.dispatchErrorNotification(_.error);
+            return;
+          }
+
+          this.notify('Registration Sucess',
+            'You have been registered in our system.  Please login at your earliest convenience',
+            null,
+            true);
+          this.router.navigate([this.loginUrl, _]);
+        },
+          (error: any) => { this.dispatchError(error); })
+    })
+  );
+
+  @Effect({ dispatch: false })
   googleSign$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.GoogleSign),
     tap((data: any) => {
@@ -239,7 +262,8 @@ export class AuthEffects {
         this.notify('Invalid username and/or password', 'Please re-enter your sign in credentials.', ' ');
         break;
       case 11000:
-        this.notify('Oops! Error occurred', !!error.errmsg ? error.errmsg : 'Please contact your administrator');
+        //this.notify('Oops! Error occurred', !!error.errmsg ? error.errmsg : 'Please contact your administrator');
+        this.notify('We found you!', 'If you do not know your password click the \'Reset Password\' link', 'Found!');
         break;
       default:
         if (!!error.message) {
