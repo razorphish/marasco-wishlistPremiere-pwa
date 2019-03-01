@@ -15,14 +15,14 @@ import { PwaService } from '@app/features/marasco/core/services/pwa.service';
   templateUrl: './register.component.html'
 })
 export class RegisterComponent implements OnInit {
-
   public isMobile: boolean = false;
   public termsAgreed: boolean = false;
+
+  public showAddToHomeScreenButton = this._pwaService.installable;
 
   public validationOptions: any;
 
   public validationOptionsDesktop: any = {
-
     //Custom method
     store: this._store,
     isMobile: false,
@@ -80,12 +80,11 @@ export class RegisterComponent implements OnInit {
       termsAgreed: {
         required: 'You must agree with Terms and Conditions'
       }
-    }
-    , submitHandler: this.register
+    },
+    submitHandler: this.register
   };
 
   public validationOptionsMobile: any = {
-
     //Custom method
     store: this._store,
     isMobile: true,
@@ -109,8 +108,8 @@ export class RegisterComponent implements OnInit {
         required: 'Please enter your email address',
         email: 'Please enter a VALID email address'
       }
-    }
-    , submitHandler: this.register
+    },
+    submitHandler: this.register
   };
 
   bsModalRef: BsModalRef;
@@ -119,21 +118,23 @@ export class RegisterComponent implements OnInit {
     private _store: Store<any>,
     private _layoutService: LayoutService,
     private _modalService: BsModalService,
-    private _pwaService: PwaService) {
+    private _pwaService: PwaService
+  ) {}
 
-  }
-
-  addToHome($event){
-    this._pwaService.prompt();
+  addToHome($event) {
+    if (this._pwaService.installable) {
+      this._pwaService.prompt();
+    }
   }
 
   ngOnInit() {
     this.isMobile = this._layoutService.store.isMobile;
-    this.validationOptions = this.isMobile ? this.validationOptionsMobile : this.validationOptionsDesktop;
+    this.validationOptions = this.isMobile
+      ? this.validationOptionsMobile
+      : this.validationOptionsDesktop;
   }
 
   register($event) {
-
     if (this['settings'].isMobile) {
       let model: UserRegistration = {
         email: $event.elements.email.value,

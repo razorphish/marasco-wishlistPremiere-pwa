@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class PwaService {
-  showBtn = false;
+  installable: boolean = false;
   deferredPrompt: any;
 
   constructor(
@@ -28,6 +28,7 @@ export class PwaService {
 
       // Update UI by showing a button to notify the user they can add to home screen
       // return false;
+      this.installable = true;
     });
 
     // button click event to show the promt

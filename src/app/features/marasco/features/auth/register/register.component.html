@@ -170,10 +170,11 @@
               </section>
             </fieldset>
             <footer>
-              <button type="submit" name="submit" class="btn btn-primary" *ngIf="isMobile">
+              <button type="submit" name="submit" class="btn btn-primary">
                 Register
               </button>
               <button
+                *ngIf="isMobile && showAddToHomeScreenButton"
                 type="button"
                 name="addToHome"
                 class="btn btn-primary"
