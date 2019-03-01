@@ -122,7 +122,9 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   addToHome($event) {
-    this._pwaService.prompt();
+    if (this._pwaService.installable){
+      this._pwaService.prompt();
+    }
   }
 
   ngOnInit() {
@@ -130,7 +132,7 @@ export class RegisterComponent implements OnInit {
     this.validationOptions = this.isMobile
       ? this.validationOptionsMobile
       : this.validationOptionsDesktop;
-    //this.showAddToHomeScreenButton = this._pwaService.installable;
+    this.showAddToHomeScreenButton = this._pwaService.installable;
   }
 
   register($event) {
