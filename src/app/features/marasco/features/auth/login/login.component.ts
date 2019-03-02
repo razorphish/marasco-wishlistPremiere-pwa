@@ -10,6 +10,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
+import { PwaService } from '@app/features/marasco/core/services/pwa.service';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
   //destroyed$ = new Subject<boolean>();
   //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
+  public showAddToHomeScreenButton: boolean = true;
 
   public validationOptions: any = {
 
@@ -57,7 +59,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   //   ) {
 
   constructor(
-    private _store: Store<any>
+    private _store: Store<any>,
+    private _pwaService: PwaService
   ) {
 
     //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
@@ -70,6 +73,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     //   )
     //   .subscribe();
     //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
+    this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
+      this.showAddToHomeScreenButton = !!prompt;
+    });
+  }
+
+  addToHome($event) {
+    this._pwaService.prompt();
   }
 
   ngOnInit() {

@@ -2,17 +2,20 @@ import { environment } from './../../../../../environments/environment';
 import { Injectable } from '@angular/core';
 import { SwUpdate, SwPush } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class PwaService {
   installable: boolean = false;
   deferredPrompt: any;
 
+  public onBeforeInstallPrompt = new BehaviorSubject<any>(this.deferredPrompt);
+
   constructor(
     private _swUpdate: SwUpdate,
     private _swPush: SwPush,
     private _snackbar: MatSnackBar
-  ) {}
+  ) { }
 
   load() {
     this.initServiceWorkerUpdate();
@@ -25,6 +28,9 @@ export class PwaService {
       e.preventDefault();
       // Stash the event so it can be triggered later on the button event.
       this.deferredPrompt = e;
+      // will be used to determine if prompt exists or not
+      // could use boolean here;
+      this.onBeforeInstallPrompt.next(e);
 
       // Update UI by showing a button to notify the user they can add to home screen
       // return false;
@@ -82,13 +88,14 @@ export class PwaService {
     // Wait for the user to respond to the prompt
     this.deferredPrompt.userChoice.then((choiceResult) => {
       if (choiceResult.outcome === 'accepted') {
-        environment.log && 
+        environment.log &&
           console.log('User accepted the prompt', choiceResult);
       } else {
-        environment.log && 
+        environment.log &&
           console.log('User refused the prompt', choiceResult);
       }
       this.deferredPrompt = null;
+      this.onBeforeInstallPrompt.next(null);
     });
   }
 }

@@ -173,16 +173,6 @@
               <button type="submit" name="submit" class="btn btn-primary">
                 Register
               </button>
-              <button
-                *ngIf="showAddToHomeScreenButton"
-                type="button"
-                name="addToHome"
-                class="btn btn-primary"
-                (click)="addToHome($event)"
-              >
-                <i class="fa fa-plus"></i>
-                Add to Home Screen
-              </button>
             </footer>
           </form>
         </div>
@@ -205,6 +195,16 @@
             ></a>
           </li>
         </ul>
+        <button
+          *ngIf="showAddToHomeScreenButton"
+          type="button"
+          name="addToHome"
+          class="btn btn-primary"
+          (click)="addToHome($event)"
+        >
+          <i class="fa fa-plus"></i>
+          Add to Home Screen
+        </button>
       </div>
     </div>
   </div>

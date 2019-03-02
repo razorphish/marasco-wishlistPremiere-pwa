@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
+import { PwaService } from '@app/features/marasco/core/services/pwa.service';
 
 @Component({
   selector: 'app-forgot',
@@ -9,9 +10,9 @@ import * as fromAuth from '@app/features/marasco/core/store/auth';
   styles: []
 })
 export class ForgotComponent implements OnInit {
+  public showAddToHomeScreenButton: boolean = true;
 
   public validationOptions: any = {
-
     //Custom method
     store: this._store,
     // Rules for form validation
@@ -22,7 +23,7 @@ export class ForgotComponent implements OnInit {
         // }
       },
       email: {
-        required: function (element) {
+        required: function(element) {
           return !$('#username').val();
         },
         email: true
@@ -38,17 +39,23 @@ export class ForgotComponent implements OnInit {
         required: 'Please enter your email address',
         email: 'Please enter a VALID email address'
       }
-    }
-    , submitHandler: this.forgotPasswordSubmit
+    },
+    submitHandler: this.forgotPasswordSubmit
   };
 
-  constructor(private _store: Store<any>) { }
-
-  ngOnInit() {
+  constructor(private _store: Store<any>, private _pwaService: PwaService) {
+    this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
+      this.showAddToHomeScreenButton = !!prompt;
+    });
   }
 
-  forgotPasswordSubmit($event) {
+  addToHome($event) {
+    this._pwaService.prompt();
+  }
 
+  ngOnInit() {}
+
+  forgotPasswordSubmit($event) {
     let model = {
       email: $event.elements.email.value,
       username: $event.elements.username.value

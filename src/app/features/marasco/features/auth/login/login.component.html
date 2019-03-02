@@ -1,18 +1,19 @@
 <header id="header" class="animated fadeInDown">
-
   <!-- < id="logo-group"> -->
   <div>
-    <span id="logo"> 
-        <a routerLink="/"><img src="assets/img/268x67.png" alt="Wishlist Premiere"></a>
-        </span>
+    <span id="logo">
+      <a routerLink="/"
+        ><img src="assets/img/268x67.png" alt="Wishlist Premiere"
+      /></a>
+    </span>
   </div>
 
-  <span id="extr-page-header-space"> <span class="hidden-mobile hiddex-xs">Need an account?</span> <a routerLink="/auth/register"
-      class="btn btn-primary">Create account</a> </span>
-
+  <span id="extr-page-header-space">
+    <span class="hidden-mobile hiddex-xs">Need an account?</span>
+    <a routerLink="/auth/register" class="btn btn-primary">Create account</a>
+  </span>
 </header>
 <div id="main" role="main" class="animated fadeInDown">
-
   <div id="content" class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
@@ -21,7 +22,8 @@
         <div class="hero">
           <div class="pull-left login-desc-box-l">
             <h4 class="paragraph-header">
-              Create an account to begin creating wishlists with your friends and family<br />
+              Create an account to begin creating wishlists with your friends
+              and family<br />
             </h4>
 
             <div class="login-app-icons">
@@ -29,33 +31,41 @@
               <a routerLink="/" class="btn btn-primary btn-sm">Back Home</a>
             </div>
           </div>
-          <img src="assets/img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
+          <img
+            src="assets/img/demo/iphoneview.png"
+            class="pull-right display-image"
+            alt=""
+            style="width:210px"
+          />
         </div>
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <h5 class="about-heading">Share your lists with Friends</h5>
 
             <p>
-                Wishlist Premiere allows you to create wishlists and share them with your friends!
+              Wishlist Premiere allows you to create wishlists and share them
+              with your friends!
             </p>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
             <h5 class="about-heading">Get Notifications!</h5>
 
             <p>
-              Wishlist Premiere allows you to create wishlists and share them with your friends!
-              Get notifications on your lists when someone purchases an item from one of your lists
+              Wishlist Premiere allows you to create wishlists and share them
+              with your friends! Get notifications on your lists when someone
+              purchases an item from one of your lists
             </p>
           </div>
         </div>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
         <div class="well no-padding">
-          <form 
+          <form
             id="form-login"
-            class="smart-form client-form" 
-            [saUiValidate]="validationOptions" 
-            novalidate="novalidate">
+            class="smart-form client-form"
+            [saUiValidate]="validationOptions"
+            novalidate="novalidate"
+          >
             <header>
               Sign In
             </header>
@@ -63,28 +73,52 @@
             <fieldset>
               <section>
                 <label class="label">Username/Email</label>
-                <label class="input"> <i class="icon-append fa fa-user"></i>
-                  <input type="text" name="username" id="username" autocomplete="username">
-                  <b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i>
-                    Please enter email/username</b></label>
+                <label class="input">
+                  <i class="icon-append fa fa-user"></i>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    autocomplete="username"
+                  />
+                  <b class="tooltip tooltip-top-right"
+                    ><i class="fa fa-user txt-color-teal"></i> Please enter
+                    email/username</b
+                  ></label
+                >
               </section>
 
               <section>
                 <label class="label">Password</label>
-                <label class="input"> <i class="icon-append fa fa-lock"></i>
-                  <input type="password" name="password" id="password" autocomplete="current-password">
+                <label class="input">
+                  <i class="icon-append fa fa-lock"></i>
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    autocomplete="current-password"
+                  />
                   <b class="tooltip tooltip-top-right">
-                    <i class="fa fa-lock txt-color-teal"></i> 
-                    Enter your password</b> </label>
+                    <i class="fa fa-lock txt-color-teal"></i>
+                    Enter your password</b
+                  >
+                </label>
                 <div class="note">
                   <a routerLink="/auth/forgot-password">Forgot password?</a>
                 </div>
               </section>
-              
+
               <section>
                 <label class="checkbox">
-                  <input type="checkbox" name="forceRefresh" id="forceRefresh" checked value="true">
-                  <i></i>Stay signed in</label>
+                  <input
+                    type="checkbox"
+                    name="forceRefresh"
+                    id="forceRefresh"
+                    checked
+                    value="true"
+                  />
+                  <i></i>Stay signed in</label
+                >
               </section>
             </fieldset>
             <footer>
@@ -94,18 +128,34 @@
             </footer>
           </form>
         </div>
-        <h5 class="text-center"> - Or sign in using -</h5>
+        <h5 class="text-center">- Or sign in using -</h5>
         <ul class="list-inline text-center">
           <li>
-            <a (click)="signInWithFB()" class="btn btn-primary btn-circle"><i class="fa fa-facebook"></i></a>
+            <a (click)="signInWithFB()" class="btn btn-primary btn-circle"
+              ><i class="fa fa-facebook"></i
+            ></a>
           </li>
           <li>
-            <a (click)="signInWithGoogle()" class="btn btn-info btn-circle"><i class="fa fa-google"></i></a>
+            <a (click)="signInWithGoogle()" class="btn btn-info btn-circle"
+              ><i class="fa fa-google"></i
+            ></a>
           </li>
           <li>
-            <a (click)="signInWithLinkedIn()" class="btn btn-warning btn-circle"><i class="fa fa-linkedin"></i></a>
+            <a (click)="signInWithLinkedIn()" class="btn btn-warning btn-circle"
+              ><i class="fa fa-linkedin"></i
+            ></a>
           </li>
         </ul>
+        <button
+          *ngIf="showAddToHomeScreenButton"
+          type="button"
+          name="addToHome"
+          class="btn btn-primary btn-block"
+          (click)="addToHome($event)"
+        >
+          <i class="fa fa-plus"></i>
+          Add to Home Screen
+        </button>
       </div>
     </div>
   </div>
