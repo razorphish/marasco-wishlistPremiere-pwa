@@ -14,13 +14,13 @@ const routes: Routes = [
     children: [
       {
         path: "",
-        redirectTo: "dashboard/analytics",
+        redirectTo: "home/landing",
         pathMatch: "full"
       },
       {
-        path: "dashboard", //home
-        loadChildren: "./features/dashboard/dashboard.module#DashboardModule",
-        data: { pageTitle: "Dashboard" },
+        path: "home", //home
+        loadChildren: "./features/home/home.module#HomeModule",
+        data: { pageTitle: "Wishlist Premiere" },
         canActivate: [AppGuard]
       },
 

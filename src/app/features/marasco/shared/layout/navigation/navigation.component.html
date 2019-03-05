@@ -12,17 +12,14 @@
 
     <ul saSmartMenu>
       <li>
-        <a title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span
-            class="menu-item-parent">{{'Dashboard' | i18n}}</span></a>
-        <ul>
-          <li routerLinkActive="active">
-            <a routerLink="/dashboard/analytics">{{'Analytics Dashboard' | i18n}}</a>
-          </li>
-          <li routerLinkActive="active">
-            <a routerLink="/dashboard/social">{{'Social Wall' | i18n}}</a>
-          </li>
-        </ul>
+        <a routerLink="/home/landing" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span
+            class="menu-item-parent">{{'Home' | i18n}}</span></a>
       </li>
+
+      <li>
+          <a routerLink="/home/search" title="Discover"><i class="fa fa-lg fa-fw fa-search"></i> <span
+              class="menu-item-parent">{{'Discover' | i18n}}</span></a>
+        </li>
 
       <!--Wishlist-->
       <!-- <li>
@@ -44,14 +41,14 @@
         </ul>
       </li> -->
 
-      <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
+      <!-- <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
         <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}" title="{{wishlist.name}}"><i
             class="fa fa-lg fa-fw fa-list-alt"></i><span class="menu-item-parent">{{wishlist.name}}</span></a>
-      </li>
+      </li> -->
 
       <li>
         <a href="#"><i class="fa fa-lg fa-fw fa-list"></i> <span
-            class="menu-item-parent">{{'Wishlist' | i18n}}</span></a>
+            class="menu-item-parent">{{'Wishlists' | i18n}}</span></a>
         <ul>
           <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
             <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}">

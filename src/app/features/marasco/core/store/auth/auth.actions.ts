@@ -16,6 +16,7 @@ export enum AuthActionTypes {
   GoogleSign = '[Auth] Google Sign Action',
   FacebookSign = '[Auth] Facebook Sign Action',
   LinkedInSign = '[Auth] LinkedIn Sign Action',
+  MobileSign = '[Auth] Mobile Sign Action',
   AuthFailure = '[Auth] Failure Action',
   AuthUserChange = '[Auth] User Change',
   AuthTokenPayload = '[Auth] Token Payload',
@@ -96,6 +97,11 @@ export class LinkedInSign implements Action {
   readonly type = AuthActionTypes.LinkedInSign;
 }
 
+export class MobileSign implements Action {
+  readonly type = AuthActionTypes.MobileSign;
+  constructor(readonly payload: any) { }
+}
+
 export class AuthFailure implements Action {
   readonly type = AuthActionTypes.AuthFailure;
   constructor(readonly payload: any) { }
@@ -153,6 +159,7 @@ export type AuthActions =
   | GoogleSign
   | FacebookSign
   | LinkedInSign
+  | MobileSign
   | AuthFailure
   | AuthUserChange
   | AuthTokenPayload

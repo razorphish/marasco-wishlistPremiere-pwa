@@ -2,7 +2,9 @@
   <div id="logo-group">
 
     <!-- PLACE YOUR LOGO HERE -->
-    <span id="logo"> <img src="assets/img/268x67.png" alt="Wishlist Premiere"> </span>
+    <a [routerLink]="['/']">
+      <span id="logo"> <img src="assets/img/268x67.png" alt="Wishlist Premiere"> </span>
+    </a>
     <!-- END LOGO PLACEHOLDER -->
 
     <!-- Note: The activity badge color changes when clicked and resets the number to 0
@@ -36,11 +38,11 @@
               <i class="fa fa-user"></i>
               <u>P</u>rofile</a>
           </li>
-          <li class="divider"></li>
-          <li>
+          <!--<li class="divider"></li>
+           <li>
             <a (click)="(null)" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut">
               <i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a>
-          </li>
+          </li> -->
           <li class="divider"></li>
           <li>
             <a (click)="(null)" class="padding-10 padding-top-0 padding-bottom-0" data-action="launchFullscreen">

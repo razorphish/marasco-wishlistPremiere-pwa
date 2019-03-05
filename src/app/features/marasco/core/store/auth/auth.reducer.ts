@@ -28,6 +28,7 @@ export function authReducer(
     case AuthActionTypes.GoogleSign:
     case AuthActionTypes.LinkedInSign:
     case AuthActionTypes.FacebookSign:
+    case AuthActionTypes.MobileSign:
       return {
         ...state,
         loading: true

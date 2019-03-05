@@ -102,6 +102,8 @@ export class AuthService {
   ): Observable<any> {
 
     const url = this._apiUrl + 'auth/register-with-email';
+    //Set status to pending
+    user.colo = 'mobile'
 
     return this._http
       .post<any>(url, user)
@@ -130,6 +132,7 @@ export class AuthService {
       forceRefresh: forceRefresh,
       client_id: this._clientId,
       client_secret: this._clientSecret,
+      applicationId: environment.application,
       grant_type: 'password'
     };
 

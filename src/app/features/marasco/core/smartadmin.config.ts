@@ -11,7 +11,7 @@ export const config: any = {
 
   smartSkin: 'smart-style-0',
 
-  mobileSmartSkin: 'smart-style-1',
+  mobileSmartSkin: 'smart-style-0',
 
   skins: [
     {

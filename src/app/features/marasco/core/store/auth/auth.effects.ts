@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
-import { from } from 'rxjs';
-import { tap, filter, map, switchMap } from 'rxjs/operators';
+import { tap, filter, map, switchMap, catchError } from 'rxjs/operators';
+import { empty } from 'rxjs';
 import { AuthState } from './auth.reducer';
 import { Store } from '@ngrx/store';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -13,11 +13,18 @@ import * as actions from './auth.actions';
 import { TokenResult } from '../../models/tokenResult.model';
 import { environment } from '@env/environment';
 
-import { AuthService as SocialAuthService, SocialUser } from "angularx-social-login";
-import { FacebookLoginProvider, GoogleLoginProvider, LinkedInLoginProvider } from "angularx-social-login";
+import {
+  AuthService as SocialAuthService,
+  SocialUser
+} from 'angularx-social-login';
+import {
+  FacebookLoginProvider,
+  GoogleLoginProvider,
+  LinkedInLoginProvider
+} from 'angularx-social-login';
 import { NotificationService } from '@app/features/marasco/core/services/notification.service';
 import { _daysInMonth } from 'ngx-bootstrap/chronos/utils/date-getters';
-
+import { UserInfo } from '../../models/userInfo.model';
 
 @Injectable()
 export class AuthEffects {
@@ -31,9 +38,34 @@ export class AuthEffects {
     ofType(actions.AuthActionTypes.LoginAction),
     tap((data: any) => {
       this.auth
-        .login(data.payload.username, data.payload.password, data.payload.forceRefresh)
-        .subscribe((_: TokenResult) => { _ },
-          (error: any) => { this.dispatchError(error); })
+        .login(
+          data.payload.username,
+          data.payload.password,
+          data.payload.forceRefresh
+        )
+        .subscribe(
+          (_: TokenResult) => {
+            _;
+          },
+          (error: any) => {
+            this.dispatchError(error);
+          }
+        );
+    })
+  );
+
+  @Effect({ dispatch: false })
+  mobileLogin$ = this.actions$.pipe(
+    ofType(actions.AuthActionTypes.MobileSign),
+    tap((data: any) => {
+      this.auth.loginSocial(data.payload).subscribe(
+        (_: TokenResult) => {
+          _;
+        },
+        (error: any) => {
+          this.dispatchError(error);
+        }
+      );
     })
   );
 
@@ -42,9 +74,7 @@ export class AuthEffects {
     ofType(actions.AuthActionTypes.LogoutAction),
     tap((data: any) => {
       this.router.navigate([this.loginUrl]);
-      this.auth
-        .signOut()
-        .subscribe((_: any) => _);
+      this.auth.signOut().subscribe((_: any) => _);
     })
   );
 
@@ -52,18 +82,20 @@ export class AuthEffects {
   forgotPassword$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.ForgotPasswordAction),
     tap((data: any) => {
-      this.auth
-        .forgotPassword(data.payload)
-        .subscribe((_: any) => {
-
-          this.notify('Request Forgot Password Sucess',
+      this.auth.forgotPassword(data.payload).subscribe(
+        (_: any) => {
+          this.notify(
+            'Request Forgot Password Sucess',
             'Please check your email for further instructions.',
             null,
-            true);
+            true
+          );
           this.router.navigate([this.loginUrl]);
-        }, (error) => {
+        },
+        (error) => {
           this.dispatchErrorNotification(error);
-        });
+        }
+      );
     })
   );
 
@@ -77,16 +109,20 @@ export class AuthEffects {
           data.payload.password,
           data.payload.passwordConfirm
         )
-        .subscribe((_: any) => {
-
-          this.notify('Reset Sucess',
-            'You\'re password has been changed.  Please login at your earliest convenience',
-            null,
-            true);
-          this.router.navigate([this.loginUrl, _]);
-        }, (error) => {
-          this.dispatchErrorNotification(error);
-        });
+        .subscribe(
+          (_: any) => {
+            this.notify(
+              'Reset Sucess',
+              "You're password has been changed.  Please login at your earliest convenience",
+              null,
+              true
+            );
+            this.router.navigate([this.loginUrl, _]);
+          },
+          (error) => {
+            this.dispatchErrorNotification(error);
+          }
+        );
     })
   );
 
@@ -95,68 +131,73 @@ export class AuthEffects {
     ofType(actions.AuthActionTypes.ResetPasswordRequestAction),
     tap((data: any) => {
       this.router.navigate([this.loginUrl]);
-      this.auth
-        .signOut()
-        .subscribe((_: any) => _);
+      this.auth.signOut().subscribe((_: any) => _);
     })
   );
 
-  @Effect({ dispatch: false })
+  @Effect({ dispatch: true })
   signup$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.SignupAction),
-    tap((data: any) => {
-
+    map((data: any) => data.payload),
+    switchMap((user: UserInfo) =>
       this.auth
-        .createUserWithEmailAndPassword(data.payload)
-        .subscribe((_: any) => {
-          if (!!_.error) {
-            this.dispatchErrorNotification(_.error);
-            return;
-          }
-
-          this.notify('Registration Sucess',
-            'You have been registered in our system.  Please login at your earliest convenience',
-            null,
-            true);
-          this.router.navigate([this.loginUrl, _]);
-        },
-          (error: any) => { this.dispatchError(error); })
-    })
+        .createUserWithEmailAndPassword(user)
+        .pipe(
+          tap((result: UserInfo) => {
+            this.notify(
+              'Registration Success!',
+              'You can now enjoy our Wishlist Premiere Platform.',
+              null,
+              true
+            );
+          }),
+          map((result: UserInfo) => new actions.MobileSign(result)),
+          catchError(error => {
+            this.dispatchError(error);
+            return empty();
+          })
+    ))
   );
 
-  @Effect({ dispatch: false })
+  @Effect({ dispatch: true })
   signupMobile$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.SignupMobileAction),
-    tap((data: any) => {
-
+    map((data: any) => data.payload),
+    switchMap((user: UserInfo) =>
       this.auth
-        .createUserWithEmail(data.payload)
-        .subscribe((_: any) => {
-          if (!!_.error) {
-            this.dispatchErrorNotification(_.error);
-            return;
-          }
-
-          this.notify('Registration Sucess',
-            'You have been registered in our system.  Please login at your earliest convenience',
-            null,
-            true);
-          this.router.navigate([this.loginUrl, _]);
-        },
-          (error: any) => { this.dispatchError(error); });
-    })
+        .createUserWithEmail(user)
+        .pipe(
+          tap((result: UserInfo) => {
+            this.notify(
+              'Registration Sucess!',
+              'You can now enjoy our Wishlist Premiere Platform.',
+              null,
+              true
+            );
+          }),
+          map((result: UserInfo) => new actions.MobileSign(result)),
+          catchError(error => {
+            this.dispatchError(error);
+            return empty();
+          })
+    ))
   );
 
   @Effect({ dispatch: false })
   googleSign$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.GoogleSign),
     tap((data: any) => {
-      this.authService.signIn(GoogleLoginProvider.PROVIDER_ID)
+      this.authService
+        .signIn(GoogleLoginProvider.PROVIDER_ID)
         .then((socialUser: SocialUser) => {
-          this.auth
-            .loginSocial(socialUser)
-            .subscribe((_: TokenResult) => { _ },
-              (error: any) => { this.dispatchError(error); })
+          this.auth.loginSocial(socialUser).subscribe(
+            (_: TokenResult) => {
+              _;
+            },
+            (error: any) => {
+              this.dispatchError(error);
+            }
+          );
         })
         .catch((error: any) => {
           this.dispatchError(error);
@@ -168,13 +209,17 @@ export class AuthEffects {
   facebookSign$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.FacebookSign),
     tap((data: any) => {
-
-      this.authService.signIn(FacebookLoginProvider.PROVIDER_ID)
+      this.authService
+        .signIn(FacebookLoginProvider.PROVIDER_ID)
         .then((socialUser: SocialUser) => {
-          this.auth
-            .loginSocial(socialUser)
-            .subscribe((_: TokenResult) => { _ },
-              (error: any) => { this.dispatchError(error); })
+          this.auth.loginSocial(socialUser).subscribe(
+            (_: TokenResult) => {
+              _;
+            },
+            (error: any) => {
+              this.dispatchError(error);
+            }
+          );
         })
         .catch((error: any) => {
           this.dispatchError(error);
@@ -186,13 +231,17 @@ export class AuthEffects {
   linkedInSign$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.LinkedInSign),
     tap((data: any) => {
-
-      this.authService.signIn(LinkedInLoginProvider.PROVIDER_ID)
+      this.authService
+        .signIn(LinkedInLoginProvider.PROVIDER_ID)
         .then((socialUser: SocialUser) => {
-          this.auth
-            .loginSocial(socialUser)
-            .subscribe((_: TokenResult) => { _ },
-              (error: any) => { this.dispatchError(error); })
+          this.auth.loginSocial(socialUser).subscribe(
+            (_: TokenResult) => {
+              _;
+            },
+            (error: any) => {
+              this.dispatchError(error);
+            }
+          );
         })
         .catch((error: any) => {
           this.dispatchError(error);
@@ -220,10 +269,12 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   authRedirect$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.AuthTokenPayload),
-    filter(_ =>
-      (this.router.url === this.loginUrl)
-      || (this.router.url === this.resetPasswordUrl)
-      || (this.router.url === this.registerUrl)),
+    filter(
+      (_) =>
+        this.router.url === this.loginUrl ||
+        this.router.url === this.resetPasswordUrl ||
+        this.router.url === this.registerUrl
+    ),
     tap((data: any) => {
       this.router.navigate([this.redirectUrl]);
     })
@@ -233,15 +284,14 @@ export class AuthEffects {
   authUser$ = this.actions$.pipe(
     ofType(actions.AuthActionTypes.AuthUserChange),
     // tap((data: any) => console.log('Whatup!!')),
-    // tap((data: any) => console.log(data)),
+    tap((data: any) => console.log(data)),
     switchMap((data: any) => data.payload.getIdToken()),
-    tap<TokenResult>(_ => (this.authToken.token = _)),
-    map(_ => this.authToken.readPayload(_)),
-    map(_ => new actions.AuthTokenPayload(_))
+    tap<TokenResult>((_) => (this.authToken.token = _)),
+    map((_) => this.authToken.readPayload(_)),
+    map((_) => new actions.AuthTokenPayload(_))
   );
 
-
-  dispatchError = err => {
+  dispatchError = (err) => {
     //Notify, if applicable
     this.dispatchErrorNotification(err);
     this.store.dispatch(
@@ -254,17 +304,29 @@ export class AuthEffects {
 
   dispatchErrorNotification(error: any) {
     if (!error.code) {
-      this.notify('Fatal Error occurred', 'Please contact your administrator', error);
+      this.notify(
+        'Fatal Error occurred',
+        'Please contact your administrator',
+        error
+      );
       return;
     }
 
     switch (error.code) {
       case 'invalid_grant':
-        this.notify('Invalid username and/or password', 'Please re-enter your sign in credentials.', ' ');
+        this.notify(
+          'Invalid username and/or password',
+          'Please re-enter your sign in credentials.',
+          ' '
+        );
         break;
       case 11000:
         //this.notify('Oops! Error occurred', !!error.errmsg ? error.errmsg : 'Please contact your administrator');
-        this.notify('We found you!', 'If you do not know your password click the \'Reset Password\' link', 'Found!');
+        this.notify(
+          'We found you!',
+          "If you do not know your password click the 'Reset Password' link",
+          'Found!'
+        );
         break;
       default:
         if (!!error.message) {
@@ -277,8 +339,8 @@ export class AuthEffects {
   }
 
   notify(title, content, number?, isMessage?) {
-    var color = isMessage ? '#739E73' : '#C46A69'
-    var icon = isMessage ? 'fa fa-check' : 'fa fa-warning shake animated'
+    var color = isMessage ? '#739E73' : '#C46A69';
+    var icon = isMessage ? 'fa fa-check' : 'fa fa-warning shake animated';
 
     this._notificationService.bigBox({
       title: title,
@@ -300,14 +362,13 @@ export class AuthEffects {
     private authService: SocialAuthService,
     private _notificationService: NotificationService
   ) {
-
     //Login/Logout
-    this.auth.onAuthStateChanged.subscribe(data => {
+    this.auth.onAuthStateChanged.subscribe((data) => {
       //console.log('\n\n onAuthStateChanged', data);
     });
 
     //Login, Logout, Token Refresh
-    this.auth.onIdTokenChanged.subscribe(authUser => {
+    this.auth.onIdTokenChanged.subscribe((authUser) => {
       if (authUser) {
         this.store.dispatch(new actions.AuthUserChange(authUser));
       } else {

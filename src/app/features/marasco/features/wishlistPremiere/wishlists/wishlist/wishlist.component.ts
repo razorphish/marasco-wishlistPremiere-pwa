@@ -157,11 +157,7 @@ export class WishlistComponent implements OnInit {
       }
     }
   }
-
-  public toList() {
-    this._router.navigate(['/wishlistPremiere/wishlists']);
-  }
-
+  
   /////////////////////////////////////
   // Private Metods
   /////////////////////////////////////

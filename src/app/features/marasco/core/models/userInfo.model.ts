@@ -21,6 +21,7 @@ export class UserInfo implements User {
     displayName?: string = `@${this.username}`;
     token?: TokenModel;
     status? : string;
+    colo? : string; //colocation (native, mobile, web)
     //updatedExisting?: boolean;
     // constructor(init? : {
     //     _id: string; avatar?: string,
