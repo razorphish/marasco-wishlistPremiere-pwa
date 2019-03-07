@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import * as moment from 'moment';
 
-import { Wishlist } from '../shared/Wishlist.interface';
+import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
 
 @Component({
   selector: 'marasco-wishlistPremiere-wishlist-list',

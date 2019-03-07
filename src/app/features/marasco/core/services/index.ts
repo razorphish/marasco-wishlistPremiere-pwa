@@ -1,8 +1,4 @@
 import { StorageService } from './storage.service';
-import {
-  AuthTokenFactory,
-  AuthTokenService
-} from './auth-token.service';
 import { AuthService } from './auth.service';
 import { TokenInterceptor } from './token.interceptor';
 import { AuthHttpService } from './auth-http.service';
@@ -12,10 +8,19 @@ import { NotificationService } from './notification.service';
 import { BodyService } from './body.service';
 import { LayoutService } from './layout.service';
 
+import { AuthTokenFactory, AuthTokenService } from './auth-token.service';
+
 import { MenuService, MenuFactory } from './menu.service';
 import { MenuItemService } from './menuItem.service';
 
-import { PwaService, PwaFactory } from '@app/features/marasco/core/services/pwa.service';
+import { PwaService, PwaFactory } from './pwa.service';
+
+import {
+  WishlistStateService,
+  WishlistStateServiceFactory
+} from './wishlists.state.service';
+
+import {WishlistService} from './wishlists.service';
 
 export const services = [
   StorageService,
@@ -31,7 +36,9 @@ export const services = [
   MenuItemService,
   BodyService,
   LayoutService,
-  PwaService
+  PwaService,
+  WishlistService,
+  WishlistStateService
 ];
 
 export * from './storage.service';
@@ -47,3 +54,6 @@ export * from './layout.service';
 export * from './menu.service';
 export * from './menuItem.service';
 export * from './pwa.service';
+export * from './wishlists.state.service';
+
+export * from './wishlists.service';

@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { NotificationService } from '@app/features/marasco/core/services/notification.service';
-import { AuthService } from '@app/features/marasco/core/services/auth.service';
 import { Store, select } from '@ngrx/store';
 
 declare var $: any;
@@ -18,7 +17,6 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private _router: Router,
-    private _authService: AuthService,
     private _notificationService: NotificationService,
     private _store: Store<fromAuth.AuthState>
   ) {}
@@ -29,14 +27,14 @@ export class HeaderComponent implements OnInit {
     //   this.isLoggedIn = loggedIn;
     // });
 
-    const testis = this._store.pipe(
-      select(fromAuth.getUser)
-    );
+    const currentState = this._store.pipe(select(fromAuth.getUser));
 
-    testis.subscribe(data => {
+    currentState.subscribe((data) => {
       this.isLoggedIn = !!data;
-      this.user = data.user;
-    })
+      if (!!data) {
+        this.user = data.user;
+      }
+    });
   }
 
   searchMobileActive = false;

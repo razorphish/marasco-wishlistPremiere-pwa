@@ -19,6 +19,7 @@ export const environment = {
 
   log: {
     auth: true,
+    wishlist: true,
     store: true,
   },
 

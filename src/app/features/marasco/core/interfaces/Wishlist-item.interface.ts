@@ -1,4 +1,4 @@
-import {  Image } from '../../../../core/interfaces/Image.interface';
+import {  Image } from './Image.interface';
 
 export interface WishlistItem {
     _id?: string;

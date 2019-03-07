@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {LoginInfoComponent} from "../../user/login-info/login-info.component";
+import { Store, select } from '@ngrx/store';
+import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
+import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 
 @Component({
 
@@ -9,29 +11,18 @@ import {LoginInfoComponent} from "../../user/login-info/login-info.component";
 export class NavigationComponent implements OnInit {
 
   public user:any;
+  public wishlists: Wishlist[];
 
-  public wishlists : any =  [
-    {
-      _id: '1234',
-      name: 'wishlist 1',
-      statusId: 'active'
-    },
-    {
-      _id: '4444',
-      name: 'wishlist 2',
-      statusId: 'active'
-    },
-    {
-      _id: '234234',
-      name: 'wishlist 3',
-      statusId: 'deleted'
-    }
-  ];
-
-  constructor() {
+  constructor(
+    private _store: Store<fromWishlist.WishlistState>
+  ) {
   }
 
   ngOnInit() {
+    const currentWishlistsState = this._store.pipe(select(fromWishlist.getUserWishlists));
+    currentWishlistsState.subscribe((wishlists: Wishlist[]) => {
+      this.wishlists = wishlists;
+    });
   }
 
   isInRole(role) {

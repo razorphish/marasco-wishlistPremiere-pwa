@@ -1,22 +1,36 @@
-import { NgModule, ModuleWithProviders, APP_INITIALIZER, Optional, SkipSelf } from '@angular/core';
-import { CommonModule } from "@angular/common";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {
+  NgModule,
+  ModuleWithProviders,
+  APP_INITIALIZER,
+  Optional,
+  SkipSelf
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { StoreModule } from "@ngrx/store";
-import { environment } from "../../../../environments/environment";
-import { StoreDevtoolsModule } from "@ngrx/store-devtools";
-import { IonicStorageModule } from "@ionic/storage";
-import { EffectsModule } from "@ngrx/effects";
-import { AppEffects } from "./app.effects";
-import * as fromStore from "./store";
-import { AuthGuard } from "./guards/auth.guard";
+import { StoreModule } from '@ngrx/store';
+import { environment } from '../../../../environments/environment';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { IonicStorageModule } from '@ionic/storage';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './app.effects';
+import * as fromStore from './store';
+import { AuthGuard } from './guards/auth.guard';
 
-import { services, AuthTokenFactory, AuthTokenService, TokenInterceptor } from '@app/features/marasco/core/services'
+import {
+  services,
+  AuthTokenFactory,
+  AuthTokenService,
+  TokenInterceptor,
+  WishlistStateService,
+  WishlistStateServiceFactory,
+  PwaFactory,
+  PwaService
+} from '@app/features/marasco/core/services';
+
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
 import { MenuService, MenuFactory } from './services/menu.service';
 import { AppGuard } from './guards/app.guard';
-import { PwaFactory, PwaService } from './services/pwa.service';
-
 
 @NgModule({
   imports: [
@@ -48,6 +62,13 @@ import { PwaFactory, PwaService } from './services/pwa.service';
 
     {
       provide: APP_INITIALIZER,
+      useFactory: WishlistStateServiceFactory,
+      deps: [WishlistStateService],
+      multi: true
+    },
+
+    {
+      provide: APP_INITIALIZER,
       useFactory: MenuFactory,
       deps: [MenuService],
       multi: true
@@ -71,5 +92,4 @@ export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     throwIfAlreadyLoaded(parentModule, 'CoreModule');
   }
-
 }

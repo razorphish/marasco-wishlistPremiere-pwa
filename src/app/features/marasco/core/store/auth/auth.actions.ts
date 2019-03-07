@@ -6,6 +6,11 @@ export enum AuthActionTypes {
   AuthInit = '[Auth] Init',
   LoggedOnce = '[Auth] Logged Once',
   LoginAction = '[Auth] Login Action',
+  LoadWishlists = '[Auth] Load wishlists',
+  WishlistsRestore = '[Auth] Wishlists Restore',
+  WishlistsChange = '[Auth] Wishlists Change',
+  WishlistsPayload = '[Auth] Wishlists Payload',
+  NullWishlists = '[Auth] Null Wishlists',
   LogoutAction = '[Auth] Logout Action',
   LoginRedirect = '[Auth] Login Redirect Action',
   SignupAction = '[Auth] Signup Action',
@@ -32,7 +37,7 @@ export class AppInit implements Action {
 
 export class AppUserInitRedirect implements Action {
   readonly type = AuthActionTypes.AppUserInitRedirect;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class AuthInit implements Action {
@@ -41,13 +46,21 @@ export class AuthInit implements Action {
 
 export class LoggedOnce implements Action {
   readonly type = AuthActionTypes.LoggedOnce;
-  constructor(readonly payload: boolean) { 
-  }
+  constructor(readonly payload: boolean) {}
 }
 
 export class LoginAction implements Action {
   readonly type = AuthActionTypes.LoginAction;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
+}
+
+export class LoadWishlists implements Action {
+  readonly type = AuthActionTypes.LoadWishlists;
+  constructor(readonly payload: any) {}
+}
+
+export class NullWishlists implements Action {
+  readonly type = AuthActionTypes.NullWishlists;
 }
 
 export class LogoutAction implements Action {
@@ -56,33 +69,32 @@ export class LogoutAction implements Action {
 
 export class ForgotPasswordAction implements Action {
   readonly type = AuthActionTypes.ForgotPasswordAction;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
-
 
 export class ResetPasswordAction implements Action {
   readonly type = AuthActionTypes.ResetPasswordAction;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class ResetPasswordRequestAction implements Action {
   readonly type = AuthActionTypes.ResetPasswordRequestAction;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class LoginRedirect implements Action {
   readonly type = AuthActionTypes.LoginRedirect;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class SignupAction implements Action {
   readonly type = AuthActionTypes.SignupAction;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class SignupMobileAction implements Action {
   readonly type = AuthActionTypes.SignupMobileAction;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class GoogleSign implements Action {
@@ -99,18 +111,18 @@ export class LinkedInSign implements Action {
 
 export class MobileSign implements Action {
   readonly type = AuthActionTypes.MobileSign;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class AuthFailure implements Action {
   readonly type = AuthActionTypes.AuthFailure;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class AuthUserChange implements Action {
   readonly type = AuthActionTypes.AuthUserChange;
   //constructor(readonly payload: TokenResult) {}
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
 }
 
 export class AuthTokenPayload implements Action {
@@ -140,7 +152,25 @@ export class TokenRefresh implements Action {
 
 export class TokenRefreshSuccess implements Action {
   readonly type = AuthActionTypes.TokenRefreshSuccess;
-  constructor(readonly payload: any) { }
+  constructor(readonly payload: any) {}
+}
+
+export class WishlistsRestore implements Action {
+  readonly type = AuthActionTypes.WishlistsRestore;
+  constructor(readonly payload: any) {
+  }
+}
+
+export class WishlistsChange implements Action {
+  readonly type = AuthActionTypes.WishlistsChange;
+  constructor(readonly payload: any) {}
+}
+
+export class WishlistsPayload implements Action {
+  readonly type = AuthActionTypes.WishlistsPayload;
+  constructor(readonly payload: any) {
+
+  }
 }
 
 export type AuthActions =
@@ -149,6 +179,7 @@ export type AuthActions =
   | AuthInit
   | LoggedOnce
   | LoginAction
+  | LoadWishlists
   | LogoutAction
   | LoginRedirect
   | SignupAction
@@ -164,6 +195,10 @@ export type AuthActions =
   | AuthUserChange
   | AuthTokenPayload
   | NullToken
+  | NullWishlists
   | TokenRestore
   | TokenRefresh
-  | TokenRefreshSuccess;
+  | TokenRefreshSuccess
+  | WishlistsRestore
+  | WishlistsChange
+  | WishlistsPayload;

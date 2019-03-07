@@ -4,14 +4,14 @@ import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { of } from 'rxjs';
 
 // Local
-import { WishlistsService } from '../shared/wishlists.service';
+import { WishlistService } from '../../../../core/services/wishlists.service';
 
 import { ActivityLogSubjectService } from '../../../../shared/activitylog.subject-service';
 
 @Injectable()
 export class WishlistResolve implements Resolve<any> {
   constructor(
-    private _wishlistService: WishlistsService,
+    private _wishlistService: WishlistService,
     private _activityLogService: ActivityLogSubjectService
   ) {}
 

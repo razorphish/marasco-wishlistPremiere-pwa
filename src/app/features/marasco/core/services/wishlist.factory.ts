@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Wishlist } from '../shared/Wishlist.interface';
+import { Wishlist } from '../interfaces/Wishlist.interface';
 import { UpperCasePipe } from '@angular/common';
 
 @Injectable()

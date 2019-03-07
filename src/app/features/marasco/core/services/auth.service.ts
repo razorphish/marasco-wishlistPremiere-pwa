@@ -13,7 +13,7 @@ import {
   HttpErrorResponse
 } from '@angular/common/http';
 
-import { map, catchError, share } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../../../../environments/environment';
 
@@ -23,10 +23,7 @@ import { UserInfo } from '../models/userInfo.model';
 import { TokenResult } from '../models/tokenResult.model';
 import { Response } from '@angular/http';
 import { AuthTokenService } from './auth-token.service';
-
-import { Store } from '@ngrx/store';
-
-import { AuthState } from '../store/auth/auth.reducer';
+import { WishlistService } from './wishlists.service';
 import { User } from '../interfaces/UserInfo.interface';
 
 const USER_TOKEN = 'token';
@@ -41,17 +38,16 @@ defaultUser.email = '@';
 
 @Injectable()
 export class AuthService {
-  private userSource: UserInfo;
-
-  private _loginSubject = new BehaviorSubject<boolean>(false);
+  private _userSource: UserInfo;
 
   private _authUrl: string = environment.apiUrlAuth;
   private _apiUrl: string = environment.apiUrl;
   private _clientId = environment.clientId;
   private _clientSecret = environment.clientSecret;
 
-  public onAuthStateChanged = new BehaviorSubject<UserInfo>(this.userSource);
-  public onIdTokenChanged = new BehaviorSubject<UserInfo>(this.userSource);
+  public onLoginSuccess = new BehaviorSubject<boolean>(false);
+  public onAuthStateChanged = new BehaviorSubject<UserInfo>(this._userSource);
+  public onIdTokenChanged = new BehaviorSubject<UserInfo>(this._userSource);
 
   public lastUrl: string;
   public redirectUrl: string;
@@ -61,8 +57,7 @@ export class AuthService {
   constructor(
     public authToken: AuthTokenService,
     private _http: HttpClient,
-    private _storage: StorageService,
-    private _store: Store<AuthState>) {
+    private _storage: StorageService) {
 
     this.lastUrl = '/';
 
@@ -72,7 +67,7 @@ export class AuthService {
     this.hasToken()
       .then(token => {
         let isToken = token ? true : false;
-        this._loginSubject.next(isToken);
+        this.onLoginSuccess.next(isToken);
       })
   }
 
@@ -118,7 +113,7 @@ export class AuthService {
   //confirmPasswordReset(code: string, newPassword: string): Promise<void>;
 
   isLoggedIn(): Observable<boolean> {
-    return this._loginSubject.asObservable();
+    return this.onLoginSuccess.asObservable();
   }
 
   loggedIn() {
@@ -145,14 +140,14 @@ export class AuthService {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
           //Inform everyone
-          this._loginSubject.next(true);
+          this.onLoginSuccess.next(true);
 
-          this.userSource = new UserInfo(credential.user);
-          this.userSource.token = credential;
-          this.userSource.token.forceRefresh = forceRefresh;
-          this.user$.next(this.userSource);
-          this.onAuthStateChanged.next(this.userSource);
-          this.onIdTokenChanged.next(this.userSource);
+          this._userSource = new UserInfo(credential.user);
+          this._userSource.token = credential;
+          this._userSource.token.forceRefresh = forceRefresh;
+          this.user$.next(this._userSource);
+          this.onAuthStateChanged.next(this._userSource);
+          this.onIdTokenChanged.next(this._userSource);
           return credential;
         }
       }),
@@ -179,13 +174,13 @@ export class AuthService {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
           //Inform everyone
-          this._loginSubject.next(true);
+          this.onLoginSuccess.next(true);
 
-          this.userSource = new UserInfo(credential.user);
-          this.userSource.token = credential;
-          this.user$.next(this.userSource);
-          this.onAuthStateChanged.next(this.userSource);
-          this.onIdTokenChanged.next(this.userSource);
+          this._userSource = new UserInfo(credential.user);
+          this._userSource.token = credential;
+          this.user$.next(this._userSource);
+          this.onAuthStateChanged.next(this._userSource);
+          this.onIdTokenChanged.next(this._userSource);
           return credential;
         }
       }),
@@ -211,13 +206,13 @@ export class AuthService {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
           //Inform everyone
-          this._loginSubject.next(true);
+          this.onLoginSuccess.next(true);
 
-          this.userSource = new UserInfo(credential.user);
-          this.userSource.token = credential;
-          this.user$.next(this.userSource);
-          this.onAuthStateChanged.next(this.userSource);
-          this.onIdTokenChanged.next(this.userSource);
+          this._userSource = new UserInfo(credential.user);
+          this._userSource.token = credential;
+          this.user$.next(this._userSource);
+          //this.onAuthStateChanged.next(this.userSource);
+          this.onIdTokenChanged.next(this._userSource);
           this.authToken.token = credential;
           return credential;
         }
@@ -226,7 +221,7 @@ export class AuthService {
   }
 
   refreshTokenErrorHandler(error) {
-    this._loginSubject.next(false);
+    this.onLoginSuccess.next(false);
     this.tokenIsBeingRefreshed.next(false);
     this.onIdTokenChanged.next(null);
   }
@@ -281,7 +276,7 @@ export class AuthService {
         // logout response
 
         //Notify listeners
-        this._loginSubject.next(false);
+        this.onLoginSuccess.next(false);
         this.user$.next(null);
         this.onAuthStateChanged.next(null);
         this.onIdTokenChanged.next(null);

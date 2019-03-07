@@ -15,6 +15,7 @@ export const environment = {
 
   log: {
     auth: false,
+    wishlist: false,
     store: false,
   },
 

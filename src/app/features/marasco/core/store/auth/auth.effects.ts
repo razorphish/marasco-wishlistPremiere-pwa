@@ -1,3 +1,5 @@
+import { WishlistService } from './../../services/wishlists.service';
+import { getUserWishlists } from './auth.selectors';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
@@ -5,7 +7,7 @@ import { tap, filter, map, switchMap, catchError } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { AuthState } from './auth.reducer';
 import { Store } from '@ngrx/store';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AuthTokenService } from '../../services/auth-token.service';
 import { AuthService } from '../../services/auth.service';
@@ -25,6 +27,8 @@ import {
 import { NotificationService } from '@app/features/marasco/core/services/notification.service';
 import { _daysInMonth } from 'ngx-bootstrap/chronos/utils/date-getters';
 import { UserInfo } from '../../models/userInfo.model';
+import { WishlistStateService } from '../../services/wishlists.state.service';
+import { Wishlist } from '../../interfaces/Wishlist.interface';
 
 @Injectable()
 export class AuthEffects {
@@ -34,10 +38,10 @@ export class AuthEffects {
   registerUrl: string = environment.registerUrl;
 
   @Effect({ dispatch: false })
-  login$ = this.actions$.pipe(
+  login$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.LoginAction),
     tap((data: any) => {
-      this.auth
+      this._auth
         .login(
           data.payload.username,
           data.payload.password,
@@ -55,10 +59,10 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
-  mobileLogin$ = this.actions$.pipe(
+  mobileLogin$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.MobileSign),
     tap((data: any) => {
-      this.auth.loginSocial(data.payload).subscribe(
+      this._auth.loginSocial(data.payload).subscribe(
         (_: TokenResult) => {
           _;
         },
@@ -70,19 +74,19 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
-  logout$ = this.actions$.pipe(
+  logout$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.LogoutAction),
     tap((data: any) => {
-      this.router.navigate([this.loginUrl]);
-      this.auth.signOut().subscribe((_: any) => _);
+      this._router.navigate([this.loginUrl]);
+      this._auth.signOut().subscribe((_: any) => _);
     })
   );
 
   @Effect({ dispatch: false })
-  forgotPassword$ = this.actions$.pipe(
+  forgotPassword$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.ForgotPasswordAction),
     tap((data: any) => {
-      this.auth.forgotPassword(data.payload).subscribe(
+      this._auth.forgotPassword(data.payload).subscribe(
         (_: any) => {
           this.notify(
             'Request Forgot Password Sucess',
@@ -90,7 +94,7 @@ export class AuthEffects {
             null,
             true
           );
-          this.router.navigate([this.loginUrl]);
+          this._router.navigate([this.loginUrl]);
         },
         (error) => {
           this.dispatchErrorNotification(error);
@@ -100,10 +104,10 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
-  resetPassword$ = this.actions$.pipe(
+  resetPassword$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.ResetPasswordAction),
     tap((data: any) => {
-      this.auth
+      this._auth
         .resetPassword(
           data.payload.token,
           data.payload.password,
@@ -117,7 +121,7 @@ export class AuthEffects {
               null,
               true
             );
-            this.router.navigate([this.loginUrl, _]);
+            this._router.navigate([this.loginUrl, _]);
           },
           (error) => {
             this.dispatchErrorNotification(error);
@@ -127,70 +131,68 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
-  resetPasswordRequest$ = this.actions$.pipe(
+  resetPasswordRequest$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.ResetPasswordRequestAction),
     tap((data: any) => {
-      this.router.navigate([this.loginUrl]);
-      this.auth.signOut().subscribe((_: any) => _);
+      this._router.navigate([this.loginUrl]);
+      this._auth.signOut().subscribe((_: any) => _);
     })
   );
 
   @Effect({ dispatch: true })
-  signup$ = this.actions$.pipe(
+  signup$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.SignupAction),
     map((data: any) => data.payload),
     switchMap((user: UserInfo) =>
-      this.auth
-        .createUserWithEmailAndPassword(user)
-        .pipe(
-          tap((result: UserInfo) => {
-            this.notify(
-              'Registration Success!',
-              'You can now enjoy our Wishlist Premiere Platform.',
-              null,
-              true
-            );
-          }),
-          map((result: UserInfo) => new actions.MobileSign(result)),
-          catchError(error => {
-            this.dispatchError(error);
-            return empty();
-          })
-    ))
+      this._auth.createUserWithEmailAndPassword(user).pipe(
+        tap((result: UserInfo) => {
+          this.notify(
+            'Registration Success!',
+            'You can now enjoy our Wishlist Premiere Platform.',
+            null,
+            true
+          );
+        }),
+        map((result: UserInfo) => new actions.MobileSign(result)),
+        catchError((error) => {
+          this.dispatchError(error);
+          return empty();
+        })
+      )
+    )
   );
 
   @Effect({ dispatch: true })
-  signupMobile$ = this.actions$.pipe(
+  signupMobile$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.SignupMobileAction),
     map((data: any) => data.payload),
     switchMap((user: UserInfo) =>
-      this.auth
-        .createUserWithEmail(user)
-        .pipe(
-          tap((result: UserInfo) => {
-            this.notify(
-              'Registration Sucess!',
-              'You can now enjoy our Wishlist Premiere Platform.',
-              null,
-              true
-            );
-          }),
-          map((result: UserInfo) => new actions.MobileSign(result)),
-          catchError(error => {
-            this.dispatchError(error);
-            return empty();
-          })
-    ))
+      this._auth.createUserWithEmail(user).pipe(
+        tap((result: UserInfo) => {
+          this.notify(
+            'Registration Sucess!',
+            'You can now enjoy our Wishlist Premiere Platform.',
+            null,
+            true
+          );
+        }),
+        map((result: UserInfo) => new actions.MobileSign(result)),
+        catchError((error) => {
+          this.dispatchError(error);
+          return empty();
+        })
+      )
+    )
   );
 
   @Effect({ dispatch: false })
-  googleSign$ = this.actions$.pipe(
+  googleSign$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.GoogleSign),
     tap((data: any) => {
-      this.authService
+      this._authService
         .signIn(GoogleLoginProvider.PROVIDER_ID)
         .then((socialUser: SocialUser) => {
-          this.auth.loginSocial(socialUser).subscribe(
+          this._auth.loginSocial(socialUser).subscribe(
             (_: TokenResult) => {
               _;
             },
@@ -206,13 +208,13 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
-  facebookSign$ = this.actions$.pipe(
+  facebookSign$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.FacebookSign),
     tap((data: any) => {
-      this.authService
+      this._authService
         .signIn(FacebookLoginProvider.PROVIDER_ID)
         .then((socialUser: SocialUser) => {
-          this.auth.loginSocial(socialUser).subscribe(
+          this._auth.loginSocial(socialUser).subscribe(
             (_: TokenResult) => {
               _;
             },
@@ -228,13 +230,13 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
-  linkedInSign$ = this.actions$.pipe(
+  linkedInSign$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.LinkedInSign),
     tap((data: any) => {
-      this.authService
+      this._authService
         .signIn(LinkedInLoginProvider.PROVIDER_ID)
         .then((socialUser: SocialUser) => {
-          this.auth.loginSocial(socialUser).subscribe(
+          this._auth.loginSocial(socialUser).subscribe(
             (_: TokenResult) => {
               _;
             },
@@ -250,51 +252,61 @@ export class AuthEffects {
   );
 
   @Effect({ dispatch: false })
-  loginRedirect$ = this.actions$.pipe(
+  loginRedirect$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.LoginRedirect),
     tap((data: any) => {
       this.redirectUrl = data.payload || '';
-      this.router.navigate([this.loginUrl]);
+      this._router.navigate([this.loginUrl]);
     })
   );
 
   @Effect({ dispatch: false })
-  appUserInitRedirect$ = this.actions$.pipe(
+  appUserInitRedirect$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.AppUserInitRedirect),
     tap((data: any) => {
-      this.router.navigate([data.payload]);
+      this._router.navigate([data.payload]);
     })
   );
 
   @Effect({ dispatch: false })
-  authRedirect$ = this.actions$.pipe(
+  authRedirect$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.AuthTokenPayload),
     filter(
       (_) =>
-        this.router.url === this.loginUrl ||
-        this.router.url === this.resetPasswordUrl ||
-        this.router.url === this.registerUrl
+        this._router.url === this.loginUrl ||
+        this._router.url === this.resetPasswordUrl ||
+        this._router.url === this.registerUrl
     ),
     tap((data: any) => {
-      this.router.navigate([this.redirectUrl]);
+      this._router.navigate([this.redirectUrl]);
     })
   );
 
   @Effect()
-  authUser$ = this.actions$.pipe(
+  authUser$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.AuthUserChange),
     // tap((data: any) => console.log('Whatup!!')),
-    tap((data: any) => console.log(data)),
+    // tap((data: any) => console.log(data)),
     switchMap((data: any) => data.payload.getIdToken()),
-    tap<TokenResult>((_) => (this.authToken.token = _)),
-    map((_) => this.authToken.readPayload(_)),
+    tap<TokenResult>((_) => (this._authTokenService.token = _)),
+    map((_) => this._authTokenService.readPayload(_)),
     map((_) => new actions.AuthTokenPayload(_))
+  );
+
+  @Effect()
+  authUserWishlistChange$ = this._actions$.pipe(
+    ofType(actions.AuthActionTypes.WishlistsChange),
+    // tap((data: any) => console.log('Whatup!!')),
+    // tap((data: any) => console.log(data)),
+    switchMap((data: any) => data.payload.getWishlists()),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
   );
 
   dispatchError = (err) => {
     //Notify, if applicable
     this.dispatchErrorNotification(err);
-    this.store.dispatch(
+    this._store.dispatch(
       new actions.AuthFailure({
         code: err.code,
         message: err.message
@@ -353,27 +365,36 @@ export class AuthEffects {
   }
 
   constructor(
-    private actions$: Actions,
-    private store: Store<AuthState>,
-    private authToken: AuthTokenService,
-    private auth: AuthService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private authService: SocialAuthService,
-    private _notificationService: NotificationService
+    private _actions$: Actions,
+    private _store: Store<AuthState>,
+    private _authTokenService: AuthTokenService,
+    private _auth: AuthService,
+    private _router: Router,
+    private _authService: SocialAuthService,
+    private _notificationService: NotificationService,
+    private _wishlistStateService: WishlistStateService,
+    private _wishlistService: WishlistService
+
   ) {
-    //Login/Logout
-    this.auth.onAuthStateChanged.subscribe((data) => {
-      //console.log('\n\n onAuthStateChanged', data);
-    });
+    // //Login, Logout
+    // this._auth.onAuthStateChanged.subscribe((user) => {
+    //   if (user) {
+    //     this._store.dispatch(new actions.WishlistsChange(user));
+    //   }
+    //   else {
+    //     this._wishlistStateService.wishlists = null;
+    //     this._store.dispatch(new actions.NullWishlists());
+    //   }
+    // });
 
     //Login, Logout, Token Refresh
-    this.auth.onIdTokenChanged.subscribe((authUser) => {
+    this._auth.onIdTokenChanged.subscribe((authUser) => {
       if (authUser) {
-        this.store.dispatch(new actions.AuthUserChange(authUser));
+        this._store.dispatch(new actions.AuthUserChange(authUser));
+        // Get Wishlists as well
       } else {
-        this.authToken.token = null;
-        this.store.dispatch(new actions.NullToken());
+        this._authTokenService.token = null;
+        this._store.dispatch(new actions.NullToken());
       }
     });
   }

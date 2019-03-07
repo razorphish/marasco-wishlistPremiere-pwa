@@ -1,5 +1,3 @@
-export * from './shared/';
-
 export * from './wishlists.component';
 
 export * from './wishlist-list/wishlist-list.component';

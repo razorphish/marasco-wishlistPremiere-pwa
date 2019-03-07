@@ -5,15 +5,16 @@ import {
   createSelector,
   MetaReducer,
   Action
-} from "@ngrx/store";
+} from '@ngrx/store';
 
-import { environment } from "../../../../../environments/environment";
+import { environment } from '../../../../../environments/environment';
 
-import * as auth from "./auth";
-import * as notify from "./notify";
-import * as profile from "./profile";
-import * as layout from "./layout";
+import * as auth from './auth';
+import * as notify from './notify';
+import * as profile from './profile';
+import * as layout from './layout';
 import * as menu from './menu';
+import * as wishlist from './wishlist';
 
 export interface AppState {
   auth: auth.AuthState;
@@ -21,6 +22,7 @@ export interface AppState {
   profile: profile.ProfileState;
   layout: layout.LayoutState;
   menu: menu.MenuState;
+  wishlist: wishlist.WishlistState;
 }
 
 export const reducers: ActionReducerMap<AppState> = {
@@ -28,7 +30,8 @@ export const reducers: ActionReducerMap<AppState> = {
   notify: notify.notifyReducer,
   profile: profile.profileReducer,
   layout: layout.layoutReducer,
-  menu: menu.menuReducer
+  menu: menu.menuReducer,
+  wishlist: wishlist.wishlistReducer
 };
 
 // console.log all actions
@@ -40,9 +43,8 @@ export function logger(
       // !action.silent &&
       environment.log.store
     ) {
-      console.log("\nstate", state);
-      console.log("+ action", action);
-
+      console.log('\nstate', state);
+      console.log('+ action', action);
     }
 
     return reducer(state, action);
@@ -58,7 +60,8 @@ export const effects = [
   notify.NotifyEffects,
   profile.ProfileEffects,
   layout.LayoutEffects,
-  menu.MenuEffects
+  menu.MenuEffects,
+  wishlist.WishlistEffects
 ];
 
 export const services = [notify.NotifyService];

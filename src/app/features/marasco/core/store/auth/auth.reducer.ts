@@ -1,5 +1,5 @@
-import { Action } from "@ngrx/store";
-import { AuthActions, AuthActionTypes } from "./auth.actions";
+import { Action } from '@ngrx/store';
+import { AuthActions, AuthActionTypes } from './auth.actions';
 
 export interface AuthState {
   loading: boolean;
@@ -7,6 +7,7 @@ export interface AuthState {
   user: any;
   logged: boolean;
   loggedOnce: boolean;
+  wishlists: any
 }
 
 export const authInitialState: AuthState = {
@@ -14,7 +15,8 @@ export const authInitialState: AuthState = {
   error: null,
   user: null,
   logged: false,
-  loggedOnce: false
+  loggedOnce: false,
+  wishlists: null
 };
 
 export function authReducer(
@@ -35,13 +37,15 @@ export function authReducer(
       };
 
     case AuthActionTypes.LogoutAction:
+    case AuthActionTypes.NullWishlists:
     case AuthActionTypes.NullToken:
       return {
         ...state,
         loading: false,
         error: null,
         user: null,
-        logged: false
+        logged: false,
+        wishlists: null
       };
 
     case AuthActionTypes.LoggedOnce:
@@ -68,6 +72,19 @@ export function authReducer(
         loading: false,
         user: null,
         logged: false
+      };
+
+    case AuthActionTypes.LoadWishlists:
+      return {
+        ...state,
+        wishlists: action.payload
+      };
+
+    case AuthActionTypes.WishlistsRestore:
+    case AuthActionTypes.WishlistsPayload:
+      return {
+        ...state,
+        wishlists: action.payload
       };
 
     default:

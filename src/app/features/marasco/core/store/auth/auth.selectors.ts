@@ -7,6 +7,8 @@ export const getAuthLoading = createSelector(getAuthState, (state: fromAuth.Auth
 export const getAuthError = createSelector(getAuthState, (state: fromAuth.AuthState) => state.error);
 export const getUser = createSelector(getAuthState, (state: fromAuth.AuthState) => state.user);
 
+export const getUserWishlists = createSelector(getAuthState, (state: fromAuth.AuthState) => state.wishlists);
+
 export const getLoggedIn = createSelector(getAuthState, (state: fromAuth.AuthState) => !!state.user);
 export const getLoggedOnce = createSelector(getAuthState, (state: fromAuth.AuthState) => state.loggedOnce);
 
