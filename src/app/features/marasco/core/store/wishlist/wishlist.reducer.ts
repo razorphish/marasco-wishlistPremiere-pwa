@@ -23,14 +23,17 @@ export function wishlistReducer(
     case WishlistActionTypes.WishlistsLoad:
     case WishlistActionTypes.WishlistsRestore:
     case WishlistActionTypes.WishlistsPayload:
+      return {
+        ...state,
+        wishlists: action.payload
+      };
     case WishlistActionTypes.CreateWishlistAction:
     case WishlistActionTypes.DeleteWishlistAction:
     case WishlistActionTypes.EditWishlistAction:
       return {
         ...state,
-        wishlists: action.payload
+        wishlists: Object.assign({}, action.payload)
       };
-
     default:
       return state;
   }

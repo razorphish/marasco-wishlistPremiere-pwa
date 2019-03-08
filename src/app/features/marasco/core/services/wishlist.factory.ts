@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Wishlist } from '../interfaces/Wishlist.interface';
-import { UpperCasePipe } from '@angular/common';
 
 @Injectable()
 export class WishlistFactory {
@@ -12,13 +11,14 @@ export class WishlistFactory {
 
   //////////Constructor//////////
   /**
-     * These should be singleton objects
-     */
-  constructor(
-    private _upperCasePipe: UpperCasePipe
-  ) {}
+   * These should be singleton objects
+   */
+  constructor() {}
 
-  public validate(Wishlist: Wishlist, callback?: (errors: string[]) => void): boolean {
+  public validate(
+    Wishlist: Wishlist,
+    callback?: (errors: string[]) => void
+  ): boolean {
     const errors: string[] = [];
 
     if (!Wishlist) {

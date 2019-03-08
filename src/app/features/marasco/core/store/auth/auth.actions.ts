@@ -6,11 +6,6 @@ export enum AuthActionTypes {
   AuthInit = '[Auth] Init',
   LoggedOnce = '[Auth] Logged Once',
   LoginAction = '[Auth] Login Action',
-  LoadWishlists = '[Auth] Load wishlists',
-  WishlistsRestore = '[Auth] Wishlists Restore',
-  WishlistsChange = '[Auth] Wishlists Change',
-  WishlistsPayload = '[Auth] Wishlists Payload',
-  NullWishlists = '[Auth] Null Wishlists',
   LogoutAction = '[Auth] Logout Action',
   LoginRedirect = '[Auth] Login Redirect Action',
   SignupAction = '[Auth] Signup Action',
@@ -52,15 +47,6 @@ export class LoggedOnce implements Action {
 export class LoginAction implements Action {
   readonly type = AuthActionTypes.LoginAction;
   constructor(readonly payload: any) {}
-}
-
-export class LoadWishlists implements Action {
-  readonly type = AuthActionTypes.LoadWishlists;
-  constructor(readonly payload: any) {}
-}
-
-export class NullWishlists implements Action {
-  readonly type = AuthActionTypes.NullWishlists;
 }
 
 export class LogoutAction implements Action {
@@ -155,31 +141,12 @@ export class TokenRefreshSuccess implements Action {
   constructor(readonly payload: any) {}
 }
 
-export class WishlistsRestore implements Action {
-  readonly type = AuthActionTypes.WishlistsRestore;
-  constructor(readonly payload: any) {
-  }
-}
-
-export class WishlistsChange implements Action {
-  readonly type = AuthActionTypes.WishlistsChange;
-  constructor(readonly payload: any) {}
-}
-
-export class WishlistsPayload implements Action {
-  readonly type = AuthActionTypes.WishlistsPayload;
-  constructor(readonly payload: any) {
-
-  }
-}
-
 export type AuthActions =
   | AppInit
   | AppUserInitRedirect
   | AuthInit
   | LoggedOnce
   | LoginAction
-  | LoadWishlists
   | LogoutAction
   | LoginRedirect
   | SignupAction
@@ -195,10 +162,6 @@ export type AuthActions =
   | AuthUserChange
   | AuthTokenPayload
   | NullToken
-  | NullWishlists
   | TokenRestore
   | TokenRefresh
-  | TokenRefreshSuccess
-  | WishlistsRestore
-  | WishlistsChange
-  | WishlistsPayload;
+  | TokenRefreshSuccess;

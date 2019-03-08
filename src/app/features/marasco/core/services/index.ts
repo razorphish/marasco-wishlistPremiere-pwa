@@ -20,7 +20,8 @@ import {
   WishlistStateServiceFactory
 } from './wishlists.state.service';
 
-import {WishlistService} from './wishlists.service';
+import { WishlistService } from './wishlists.service';
+import { WishlistFactory } from './wishlist.factory';
 
 export const services = [
   StorageService,
@@ -28,7 +29,6 @@ export const services = [
   AuthService,
   TokenInterceptor,
   AuthHttpService,
-
   JsonApiService,
   UserService,
   MenuService,
@@ -38,7 +38,8 @@ export const services = [
   LayoutService,
   PwaService,
   WishlistService,
-  WishlistStateService
+  WishlistStateService,
+  WishlistFactory
 ];
 
 export * from './storage.service';

@@ -2,10 +2,8 @@ import { WishlistService } from '../../services/wishlists.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
-import { tap, filter, map, switchMap, catchError } from 'rxjs/operators';
-import { empty } from 'rxjs';
+import { tap, map, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
 
 import { WishlistState } from './wishlist.reducer';
 import { AuthService } from '../../services/auth.service';
@@ -22,29 +20,33 @@ export class WishlistEffects {
   createWishlist$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistAction),
     tap((data: any) => {
-      // this._auth
-      //   .login(
-      //     data.payload.username,
-      //     data.payload.password,
-      //     data.payload.forceRefresh
-      //   )
-      //   .subscribe(
-      //     (_: TokenResult) => {
-      //       _;
-      //     },
-      //     (error: any) => {
-      //       this.dispatchError(error);
-      //     }
-      //   );
+      this._wishlistService.insert(data).subscribe(
+        (_: any) => {
+          _;
+        },
+        (error: any) => {
+          this.dispatchError(error);
+        }
+      );
     })
   );
 
   @Effect()
-  wishlistChange$ = this._actions$.pipe(
+  wishlistsChange$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.WishlistsChange),
     // tap((data: any) => console.log('Whatup!!')),
     // tap((data: any) => console.log(data)),
     switchMap((data: any) => data.payload.getWishlists()),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+
+  @Effect()
+  wishlistCreateSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.CreateWishlistSuccess),
+    // tap((data: any) => console.log('Whatup!!')),
+    // tap((data: any) => console.log(data)),
+    switchMap((data:any) => this._wishlistStateService.add(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
@@ -85,6 +87,11 @@ export class WishlistEffects {
     }
   }
 
+  dispatchError = (err) => {
+    //Notify, if applicable
+    this.dispatchErrorNotification(err);
+  };
+
   notify(title, content, number?, isMessage?) {
     var color = isMessage ? '#739E73' : '#C46A69';
     var icon = isMessage ? 'fa fa-check' : 'fa fa-warning shake animated';
@@ -103,7 +110,6 @@ export class WishlistEffects {
     private _actions$: Actions,
     private _store: Store<WishlistState>,
     private _auth: AuthService,
-    private _router: Router,
     private _notificationService: NotificationService,
     private _wishlistStateService: WishlistStateService,
     private _wishlistService: WishlistService
@@ -116,6 +122,12 @@ export class WishlistEffects {
         this._wishlistStateService.wishlists = null;
         this._store.dispatch(new actions.WishlistsNull());
       }
+    });
+
+    this._wishlistService.onWishlistsCreated.subscribe((wishlist) => {
+      if (wishlist) {
+        this._store.dispatch(new actions.CreateWishlistSuccess(wishlist));
+      } 
     });
   }
 }

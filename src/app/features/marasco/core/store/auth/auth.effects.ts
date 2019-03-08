@@ -1,5 +1,3 @@
-import { WishlistService } from './../../services/wishlists.service';
-import { getUserWishlists } from './auth.selectors';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
@@ -27,8 +25,6 @@ import {
 import { NotificationService } from '@app/features/marasco/core/services/notification.service';
 import { _daysInMonth } from 'ngx-bootstrap/chronos/utils/date-getters';
 import { UserInfo } from '../../models/userInfo.model';
-import { WishlistStateService } from '../../services/wishlists.state.service';
-import { Wishlist } from '../../interfaces/Wishlist.interface';
 
 @Injectable()
 export class AuthEffects {
@@ -293,16 +289,6 @@ export class AuthEffects {
     map((_) => new actions.AuthTokenPayload(_))
   );
 
-  @Effect()
-  authUserWishlistChange$ = this._actions$.pipe(
-    ofType(actions.AuthActionTypes.WishlistsChange),
-    // tap((data: any) => console.log('Whatup!!')),
-    // tap((data: any) => console.log(data)),
-    switchMap((data: any) => data.payload.getWishlists()),
-    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-    map((_) => new actions.WishlistsPayload(_))
-  );
-
   dispatchError = (err) => {
     //Notify, if applicable
     this.dispatchErrorNotification(err);
@@ -371,27 +357,14 @@ export class AuthEffects {
     private _auth: AuthService,
     private _router: Router,
     private _authService: SocialAuthService,
-    private _notificationService: NotificationService,
-    private _wishlistStateService: WishlistStateService,
-    private _wishlistService: WishlistService
+    private _notificationService: NotificationService
 
   ) {
-    // //Login, Logout
-    // this._auth.onAuthStateChanged.subscribe((user) => {
-    //   if (user) {
-    //     this._store.dispatch(new actions.WishlistsChange(user));
-    //   }
-    //   else {
-    //     this._wishlistStateService.wishlists = null;
-    //     this._store.dispatch(new actions.NullWishlists());
-    //   }
-    // });
 
     //Login, Logout, Token Refresh
     this._auth.onIdTokenChanged.subscribe((authUser) => {
       if (authUser) {
         this._store.dispatch(new actions.AuthUserChange(authUser));
-        // Get Wishlists as well
       } else {
         this._authTokenService.token = null;
         this._store.dispatch(new actions.NullToken());

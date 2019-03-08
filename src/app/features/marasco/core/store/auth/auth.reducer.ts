@@ -6,8 +6,7 @@ export interface AuthState {
   error: any;
   user: any;
   logged: boolean;
-  loggedOnce: boolean;
-  wishlists: any
+  loggedOnce: boolean
 }
 
 export const authInitialState: AuthState = {
@@ -15,8 +14,7 @@ export const authInitialState: AuthState = {
   error: null,
   user: null,
   logged: false,
-  loggedOnce: false,
-  wishlists: null
+  loggedOnce: false
 };
 
 export function authReducer(
@@ -37,15 +35,13 @@ export function authReducer(
       };
 
     case AuthActionTypes.LogoutAction:
-    case AuthActionTypes.NullWishlists:
     case AuthActionTypes.NullToken:
       return {
         ...state,
         loading: false,
         error: null,
         user: null,
-        logged: false,
-        wishlists: null
+        logged: false
       };
 
     case AuthActionTypes.LoggedOnce:
@@ -72,19 +68,6 @@ export function authReducer(
         loading: false,
         user: null,
         logged: false
-      };
-
-    case AuthActionTypes.LoadWishlists:
-      return {
-        ...state,
-        wishlists: action.payload
-      };
-
-    case AuthActionTypes.WishlistsRestore:
-    case AuthActionTypes.WishlistsPayload:
-      return {
-        ...state,
-        wishlists: action.payload
       };
 
     default:

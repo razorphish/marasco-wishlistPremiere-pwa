@@ -14,9 +14,16 @@ export class WishlistService {
   private _url: string = environment.apiUrl + 'wishlist/';
   private _headers: Headers;
   private _options: RequestOptions;
+  private _wishlistSource: Wishlist;
   private _wishlistsSource: Wishlist[];
 
-  public onWishlistsChanged = new BehaviorSubject<Wishlist[]>(this._wishlistsSource);
+  public onWishlistsChanged = new BehaviorSubject<Wishlist[]>(
+    this._wishlistsSource
+  );
+
+  public onWishlistsCreated = new BehaviorSubject<Wishlist>(
+    this._wishlistSource
+  );
 
   constructor(private _authHttp: AuthHttpService) {
     this._headers = new Headers({
@@ -69,7 +76,10 @@ export class WishlistService {
 
   insert(wishlist: Wishlist): Observable<Wishlist> {
     return this._authHttp.post(this._url, JSON.stringify(wishlist)).pipe(
-      map((wishlist: Wishlist) => wishlist),
+      map((wishlist: Wishlist) => {
+        this.onWishlistsCreated.next(wishlist);
+        return wishlist;
+      }),
       catchError(this.handleError)
     );
   }

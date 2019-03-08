@@ -17,8 +17,6 @@ import {
   WishlistResolve,
   WishlistGuard,
 } from '../wishlists';
-import { WishlistService } from '@app/features/marasco/core/services/wishlists.service';
-import { WishlistFactory } from '@app/features/marasco/core/services/wishlist.factory';
 
 @NgModule({
   imports: [
@@ -32,11 +30,9 @@ import { WishlistFactory } from '@app/features/marasco/core/services/wishlist.fa
   exports: [],
   declarations: [WishlistsComponent, WishlistListComponent, WishlistComponent],
   providers: [
-    WishlistService,
     WishlistGuard,
     WishlistListResolve,
     WishlistResolve,
-    WishlistFactory,
     UpperCasePipe
   ]
 })

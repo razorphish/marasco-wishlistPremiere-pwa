@@ -33,6 +33,14 @@ export class WishlistStateService {
     private _store: Store<WishlistState>
   ) {}
 
+  add(wishlist: Wishlist){
+    this.wishlists.push(wishlist);
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
       this._storage.get(USER_WISHLISTS).then(
