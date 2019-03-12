@@ -22,6 +22,6 @@ export class WishlistResolve implements Resolve<any> {
     if (id === "0") {
       return of("0");
     }
-    return this._wishlistService.getDetails(id);
+    return this._wishlistService.get(id);
   }
 }

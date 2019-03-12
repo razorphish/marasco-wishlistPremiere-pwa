@@ -139,6 +139,9 @@ export class AuthEffects {
   signup$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.SignupAction),
     map((data: any) => data.payload),
+    tap((user: UserInfo) => {
+      //setup
+    }),
     switchMap((user: UserInfo) =>
       this._auth.createUserWithEmailAndPassword(user).pipe(
         tap((result: UserInfo) => {

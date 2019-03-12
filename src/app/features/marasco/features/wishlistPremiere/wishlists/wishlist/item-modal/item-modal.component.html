@@ -1,0 +1,135 @@
+<div class="modal-header">
+  <button
+    type="button"
+    class="close"
+    data-dismiss="modal"
+    aria-hidden="true"
+    (click)="close.emit(true)"
+  >
+    &times;
+  </button>
+  <h4 class="modal-title" id="myModalLabel">Wishlist Item</h4>
+</div>
+<div class="modal-body custom-scroll">
+  <dropzone2-upload></dropzone2-upload>
+  <form
+    id="form-add-wishlist-item"
+    class="smart-form"
+    [saUiValidate]="validationOptions"
+    novalidate="novalidate"
+  >
+    <fieldset>
+      <div class="row">
+        <section class="col col-8">
+          <label class="input">
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Name"
+              class="input-lg"
+            />
+            <b class="tooltip tooltip-bottom-right">Name of the wishlist</b>
+          </label>
+        </section>
+        <section class="col col-4">
+          <label class="input">
+            <input
+              type="number"
+              id="price"
+              name="price"
+              placeholder="Price"
+              class="input-lg"
+            />
+            <b class="tooltip tooltip-bottom-right">Price of the item</b>
+          </label>
+        </section>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="row">
+        <section class="col col-8">
+          <label class="input">
+            <input
+              type="text"
+              name="url"
+              id="url"
+              placeholder="Link or Store name"
+              class="input-lg"
+            />
+          </label>
+        </section>
+        <section class="col col-4">
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              name="includePriceWhenSharing"
+              [checked]="wishlist.purchased"
+            />
+            <i></i>
+            Purchased?
+          </label>
+        </section>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <div class="row">
+        <section class="col col-8">
+          <label class="select">
+            <select
+              name="wishlistItemCategories"
+              class="input-lg"
+              ngModel
+              (change)="onSelectItem($event)"
+            >
+              <option value="" disabled>Choose a Category</option>
+              <option
+                *ngFor="let category of dropdownList"
+                [ngValue]="category._id"
+              >
+                {{ category.name }}
+              </option>
+            </select>
+          </label>
+        </section>
+
+        <section class="col col-4">
+          <button class="btn btn-primary btn-lg" (click)="addCategory($event)">
+            Add Category
+          </button>
+        </section>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <section>
+        Notes
+        <label class="textarea">
+          <textarea
+            [(ngModel)]="wishlist.notes"
+            rows="4"
+            name="notes"
+            id="notes"
+            class="textarea-lg"
+          ></textarea>
+        </label>
+      </section>
+    </fieldset>
+  </form>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" (click)="close.emit(true)">
+    Cancel
+  </button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    id="i-agree"
+    (click)="save.emit(true)"
+  >
+    <i class="fa fa-check"></i> Save
+  </button>
+</div>

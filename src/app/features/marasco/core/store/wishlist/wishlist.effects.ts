@@ -1,3 +1,4 @@
+import { WishlistItemCategoriesStateService } from '../../services/wishlist-item-categories.state.service';
 import { WishlistService } from '../../services/wishlists.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
@@ -42,11 +43,24 @@ export class WishlistEffects {
   );
 
   @Effect()
+  wishlistItemCategoriesChange$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.WishlistItemCategoriesChange),
+    // tap((data: any) => console.log('Whatup!!')),
+    // tap((data: any) => console.log(data)),
+    switchMap((data: any) => data.payload.getWishlistItemCategories()),
+    tap<Wishlist[]>(
+      (_) =>
+        (this._wishlistItemCategoriesStateService.wishlistItemCategories = _)
+    ),
+    map((_) => new actions.WishlistItemCategoriesPayload(_))
+  );
+
+  @Effect()
   wishlistCreateSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistSuccess),
     // tap((data: any) => console.log('Whatup!!')),
     // tap((data: any) => console.log(data)),
-    switchMap((data:any) => this._wishlistStateService.add(data.payload)),
+    switchMap((data: any) => this._wishlistStateService.add(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
@@ -112,6 +126,7 @@ export class WishlistEffects {
     private _auth: AuthService,
     private _notificationService: NotificationService,
     private _wishlistStateService: WishlistStateService,
+    private _wishlistItemCategoriesStateService: WishlistItemCategoriesStateService,
     private _wishlistService: WishlistService
   ) {
     //Login, Logout
@@ -121,13 +136,16 @@ export class WishlistEffects {
       } else {
         this._wishlistStateService.wishlists = null;
         this._store.dispatch(new actions.WishlistsNull());
+
+        this._wishlistItemCategoriesStateService.wishlistItemCategories = null;
+        this._store.dispatch(new actions.WishlistItemCategoriesNull());
       }
     });
 
     this._wishlistService.onWishlistsCreated.subscribe((wishlist) => {
       if (wishlist) {
         this._store.dispatch(new actions.CreateWishlistSuccess(wishlist));
-      } 
+      }
     });
   }
 }

@@ -2,11 +2,13 @@ import { Action } from '@ngrx/store';
 import { WishlistActions, WishlistActionTypes } from './wishlist.actions';
 
 export interface WishlistState {
+  categories: any;
   wishlists: any;
 }
 
 export const wishlistInitialState: WishlistState = {
-  wishlists: null
+  wishlists: null,
+  categories: null
 };
 
 export function wishlistReducer(

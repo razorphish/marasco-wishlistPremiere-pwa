@@ -2,10 +2,11 @@
 <div id="content">
   <div class="row">
     <sa-big-breadcrumbs
-      [items]="['Wishlist', 'Details']"
-      icon="pencil-square-o"
+      [items]="[wishlist.name || 'Wishlist', 'Details']"
+      icon="gift"
       class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
     ></sa-big-breadcrumbs>
+    <sa-stats></sa-stats>
   </div>
 
   <!-- widget grid -->
@@ -17,7 +18,7 @@
         <!-- Widget ID (each widget will need unique ID)-->
         <div
           sa-widget
-          class="well"
+          
           [colorbutton]="false"
           [editbutton]="false"
           [custombutton]="false"
@@ -29,7 +30,7 @@
           <header>
             <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
-            <h2>{{ isUpdate ? 'Edit' : 'Create A New Wishlist' }}</h2>
+            <h2>{{ isUpdate ? 'Edit': 'Create A New Wishlist' }}</h2>
           </header>
 
           <!-- widget div-->
@@ -42,8 +43,7 @@
             >
               <div class="smart-form">
                 <!-- widget content -->
-                <div class="widget-body no-padding">
-
+                <div class="widget-body">
                   <fieldset>
                     <div class="row">
                       <section class="col col-4">
@@ -60,11 +60,21 @@
                     </div>
                   </fieldset>
 
-                  <footer>
-                    <button type="submit" class="btn btn-primary">
+                  <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      <i class="fa fa-save"></i>
                       Save
                     </button>
-                  </footer>
+                    &nbsp;
+                    <button
+                      type="button"
+                      (click)="openModal($event, wishlistItemModal)"
+                      class="btn btn-primary btn-lg"
+                      *ngIf="isUpdate"
+                    >
+                      Add Item
+                    </button>
+                  </div>
                 </div>
                 <!-- end widget content -->
               </div>
@@ -217,3 +227,11 @@
   </sa-widgets-grid>
   <!-- end widget grid -->
 </div>
+
+
+<ng-template #wishlistItemModal>
+    <wishlist-item-modal
+      (save)="addItem()"
+      (close)="onModalClose()"
+    ></wishlist-item-modal>
+  </ng-template>

@@ -1,4 +1,4 @@
-import { Directive, Input, ElementRef } from "@angular/core";
+import { Directive, Input, Output, ElementRef, EventEmitter, HostListener } from "@angular/core";
 
 import * as Dropzone from "dropzone";
 Dropzone.autoDiscover = false;
@@ -7,6 +7,8 @@ Dropzone.autoDiscover = false;
 })
 export class DropzoneDirective {
   @Input() saDropzone: any;
+  @Output() dropped =  new EventEmitter<FileList>();
+  @Output() hovered =  new EventEmitter<boolean>();
 
   private dropzone: any;
 

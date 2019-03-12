@@ -1,17 +1,28 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  Input,
+  TemplateRef
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+
+import * as moment from 'moment';
 
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ActivityLogSubjectService } from '../../../../shared/activitylog.subject-service';
-
 import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
 import { WishlistService } from '../../../../core/services/wishlists.service';
 import { WishlistFactory } from '../../../../core/services/wishlist.factory';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
-import { Store, select } from '@ngrx/store';
-
-import * as moment from 'moment';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 @Component({
   selector: 'marasco-wishlist',
@@ -24,6 +35,31 @@ export class WishlistComponent implements OnInit {
   //\\\END Private variables ////////
 
   //////////////////Publicly exposed variables///////////
+  public defaultWishlist: Wishlist = {
+    name: '',
+    userId: '',
+    preferences: {
+      includePriceWhenSharing: true,
+      markPurchasedItem: false,
+      hideFromMe: false,
+      currencyUnitSymbol: '$'
+    }
+  };
+
+  public dropdownSettingsStatus = {};
+
+  public isUpdate = true;
+
+  public options = [];
+  public optionsNotificationTable: any = {};
+  public optionsTokenTable: any = {};
+
+  public selectedStatus = [];
+  public state: any = {
+    tabs: {
+      demo1: 0
+    }
+  };
   public statusOptions = [
     {
       _id: 'active',
@@ -55,31 +91,6 @@ export class WishlistComponent implements OnInit {
     }
   ];
 
-  public selectedStatus = [];
-
-  public defaultWishlist: Wishlist = {
-    name: '',
-    userId: '',
-    preferences: {
-      includePriceWhenSharing: true,
-      markPurchasedItem: false,
-      hideFromMe: false,
-      currencyUnitSymbol: '$'
-    }
-  };
-
-  public dropdownSettingsStatus = {};
-  public isUpdate = true;
-  public options = [];
-  public state: any = {
-    tabs: {
-      demo1: 0
-    }
-  };
-
-  public optionsTokenTable: any = {};
-  public optionsNotificationTable: any = {};
-  public wishlist: Wishlist = this.defaultWishlist;
   public user: User;
 
   public validationOptions: any = {
@@ -110,10 +121,19 @@ export class WishlistComponent implements OnInit {
     }
   };
 
+  public uploadPercent: Observable<number>;
+  public downloadURL: Observable<string>;
+
+  public wishlist: Wishlist = this.defaultWishlist;
+
   // @Input() filter = "ion ([7-9]|[1][0-2])";
   @Input() filter = '';
 
   @ViewChild('wishlistDetailsForm') wishlistDetailsForm;
+
+  bsModalRef: BsModalRef;
+
+  //////////////////END Publicly exposed variables///////////
 
   constructor(
     private _wishlistService: WishlistService,
@@ -122,7 +142,9 @@ export class WishlistComponent implements OnInit {
     private _router: Router,
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
-    private _store: Store<fromAuth.AuthState>
+    private _store: Store<fromAuth.AuthState>,
+    private _modalService: BsModalService,
+    private _storage: AngularFireStorage
   ) {}
 
   /////////////////////////////////////
@@ -151,8 +173,21 @@ export class WishlistComponent implements OnInit {
   }
 
   /////////////////////////////////////
-  // Public Metods
+  // Public Methods
   /////////////////////////////////////
+
+  public openModal(event, template: TemplateRef<any>) {
+    event.preventDefault();
+    this.bsModalRef = this._modalService.show(template);
+  }
+
+  public onModalClose() {
+    this.bsModalRef.hide();
+  }
+
+  public addItem() {
+    this.bsModalRef.hide();
+  }
 
   public save(wishlistDetailsForm: any) {
     if (this.validate()) {
@@ -162,6 +197,22 @@ export class WishlistComponent implements OnInit {
         this.insert();
       }
     }
+  }
+
+  public uploadFile(event) {
+    const file = event.target.files[0];
+    const filePath = 'name-your-file-path-here';
+    const fileRef = this._storage.ref(filePath);
+    const task = this._storage.upload(filePath, file, { customMetadata: {} });
+
+    // observe percentage changes
+    this.uploadPercent = task.percentageChanges();
+    
+    // get notified when the download URL is available
+    task
+      .snapshotChanges()
+      .pipe(finalize(() => (this.downloadURL = fileRef.getDownloadURL())))
+      .subscribe();
   }
 
   /////////////////////////////////////

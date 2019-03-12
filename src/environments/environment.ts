@@ -6,7 +6,14 @@
 export const environment = {
   production: false,
 
-  firebase: {},
+  firebase: {
+    apiKey: "AIzaSyCUDutHgAw251N38tdRHiBUTz20P6c7odE",
+    authDomain: "marasco-wishlistpremiere-pwa.firebaseapp.com",
+    databaseURL: "https://marasco-wishlistpremiere-pwa.firebaseio.com",
+    projectId: "marasco-wishlistpremiere-pwa",
+    storageBucket: "marasco-wishlistpremiere-pwa.appspot.com",
+    messagingSenderId: "852120795509"
+  },
 
   serviceWorkerOptions : {
     vap: {

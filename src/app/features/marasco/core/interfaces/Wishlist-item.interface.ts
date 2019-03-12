@@ -2,6 +2,7 @@ import {  Image } from './Image.interface';
 
 export interface WishlistItem {
     _id?: string;
+    wishlistId? : string;
     name: string;
     categoryId?: any;
     price?: number;
@@ -10,7 +11,7 @@ export interface WishlistItem {
     purchased?: boolean;
     images?: Image[];
     statusId?: string; //created|deleted
-    sort? : number;
+    sortOrder? : number;
     dateCreated?: Date;
     dateModifed?: Date
 }

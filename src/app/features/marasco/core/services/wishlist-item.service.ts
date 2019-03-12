@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response, Headers, RequestOptions } from '@angular/http';
+import { Response } from '@angular/http';
 
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -7,32 +7,31 @@ import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { AuthHttpService } from './auth-http.service';
 
-import { Wishlist } from '../interfaces/Wishlist.interface';
+import { WishlistItem } from '../interfaces/Wishlist-item.interface';
 
 @Injectable()
-export class WishlistService {
-  private _url: string = `${environment.apiUrl}wishlist/`;
-  private _wishlistSource: Wishlist;
-  private _wishlistsSource: Wishlist[];
+export class WishlistItemService {
+  private _url: string = `${environment.apiUrl}wishlist/${this.wishlistId}/item`;
+  private _wishlistSource: WishlistItem;
 
-  public onWishlistsChanged = new BehaviorSubject<Wishlist[]>(
-    this._wishlistsSource
-  );
-
-  public onWishlistsCreated = new BehaviorSubject<Wishlist>(
+  public onWishlistItemChanged = new BehaviorSubject<WishlistItem>(
     this._wishlistSource
   );
 
-  constructor(private _authHttp: AuthHttpService) {}
+  public onWishlistItemCreated = new BehaviorSubject<WishlistItem>(
+    this._wishlistSource
+  );
 
-  all(): Observable<Wishlist[]> {
+  constructor(public wishlistId: string, private _authHttp: AuthHttpService) {}
+
+  all(): Observable<WishlistItem[]> {
     return this._authHttp.get(this._url).pipe(
       map((wishlists: any) => wishlists),
       catchError(this.handleError)
     );
   }
 
-  allDetails(): Observable<Wishlist[]> {
+  allDetails(): Observable<WishlistItem[]> {
     return this._authHttp.get(`${this._url}details`).pipe(
       map((wishlists: any) => wishlists),
       catchError(this.handleError)
@@ -46,35 +45,35 @@ export class WishlistService {
     );
   }
 
-  get(id: string): Observable<Wishlist> {
+  get(id: string): Observable<WishlistItem> {
     return this._authHttp.get(`${this._url}${id}`).pipe(
-      map((wishlist: any) => wishlist),
+      map((wishlistItem: any) => wishlistItem),
       catchError(this.handleError)
     );
   }
 
-  getDetails(id: string): Observable<Wishlist> {
+  getDetails(id: string): Observable<WishlistItem> {
     return this._authHttp.get(`${this._url}${id}/details`).pipe(
       map((wishlist: any) => wishlist),
       catchError(this.handleError)
     );
   }
 
-  insert(wishlist: Wishlist): Observable<Wishlist> {
+  insert(wishlist: WishlistItem): Observable<WishlistItem> {
     return this._authHttp.post(this._url, JSON.stringify(wishlist)).pipe(
-      map((wishlist: Wishlist) => {
-        this.onWishlistsCreated.next(wishlist);
-        return wishlist;
+      map((wishlistItem: WishlistItem) => {
+        this.onWishlistItemCreated.next(wishlistItem);
+        return wishlistItem;
       }),
       catchError(this.handleError)
     );
   }
 
-  update(wishlist: Wishlist): Observable<Wishlist> {
+  update(wishlist: WishlistItem): Observable<WishlistItem> {
     return this._authHttp
       .put(`${this._url}${wishlist._id}`, JSON.stringify(wishlist))
       .pipe(
-        map((wishlist: Wishlist) => wishlist),
+        map((wishlistItem: WishlistItem) => wishlistItem),
         catchError(this.handleError)
       );
   }

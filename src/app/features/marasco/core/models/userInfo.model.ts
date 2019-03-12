@@ -1,3 +1,4 @@
+import { WishlistItemCategory } from './../interfaces/Wishlist-item-category.interface';
 import { Wishlist } from './../interfaces/Wishlist.interface';
 import { User } from '../interfaces/UserInfo.interface';
 import { Address } from './address.model';
@@ -25,6 +26,7 @@ export class UserInfo implements User {
   status?: string;
   colo?: string; //colocation (native, mobile, web)
   wishlists?: Wishlist[];
+  wishlistItemCategories?: WishlistItemCategory[];
   //updatedExisting?: boolean;
   // constructor(init? : {
   //     _id: string; avatar?: string,
@@ -57,6 +59,12 @@ export class UserInfo implements User {
   getWishlists() {
     return new Promise((resolve) => {
       resolve(this.wishlists);
+    });
+  }
+
+  getWishlistItemCategories() {
+    return new Promise((resolve) => {
+      resolve(this.wishlistItemCategories);
     });
   }
 }

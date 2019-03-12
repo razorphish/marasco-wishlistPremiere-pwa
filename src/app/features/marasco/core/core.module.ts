@@ -13,6 +13,10 @@ import { environment } from '../../../../environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { IonicStorageModule } from '@ionic/storage';
 import { EffectsModule } from '@ngrx/effects';
+
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
+
 import { AppEffects } from './app.effects';
 import * as fromStore from './store';
 import { AuthGuard } from './guards/auth.guard';
@@ -43,7 +47,10 @@ import { AppGuard } from './guards/app.guard';
       metaReducers: fromStore.metaReducers
     }),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
-    EffectsModule.forRoot([...fromStore.effects, AppEffects])
+    EffectsModule.forRoot([...fromStore.effects, AppEffects]),
+
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireStorageModule
   ],
   exports: [],
   providers: [
@@ -85,6 +92,11 @@ import { AppGuard } from './guards/app.guard';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
+    },
+
+    {
+      provide: StorageBucket,
+      useValue: environment.firebase.storageBucket
     }
   ]
 })
