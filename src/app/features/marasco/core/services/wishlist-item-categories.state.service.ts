@@ -12,7 +12,7 @@ import { WishlistState } from '../store/wishlist/wishlist.reducer';
 import { WishlistItemCategory } from '../interfaces/Wishlist-item-category.interface';
 import { WishlistItemCategoriesRestore } from '../store/wishlist/wishlist.actions';
 
-const USER_WISHLIST_ITEM_CATEGORIES = 'wishlist-item-categories';
+const USER_WISHLIST_ITEM_CATEGORIES = 'user_wishlist_item_categories';
 
 @Injectable()
 export class WishlistItemCategoriesStateService {
@@ -22,9 +22,9 @@ export class WishlistItemCategoriesStateService {
     WishlistItemCategory[]
   >(this._wishlistItemCategoriesSource);
 
-  public onWishlistItemCategoriesLoad = new BehaviorSubject<WishlistItemCategory[]>(
-    this._wishlistItemCategoriesSource
-  );
+  public onWishlistItemCategoriesLoad = new BehaviorSubject<
+    WishlistItemCategory[]
+  >(this._wishlistItemCategoriesSource);
 
   public wishlistItemCategories$ = this._wishlistItemCategoriesSubject.asObservable();
 
@@ -95,6 +95,7 @@ export class WishlistItemCategoriesStateService {
         '\n\n\n================\ndump wishlist categories',
         wishlistItemCategories
       );
+      
     return !!wishlistItemCategories
       ? this._storage.set(USER_WISHLIST_ITEM_CATEGORIES, wishlistItemCategories)
       : this._storage.remove(USER_WISHLIST_ITEM_CATEGORIES).then(() => null);

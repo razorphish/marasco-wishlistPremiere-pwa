@@ -1,3 +1,4 @@
+
 import {
   NgModule,
   ModuleWithProviders,
@@ -16,6 +17,7 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { AppEffects } from './app.effects';
 import * as fromStore from './store';
@@ -28,6 +30,8 @@ import {
   TokenInterceptor,
   WishlistStateService,
   WishlistStateServiceFactory,
+  WishlistItemCategoriesStateServiceFactory,
+  WishlistItemCategoriesStateService,
   PwaFactory,
   PwaService
 } from '@app/features/marasco/core/services';
@@ -50,7 +54,8 @@ import { AppGuard } from './guards/app.guard';
     EffectsModule.forRoot([...fromStore.effects, AppEffects]),
 
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFireStorageModule
+    AngularFireStorageModule, 
+    AngularFirestoreModule
   ],
   exports: [],
   providers: [
@@ -71,6 +76,13 @@ import { AppGuard } from './guards/app.guard';
       provide: APP_INITIALIZER,
       useFactory: WishlistStateServiceFactory,
       deps: [WishlistStateService],
+      multi: true
+    },
+
+    {
+      provide: APP_INITIALIZER,
+      useFactory: WishlistItemCategoriesStateServiceFactory,
+      deps: [WishlistItemCategoriesStateService],
       multi: true
     },
 

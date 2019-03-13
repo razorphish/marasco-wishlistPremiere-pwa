@@ -2,12 +2,12 @@ export const environment = {
   production: true,
 
   firebase: {
-    apiKey: "AIzaSyCUDutHgAw251N38tdRHiBUTz20P6c7odE",
-    authDomain: "marasco-wishlistpremiere-pwa.firebaseapp.com",
-    databaseURL: "https://marasco-wishlistpremiere-pwa.firebaseio.com",
-    projectId: "marasco-wishlistpremiere-pwa",
-    storageBucket: "marasco-wishlistpremiere-pwa.appspot.com",
-    messagingSenderId: "852120795509"
+    apiKey: 'AIzaSyCUDutHgAw251N38tdRHiBUTz20P6c7odE',
+    authDomain: 'marasco-wishlistpremiere-pwa.firebaseapp.com',
+    databaseURL: 'https://marasco-wishlistpremiere-pwa.firebaseio.com',
+    projectId: 'marasco-wishlistpremiere-pwa',
+    storageBucket: 'marasco-wishlistpremiere-pwa.appspot.com',
+    messagingSenderId: '852120795509'
   },
 
   serviceWorkerOptions : {
@@ -18,6 +18,10 @@ export const environment = {
   },
 
   debug: false,
+
+  wishlist: {
+    firebaseDbName: 'wishlist-images'
+  },
 
   log: {
     auth: false,

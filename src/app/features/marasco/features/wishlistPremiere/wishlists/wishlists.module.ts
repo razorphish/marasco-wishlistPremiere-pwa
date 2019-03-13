@@ -17,7 +17,8 @@ import {
   WishlistListResolve,
   WishlistResolve,
   WishlistGuard,
-  WishlistItemModalComponent
+  WishlistItemModalComponent,
+  WishlistItemCategoryModalComponent
 } from '../wishlists';
 
 @NgModule({
@@ -35,7 +36,8 @@ import {
     WishlistsComponent,
     WishlistListComponent,
     WishlistComponent,
-    WishlistItemModalComponent
+    WishlistItemModalComponent,
+    WishlistItemCategoryModalComponent
   ],
   providers: [
     WishlistGuard,

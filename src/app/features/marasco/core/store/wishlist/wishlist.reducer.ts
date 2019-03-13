@@ -16,10 +16,11 @@ export function wishlistReducer(
   action: WishlistActions
 ): WishlistState {
   switch (action.type) {
-    case WishlistActionTypes.WishlistsNull:
+    case WishlistActionTypes.WishlistPremiereNull:
       return {
         ...state,
-        wishlists: null
+        wishlists: null,
+        categories: null
       };
 
     case WishlistActionTypes.WishlistsLoad:
@@ -36,6 +37,19 @@ export function wishlistReducer(
         ...state,
         wishlists: Object.assign({}, action.payload)
       };
+    case WishlistActionTypes.WishlistItemCategoriesLoad:
+    case WishlistActionTypes.WishlistItemCategoriesRestore:
+    case WishlistActionTypes.WishlistItemCategoriesPayload:
+      return {
+        ...state,
+        categories: action.payload
+      };
+    case WishlistActionTypes.CreateWishlistItemCategoryAction:
+      return {
+        ...state,
+        categories: Object.assign({}, action.payload)
+      }
+
     default:
       return state;
   }

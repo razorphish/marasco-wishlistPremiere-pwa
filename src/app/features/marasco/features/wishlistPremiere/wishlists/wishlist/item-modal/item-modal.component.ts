@@ -1,13 +1,27 @@
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  Input,
+  TemplateRef
+} from '@angular/core';
+import { environment } from '@env/environment';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
 
 @Component({
   selector: 'wishlist-item-modal',
   templateUrl: './item-modal.component.html'
 })
 export class WishlistItemModalComponent implements OnInit {
+  public dbName = environment.wishlist.firebaseDbName;
   public dropdownList = [];
   public selectedItems = [];
   public dropdownSettings = {};
+  public bsModalRef: BsModalRef;
 
   public validationOptions: any = {
     // Rules for form validation
@@ -67,7 +81,7 @@ export class WishlistItemModalComponent implements OnInit {
     }
   };
 
-  @Input() wishlist: any = {};
+  @Input() wishlist: Wishlist;
   @Output() save = new EventEmitter();
   @Output() close = new EventEmitter();
   @Output() upload = new EventEmitter();
@@ -77,17 +91,7 @@ export class WishlistItemModalComponent implements OnInit {
     inline: true
   };
 
-  constructor() {}
-
-  addCategory($event){
-
-  }
-
-  onSelectItem($event: any) {
-    // Clear out current wishlist roles
-    //console.log(item);
-    console.log($event);
-  }
+  constructor(private _modalService: BsModalService) {}
 
   ngOnInit() {
     this.dropdownList = [
@@ -106,5 +110,22 @@ export class WishlistItemModalComponent implements OnInit {
       closeDropDownOnSelection: true,
       noDataAvailablePlaceholderText: 'No Categories Available'
     };
+  }
+
+  public openModal(event, template: TemplateRef<any>) {
+    event.preventDefault();
+    this.bsModalRef = this._modalService.show(template);
+  }
+
+  public onModalClose() {
+    this.bsModalRef.hide();
+  }
+
+  public onSelectItem($event){
+    
+  }
+
+  public addItem() {
+    this.bsModalRef.hide();
   }
 }

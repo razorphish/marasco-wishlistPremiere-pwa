@@ -62,7 +62,6 @@
 
                   <div class="form-actions">
                     <button type="submit" class="btn btn-primary btn-lg">
-                      <i class="fa fa-save"></i>
                       Save
                     </button>
                     &nbsp;
@@ -231,6 +230,7 @@
 
 <ng-template #wishlistItemModal>
     <wishlist-item-modal
+      [wishlist]="wishlist"
       (save)="addItem()"
       (close)="onModalClose()"
     ></wishlist-item-modal>

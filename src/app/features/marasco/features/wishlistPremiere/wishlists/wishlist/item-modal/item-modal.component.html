@@ -11,7 +11,7 @@
   <h4 class="modal-title" id="myModalLabel">Wishlist Item</h4>
 </div>
 <div class="modal-body custom-scroll">
-  <dropzone2-upload></dropzone2-upload>
+  <dropzone2-upload [dbName]="dbName"></dropzone2-upload>
   <form
     id="form-add-wishlist-item"
     class="smart-form"
@@ -96,7 +96,10 @@
         </section>
 
         <section class="col col-4">
-          <button class="btn btn-primary btn-lg" (click)="addCategory($event)">
+          <button
+            class="btn btn-primary btn-lg"
+            (click)="openModal($event, wishlistItemCategoryModal)"
+          >
             Add Category
           </button>
         </section>
@@ -117,19 +120,44 @@
         </label>
       </section>
     </fieldset>
+
+    <fieldset>
+      <div class="row">
+        <section class="col col-12" style="float: right">
+
+          <button
+            type="button"
+            class="btn btn-default btn-lg"
+            (click)="close.emit(true)"
+          >
+            Cancel
+          </button>
+
+          &nbsp;
+
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg"
+            id="i-agree"
+            (click)="save.emit(true)"
+          >
+            <i class="fa fa-check"></i> Save
+          </button>
+
+        </section>
+      </div>
+    </fieldset>
   </form>
 </div>
 
-<div class="modal-footer">
-  <button type="button" class="btn btn-default" (click)="close.emit(true)">
-    Cancel
-  </button>
-  <button
-    type="button"
-    class="btn btn-primary"
-    id="i-agree"
-    (click)="save.emit(true)"
-  >
-    <i class="fa fa-check"></i> Save
-  </button>
-</div>
+<!-- <div class="modal-footer">
+
+</div> -->
+
+<ng-template #wishlistItemCategoryModal>
+  <wishlist-item-category-modal
+    [userId]="wishlist.userId"
+    (save)="addItem()"
+    (close)="onModalClose()"
+  ></wishlist-item-category-modal>
+</ng-template>

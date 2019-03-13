@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Output, Input } from '@angular/core';
 import {
   AngularFireStorage,
   AngularFireUploadTask
 } from '@angular/fire/storage';
 
+import { AngularFirestore } from '@angular/fire/firestore';
+
 import { Observable } from 'rxjs';
 
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'dropzone2-upload',
@@ -23,12 +25,18 @@ export class Dropzone2Component {
   snapshot: Observable<any>;
 
   // Download URL
-  downloadURL: Observable<string>;
+  @Output() downloadURL: Observable<string>;
+  @Input() dbName: string;
+  @Input() document: any;
+  @Input() meta: any;
 
   // State for dropzone CSS toggling
   isHovering: boolean;
 
-  constructor(private _storage: AngularFireStorage) {}
+  constructor(
+    private _storage: AngularFireStorage,
+    private _db: AngularFirestore
+  ) {}
 
   toggleHover(event: boolean) {
     this.isHovering = event;
@@ -48,7 +56,7 @@ export class Dropzone2Component {
     const path = `test/${new Date().getTime()}_${file.name}`;
 
     // Totally optional metadata
-    const customMetadata = { app: 'My AngularFire-powered PWA!' };
+    const customMetadata = this.meta || {};
 
     const fileRef = this._storage.ref(path);
 
@@ -57,9 +65,19 @@ export class Dropzone2Component {
 
     // Progress monitoring
     this.percentage = this.task.percentageChanges();
-    this.snapshot = this.task
-      .snapshotChanges()
-      .pipe(finalize(() => (this.downloadURL = fileRef.getDownloadURL())));
+    this.snapshot = this.task.snapshotChanges().pipe(
+      tap((snap) => {
+        if (!!this.dbName) {
+          if (snap.bytesTransferred === snap.totalBytes) {
+            // Update firestore on completion
+            this._db
+              .collection(this.dbName)
+              .add(Object.assign({ url: path, size: snap.totalBytes }, this.meta));
+          }
+        }
+      }),
+      finalize(() => (this.downloadURL = fileRef.getDownloadURL()))
+    );
   }
 
   // Determines if the upload task is active

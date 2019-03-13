@@ -11,8 +11,9 @@ import { environment } from '../../../../../environments/environment';
 
 import { Wishlist } from '../interfaces/Wishlist.interface';
 import { StorageService } from './storage.service';
+import { WishlistItem } from '../interfaces/Wishlist-item.interface';
 
-const USER_WISHLISTS = 'wishlists';
+const USER_WISHLISTS = 'user_wishlists';
 
 @Injectable()
 export class WishlistStateService {
@@ -33,8 +34,24 @@ export class WishlistStateService {
     private _store: Store<WishlistState>
   ) {}
 
-  add(wishlist: Wishlist){
+  add(wishlist: Wishlist) {
     this.wishlists.push(wishlist);
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
+  addItem(wishlistItem: WishlistItem) {
+    var foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistItem.wishlistId;
+    });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlistItem.wishlistId
+    );
+
+    this.wishlists[foundIndex] = foundWishlist;
 
     return new Promise((resolve) => {
       resolve(this.wishlists);
@@ -43,10 +60,14 @@ export class WishlistStateService {
 
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
+
       this._storage.get(USER_WISHLISTS).then(
         (wishlists) => {
           environment.log.wishlist &&
-            console.log((!!wishlists ? 'wishlists exists' : 'wishlist does not exist') + ' at boot');
+            console.log(
+              (!!wishlists ? 'wishlists exists' : 'wishlist does not exist') +
+                ' at boot'
+            );
 
           if (!!wishlists) {
             try {
@@ -59,7 +80,9 @@ export class WishlistStateService {
           this.wishlists = wishlists;
 
           this.wishlists$
-            .pipe(switchMap(this.dumpWishlists))
+            .pipe(
+              switchMap(this.dumpWishlists)
+            )
             .subscribe(() => {});
 
           resolve(wishlists);

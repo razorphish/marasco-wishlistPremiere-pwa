@@ -1,5 +1,7 @@
 export interface WishlistItemCategory {
-    name: string;
-    dateCreated?: Date;
-    dateModifed?: Date;
+  _id?: string;
+  userId?: string;
+  name: string;
+  dateCreated?: Date;
+  dateModifed?: Date;
 }

@@ -26,6 +26,7 @@ import {
 
 import { WishlistService } from './wishlists.service';
 import { WishlistFactory } from './wishlist.factory';
+import { WishlistItemCategoryService } from './wishlist-item-category.service';
 
 
 export const services = [
@@ -44,6 +45,7 @@ export const services = [
   WishlistService,
   WishlistStateService,
   WishlistItemCategoriesStateService,
+  WishlistItemCategoryService,
   WishlistFactory
 ];
 
@@ -63,5 +65,6 @@ export * from './menuItem.service';
 export * from './pwa.service';
 
 export * from './wishlists.state.service';
+export * from './wishlist-item-category.service';
 export * from './wishlist-item-categories.state.service';
 export * from './wishlists.service';
