@@ -57,6 +57,7 @@
               id="url"
               placeholder="Link or Store name"
               class="input-lg"
+              [ngModel] = 'wishlistItem.url'
             />
           </label>
         </section>
@@ -65,7 +66,7 @@
             <input
               type="checkbox"
               name="includePriceWhenSharing"
-              [checked]="wishlist.purchased"
+              [checked]="wishlistItem.purchased"
             />
             <i></i>
             Purchased?
@@ -111,7 +112,7 @@
         Notes
         <label class="textarea">
           <textarea
-            [(ngModel)]="wishlist.notes"
+            [(ngModel)]="wishlistItem.notes"
             rows="4"
             name="notes"
             id="notes"

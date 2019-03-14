@@ -61,7 +61,8 @@ export const effects = [
   profile.ProfileEffects,
   layout.LayoutEffects,
   menu.MenuEffects,
-  wishlist.WishlistEffects
+  wishlist.WishlistEffects,
+  wishlist.WishlistItemCategoryEffects
 ];
 
 export const services = [notify.NotifyService];

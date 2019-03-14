@@ -1,3 +1,4 @@
+import { WishlistItemCategory } from './../../../../../core/interfaces/Wishlist-item-category.interface';
 import {
   Component,
   OnInit,
@@ -6,22 +7,27 @@ import {
   Input,
   TemplateRef
 } from '@angular/core';
-import { environment } from '@env/environment';
+import { Store, select } from '@ngrx/store';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+
+import { environment } from '@env/environment';
+
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
+import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
+import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 
 @Component({
   selector: 'wishlist-item-modal',
   templateUrl: './item-modal.component.html'
 })
 export class WishlistItemModalComponent implements OnInit {
+  public bsModalRef: BsModalRef;
   public dbName = environment.wishlist.firebaseDbName;
   public dropdownList = [];
-  public selectedItems = [];
   public dropdownSettings = {};
-  public bsModalRef: BsModalRef;
+  public selectedItems = [];
 
   public validationOptions: any = {
     // Rules for form validation
@@ -81,6 +87,11 @@ export class WishlistItemModalComponent implements OnInit {
     }
   };
 
+  public wishlistItem: WishlistItem = {
+    name: ''
+  };
+  public wishlistItemCategories: WishlistItemCategory[];
+
   @Input() wishlist: Wishlist;
   @Output() save = new EventEmitter();
   @Output() close = new EventEmitter();
@@ -91,15 +102,25 @@ export class WishlistItemModalComponent implements OnInit {
     inline: true
   };
 
-  constructor(private _modalService: BsModalService) {}
+  constructor(
+    private _store: Store<fromWishlist.WishlistState>,
+    private _modalService: BsModalService
+  ) {}
 
   ngOnInit() {
-    this.dropdownList = [
-      {
-        _id: 0,
+    const currentWishlistItemCategoryState = this._store.pipe(
+      select(fromWishlist.getUserWishlistCategories)
+    );
+    currentWishlistItemCategoryState.subscribe((wishlistItemCategories: WishlistItemCategory[]) => {
+      this.wishlistItemCategories = wishlistItemCategories;
+
+      this.wishlistItemCategories.push({
+        _id: '0',
         name: 'Miscellaneous'
-      }
-    ];
+      })
+
+      this.dropdownList = this.wishlistItemCategories;
+    });
 
     this.selectedItems.push(this.dropdownList[0]);
 
@@ -121,9 +142,7 @@ export class WishlistItemModalComponent implements OnInit {
     this.bsModalRef.hide();
   }
 
-  public onSelectItem($event){
-    
-  }
+  public onSelectItem($event) {}
 
   public addItem() {
     this.bsModalRef.hide();

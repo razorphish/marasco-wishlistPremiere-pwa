@@ -16,13 +16,6 @@ export function wishlistReducer(
   action: WishlistActions
 ): WishlistState {
   switch (action.type) {
-    case WishlistActionTypes.WishlistPremiereNull:
-      return {
-        ...state,
-        wishlists: null,
-        categories: null
-      };
-
     case WishlistActionTypes.WishlistsLoad:
     case WishlistActionTypes.WishlistsRestore:
     case WishlistActionTypes.WishlistsPayload:
@@ -54,3 +47,5 @@ export function wishlistReducer(
       return state;
   }
 }
+
+

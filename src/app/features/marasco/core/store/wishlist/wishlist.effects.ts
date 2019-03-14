@@ -1,13 +1,10 @@
-import { getUserWishlistCategories } from './wishlist.selectors';
 import { WishlistItemCategoryService } from './../../services/wishlist-item-category.service';
-import { WishlistItemCategory } from './../../interfaces/Wishlist-item-category.interface';
 import { WishlistItemCategoriesStateService } from '../../services/wishlist-item-categories.state.service';
 import { WishlistService } from '../../services/wishlists.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
-import { empty, of } from 'rxjs';
-import { tap, map, switchMap, catchError, mergeMap, concatMap } from 'rxjs/operators';
+import { tap, map, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { WishlistState } from './wishlist.reducer';
@@ -36,91 +33,17 @@ export class WishlistEffects {
     })
   );
 
-  // @Effect()
-  // wishlistsChange$ = this._actions$.pipe(
-  //   ofType(actions.WishlistActionTypes.WishlistsChange),
-  //   // tap((data: any) => console.log('Whatup!!')),
-  //   // tap((data: any) => console.log(data)),
-  //   switchMap((data: any) => data.payload.getWishlists()),
-  //   tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-  //   map((_) => new actions.WishlistsPayload(_))
-  // );
-
-    @Effect()
+  @Effect()
   wishlistsChange$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.WishlistsChange),
-    // tap((data: any) => console.log('Whatup!!')),
-    // tap((data: any) => console.log(data)),
-    concatMap((data: any) => [
-      data.payload.getWishlists(),
-      data.payload.getWishlistItemCategories()
-    ]),
-    tap<Wishlist[]>((_) => (
-      this._wishlistStateService.wishlists = _
-      )),
+    switchMap((data: any) => data.payload.getWishlists()),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
 
   @Effect()
-  wishlistItemCategoriesChange$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.WishlistItemCategoriesChange),
-    // tap((data: any) => console.log('Whatup!!')),
-    // tap((data: any) => console.log(data)),
-    switchMap((data: any) =>data.payload.getWishlistItemCategories()),
-    tap<WishlistItemCategory[]>(
-      (_) =>
-        (this._wishlistItemCategoriesStateService.wishlistItemCategories = _)
-    ),
-    map((_) => new actions.WishlistItemCategoriesPayload(_))
-  );
-
-
-  @Effect({ dispatch: false })
-  itemCategoryCreate$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.CreateWishlistItemCategoryAction),
-    map((data: any) => data.payload),
-    tap((category: WishlistItemCategory) => {
-      this._wishlistItemCategoryService.insert(category).subscribe(
-        (result: any) => {
-          if (!!result.error) {
-            this.dispatchErrorNotification(result.error);
-            return;
-          }
-
-          this.notify(
-            'Category Created!',
-            'Category has been added to available list of options.',
-            null,
-            true
-          );
-        },
-        (error: any) => {
-          this.dispatchError(error);
-        }
-      );
-    })
-  );
-
-  // @Effect()
-  // wishlistItemCategoriesChange$ = this._actions$.pipe(
-  //   ofType(actions.WishlistActionTypes.WishlistItemCategoriesChange),
-  //   // tap((data: any) => console.log('Whatup!!')),
-  //   // tap((data: any) => console.log(data)),
-  //   switchMap((data: any) =>
-  //     this._wishlistItemCategoriesStateService.add(data.payload)
-  //   ),
-  //   tap<WishlistItemCategory[]>(
-  //     (_) =>
-  //       (this._wishlistItemCategoriesStateService.wishlistItemCategories = _)
-  //   ),
-  //   map((_) => new actions.WishlistItemCategoriesPayload(_))
-  // );
-
-  @Effect()
   wishlistCreateSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistSuccess),
-    // tap((data: any) => console.log('Whatup!!')),
-    // tap((data: any) => console.log(data)),
     switchMap((data: any) => this._wishlistStateService.add(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
@@ -187,19 +110,15 @@ export class WishlistEffects {
     private _auth: AuthService,
     private _notificationService: NotificationService,
     private _wishlistStateService: WishlistStateService,
-    private _wishlistItemCategoriesStateService: WishlistItemCategoriesStateService,
-    private _wishlistItemCategoryService: WishlistItemCategoryService,
     private _wishlistService: WishlistService
   ) {
     //Login, Logout
     this._auth.onAuthStateChanged.subscribe((user) => {
       if (!!user) {
-        //this._store.dispatch(new actions.WishlistItemCategoriesChange(user));
         this._store.dispatch(new actions.WishlistsChange(user));
       } else {
         this._wishlistStateService.wishlists = null;
-        this._wishlistItemCategoriesStateService.wishlistItemCategories = null;
-        this._store.dispatch(new actions.WishlistPremiereNull());
+        this._store.dispatch(new actions.WishlistsNull());
       }
     });
 
@@ -208,15 +127,5 @@ export class WishlistEffects {
         this._store.dispatch(new actions.CreateWishlistSuccess(wishlist));
       }
     });
-
-    this._wishlistItemCategoryService.onWishlistItemCategoryCreated.subscribe(
-      (wishlistCategory) => {
-        if (!!wishlistCategory) {
-          this._store.dispatch(
-            new actions.WishlistItemCategoriesChange(wishlistCategory)
-          );
-        }
-      }
-    );
   }
 }

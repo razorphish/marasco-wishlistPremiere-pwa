@@ -1,12 +1,12 @@
 import { Action } from '@ngrx/store';
 
 export enum WishlistActionTypes {
-  WishlistPremiereNull = '[Wishlist Premiere] Null Wishlist Premiere',
 
-  WishlistsLoad = '[Wishlist] Load wishlists',
-  WishlistsRestore = '[Wishlist] Wishlists Restore',
-  WishlistsChange = '[Wishlist] Wishlists Change',
-  WishlistsPayload = '[Wishlist] Wishlists Payload',
+  WishlistsLoad = '[Wishlists] Load wishlists',
+  WishlistsRestore = '[Wishlists] Wishlists Restore',
+  WishlistsChange = '[Wishlists] Wishlists Change',
+  WishlistsPayload = '[Wishlists] Wishlists Payload',
+  WishlistsNull = '[Wishlist] Wishlists Null',
 
   CreateWishlistAction = '[Wishlist] Create Wishlist Action',
   CreateWishlistSuccess = '[Wishlist] Create Wishlist Success',
@@ -17,8 +17,10 @@ export enum WishlistActionTypes {
   WishlistItemCategoriesRestore = '[WishlistItemCategory] Wishlist Item Categories Restore',
   WishlistItemCategoriesChange = '[WishlistItemCategory] Wishlists Item Categories Change',
   WishlistItemCategoriesPayload = '[WishlistItemCategory] Wishlists Item Categories Payload',
+  WishlistItemCategoriesNull = '[WishlistItemCategory] Wishlist Item Categories Nulll',
 
-  CreateWishlistItemCategoryAction = '[WishlistItemCategory] Create Wishlist Item Category'
+  CreateWishlistItemCategoryAction = '[WishlistItemCategory] Create Wishlist Item Category',
+  CreateWishlistItemCategorySuccess = '[WishlistItemCategory] Create Wishlist Item Category Success'
 }
 
 export class WishlistsLoad implements Action {
@@ -26,8 +28,16 @@ export class WishlistsLoad implements Action {
   constructor(readonly payload: any) {}
 }
 
+export class WishlistsNull implements Action {
+  readonly type = WishlistActionTypes.WishlistsNull;
+}
+
+export class WishlistItemCategoriesNull implements Action {
+  readonly type = WishlistActionTypes.WishlistItemCategoriesNull;
+}
+
 export class WishlistPremiereNull implements Action {
-  readonly type = WishlistActionTypes.WishlistPremiereNull;
+  readonly type = WishlistActionTypes.WishlistItemCategoriesNull;
 }
 
 export class WishlistsRestore implements Action {
@@ -91,12 +101,18 @@ export class CreateWishlistItemCategoryAction implements Action {
   constructor(readonly payload: any) {}
 }
 
+export class CreateWishlistItemCategorySuccess implements Action {
+  readonly type = WishlistActionTypes.CreateWishlistItemCategorySuccess;
+  constructor(readonly payload: any) {}
+}
+
 export type WishlistActions =
   | WishlistsLoad
   | WishlistsRestore
   | WishlistsChange
   | WishlistsPayload
-  | WishlistPremiereNull
+  | WishlistsNull
+  | WishlistItemCategoriesNull
   | WishlistItemCategoriesLoad
   | WishlistItemCategoriesRestore
   | WishlistItemCategoriesChange
@@ -105,4 +121,5 @@ export type WishlistActions =
   | CreateWishlistSuccess
   | DeleteWishlistAction
   | EditWishlistAction
-  | CreateWishlistItemCategoryAction;
+  | CreateWishlistItemCategoryAction
+  | CreateWishlistItemCategorySuccess;
