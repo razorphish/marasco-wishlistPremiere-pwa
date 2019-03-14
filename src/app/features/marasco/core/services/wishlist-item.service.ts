@@ -11,7 +11,7 @@ import { WishlistItem } from '../interfaces/Wishlist-item.interface';
 
 @Injectable()
 export class WishlistItemService {
-  private _url: string = `${environment.apiUrl}wishlist/${this.wishlistId}/item`;
+  private _url: string = `${environment.apiUrl}wishlist/this.wishlistId/item`;
   private _wishlistSource: WishlistItem;
 
   public onWishlistItemChanged = new BehaviorSubject<WishlistItem>(
@@ -22,7 +22,7 @@ export class WishlistItemService {
     this._wishlistSource
   );
 
-  constructor(public wishlistId: string, private _authHttp: AuthHttpService) {}
+  constructor(private _authHttp: AuthHttpService) {}
 
   all(): Observable<WishlistItem[]> {
     return this._authHttp.get(this._url).pipe(
