@@ -1,17 +1,20 @@
+import { Wishlist } from './../../../../core/interfaces/Wishlist.interface';
 
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { filter, mergeMap, take } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Store, select } from '@ngrx/store';
 
 // Local
-import { WishlistService } from '../../../../core/services/wishlists.service';
 
 import { ActivityLogSubjectService } from '../../../../shared/activitylog.subject-service';
+import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 
 @Injectable()
 export class WishlistResolve implements Resolve<any> {
   constructor(
-    private _wishlistService: WishlistService,
+    private _store: Store<any>,
     private _activityLogService: ActivityLogSubjectService
   ) {}
 
@@ -22,6 +25,13 @@ export class WishlistResolve implements Resolve<any> {
     if (id === "0") {
       return of("0");
     }
-    return this._wishlistService.get(id);
+
+    return this._store.pipe(
+      select(fromWishlist.getUserWishlists),
+      take(1),
+      mergeMap(_ => _),
+      filter((wishlist: Wishlist) => wishlist._id === id)
+    );
+    //return this._wishlistService.get(id);
   }
 }
