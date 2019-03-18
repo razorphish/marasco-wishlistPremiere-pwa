@@ -1,4 +1,4 @@
-import { Component, Output, Input } from '@angular/core';
+import { Component, Output, Input, EventEmitter } from '@angular/core';
 import {
   AngularFireStorage,
   AngularFireUploadTask
@@ -25,7 +25,9 @@ export class Dropzone2Component {
   snapshot: Observable<any>;
 
   // Download URL
-  @Output() downloadURL: Observable<string>;
+  downloadURL: Observable<string>;
+
+  @Output() imageUpload = new EventEmitter<string>();
   @Input() dbName: string;
   @Input() document: any;
   @Input() meta: any;
@@ -37,6 +39,10 @@ export class Dropzone2Component {
     private _storage: AngularFireStorage,
     private _db: AngularFirestore
   ) {}
+
+  onImageUpload(value) {
+    this.imageUpload.emit(value);
+  }
 
   toggleHover(event: boolean) {
     this.isHovering = event;
@@ -65,6 +71,7 @@ export class Dropzone2Component {
 
     // Progress monitoring
     this.percentage = this.task.percentageChanges();
+
     this.snapshot = this.task.snapshotChanges().pipe(
       tap((snap) => {
         if (!!this.dbName) {
@@ -72,12 +79,15 @@ export class Dropzone2Component {
             // Update firestore on completion
             this._db
               .collection(this.dbName)
-              .add(Object.assign({ url: path, size: snap.totalBytes }, this.meta));
+              .add(
+                Object.assign({ url: path, size: snap.totalBytes }, this.meta)
+              );
           }
         }
       }),
       finalize(() => (this.downloadURL = fileRef.getDownloadURL()))
     );
+
   }
 
   // Determines if the upload task is active

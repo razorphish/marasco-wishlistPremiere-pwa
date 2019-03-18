@@ -128,6 +128,10 @@ export class AuthTokenService {
         .join('')
     );
   }
+
+  ngOnDestroy(){
+    
+  }
 }
 
 export function AuthTokenFactory(service: AuthTokenService): Function {

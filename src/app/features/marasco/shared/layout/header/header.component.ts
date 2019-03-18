@@ -1,9 +1,11 @@
 import { User } from './../../../core/interfaces/UserInfo.interface';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { NotificationService } from '@app/features/marasco/core/services/notification.service';
 import { Store, select } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -11,7 +13,9 @@ declare var $: any;
   selector: 'sa-header',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
+  
   public isLoggedIn: boolean;
   public user: User;
 
@@ -29,7 +33,9 @@ export class HeaderComponent implements OnInit {
 
     const currentState = this._store.pipe(select(fromAuth.getUser));
 
-    currentState.subscribe((data) => {
+    currentState
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((data) => {
       this.isLoggedIn = !!data;
       if (!!data) {
         this.user = data.user;
@@ -76,5 +82,10 @@ export class HeaderComponent implements OnInit {
 
   onSubmit() {
     this._router.navigate(['/miscellaneous/search']);
+  }
+
+  ngOnDestroy(){
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

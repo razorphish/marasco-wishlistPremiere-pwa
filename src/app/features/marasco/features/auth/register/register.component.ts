@@ -1,6 +1,6 @@
 import { LayoutService } from './../../../core/services/layout.service';
 import { UserRegistration } from './../../../core/models/userRegistration.model';
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -9,12 +9,15 @@ import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { environment } from '@env/environment';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public isMobile: boolean = false;
   public termsAgreed: boolean = false;
 
@@ -120,9 +123,11 @@ export class RegisterComponent implements OnInit {
     private _modalService: BsModalService,
     private _pwaService: PwaService
   ) {
-    this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
-      this.showAddToHomeScreenButton = !!prompt;
-    });
+    this._pwaService.onBeforeInstallPrompt
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((prompt) => {
+        this.showAddToHomeScreenButton = !!prompt;
+      });
   }
 
   addToHome($event) {
@@ -185,5 +190,10 @@ export class RegisterComponent implements OnInit {
   signInWithLinkedIn(): void {
     //this.authService.signIn(LinkedInLoginProvider.PROVIDER_ID);
     this._store.dispatch(new fromAuth.LinkedInSign());
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

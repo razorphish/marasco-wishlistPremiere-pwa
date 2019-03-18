@@ -11,13 +11,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
-
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
 
   //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
   //destroyed$ = new Subject<boolean>();
@@ -25,7 +27,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public showAddToHomeScreenButton: boolean = true;
 
   public validationOptions: any = {
-
     //Custom method
     store: this._store,
     // Rules for form validation
@@ -34,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         required: true
       },
       password: {
-        required: true,
+        required: true
       }
     },
 
@@ -46,8 +47,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       password: {
         required: 'Please enter your password'
       }
-    }
-    , submitHandler: this.login
+    },
+    submitHandler: this.login
   };
 
   // constructor(
@@ -58,11 +59,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   //   private authService: SocialAuthService
   //   ) {
 
-  constructor(
-    private _store: Store<any>,
-    private _pwaService: PwaService
-  ) {
-
+  constructor(private _store: Store<any>, private _pwaService: PwaService) {
     //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
     // updates$
     //   .ofType(actions.AuthActionTypes.AuthFailure)
@@ -73,18 +70,18 @@ export class LoginComponent implements OnInit, OnDestroy {
     //   )
     //   .subscribe();
     //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
-    this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
-      this.showAddToHomeScreenButton = !!prompt;
-    });
+    this._pwaService.onBeforeInstallPrompt
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((prompt) => {
+        this.showAddToHomeScreenButton = !!prompt;
+      });
   }
 
   addToHome($event) {
     this._pwaService.prompt();
   }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
   //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
   // dispatchError(error: any) {
   //   switch (error.payload.code) {
@@ -99,11 +96,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
 
   login($event) {
-
     let model: any = {
       username: $event.elements.username.value,
       password: $event.elements.password.value,
-      forceRefresh: $event.elements.forceRefresh.value,
+      forceRefresh: $event.elements.forceRefresh.value
     };
 
     this['settings'].store.dispatch(new fromAuth.LoginAction(model));
@@ -129,5 +125,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     //this.destroyed$.next(true);
     //this.destroyed$.complete();
     //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

@@ -1,11 +1,12 @@
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { finalize, takeUntil } from 'rxjs/operators';
 import {
   Component,
   OnInit,
   ViewChild,
   Input,
-  TemplateRef
+  TemplateRef,
+  OnDestroy
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -29,9 +30,12 @@ import { AngularFireStorage } from '@angular/fire/storage';
   templateUrl: 'wishlist.component.html',
   styleUrls: ['./wishlist.component.css']
 })
-export class WishlistComponent implements OnInit {
+export class WishlistComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
-
+  private unsubscribe$ = new Subject<void>();
+  private unsubscribe2$ = new Subject<void>();
+  private unsubscribe3$ = new Subject<void>();
+  private unsubscribe4$ = new Subject<void>();
   //\\\END Private variables ////////
 
   //////////////////Publicly exposed variables///////////
@@ -207,11 +211,13 @@ export class WishlistComponent implements OnInit {
 
     // observe percentage changes
     this.uploadPercent = task.percentageChanges();
-    
+
     // get notified when the download URL is available
     task
       .snapshotChanges()
-      .pipe(finalize(() => (this.downloadURL = fileRef.getDownloadURL())))
+      .pipe(
+        takeUntil(this.unsubscribe4$),
+        finalize(() => (this.downloadURL = fileRef.getDownloadURL())))
       .subscribe();
   }
 
@@ -274,7 +280,10 @@ export class WishlistComponent implements OnInit {
   }
 
   private activateState() {
-    const currentState = this._store.pipe(select(fromAuth.getUser));
+    const currentState = this._store.pipe(
+      select(fromAuth.getUser),
+      takeUntil(this.unsubscribe2$)
+    );
 
     currentState.subscribe((data) => {
       if (!!data) {
@@ -301,7 +310,9 @@ export class WishlistComponent implements OnInit {
    */
   private insert() {
     this.wishlist.statusId = this.selectedStatus[0];
-    this._wishlistService.insert(this.wishlist).subscribe(
+    this._wishlistService.insert(this.wishlist)
+    .pipe(takeUntil(this.unsubscribe3$))
+    .subscribe(
       (item) => {
         if (item) {
           this._activityLogService.addInserts(`Inserted wishlist ${item._id}`);
@@ -352,48 +363,51 @@ export class WishlistComponent implements OnInit {
    */
   private update() {
     this.wishlist.statusId = this.selectedStatus[0];
-    this._wishlistService.update(this.wishlist).subscribe(
-      (item) => {
-        if (item) {
-          this._activityLogService.addUpdate(`Updated wishlist ${item._id}`);
-          this._notificationService.smallBox({
-            title: 'Wishlist Updated',
-            content: 'Wishlist has been updated successfully. ',
-            color: '#739E73',
-            timeout: 4000,
-            icon: 'fa fa-check',
-            number: '4'
-          });
-        } else {
-          this._activityLogService.addError(
-            'No wishlist present: Update Faile'
-          );
+    this._wishlistService
+      .update(this.wishlist)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (item) => {
+          if (item) {
+            this._activityLogService.addUpdate(`Updated wishlist ${item._id}`);
+            this._notificationService.smallBox({
+              title: 'Wishlist Updated',
+              content: 'Wishlist has been updated successfully. ',
+              color: '#739E73',
+              timeout: 4000,
+              icon: 'fa fa-check',
+              number: '4'
+            });
+          } else {
+            this._activityLogService.addError(
+              'No wishlist present: Update Faile'
+            );
+            this._notificationService.bigBox({
+              title: 'Oops! the database has returned an error',
+              content:
+                'No wishlist returned which means that wishlist was not updated',
+              color: '#C46A69',
+              icon: 'fa fa-warning shake animated',
+              number: '1',
+              timeout: 6000 // 6 seconds
+            });
+          }
+        },
+        (err) => {
+          this._activityLogService.addError(err);
           this._notificationService.bigBox({
-            title: 'Oops! the database has returned an error',
-            content:
-              'No wishlist returned which means that wishlist was not updated',
+            title: 'Oops!  there is an issue with the call to update',
+            content: err,
             color: '#C46A69',
             icon: 'fa fa-warning shake animated',
             number: '1',
             timeout: 6000 // 6 seconds
           });
+        },
+        () => {
+          // Clean up
         }
-      },
-      (err) => {
-        this._activityLogService.addError(err);
-        this._notificationService.bigBox({
-          title: 'Oops!  there is an issue with the call to update',
-          content: err,
-          color: '#C46A69',
-          icon: 'fa fa-warning shake animated',
-          number: '1',
-          timeout: 6000 // 6 seconds
-        });
-      },
-      () => {
-        // Clean up
-      }
-    );
+      );
   }
 
   /**
@@ -401,5 +415,16 @@ export class WishlistComponent implements OnInit {
    */
   private validate(): boolean {
     return this._factory.validate(this.wishlist, this.displayErrors);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+    this.unsubscribe2$.next();
+    this.unsubscribe2$.complete();
+    this.unsubscribe3$.next();
+    this.unsubscribe3$.complete();
+    this.unsubscribe4$.next();
+    this.unsubscribe4$.complete();
   }
 }

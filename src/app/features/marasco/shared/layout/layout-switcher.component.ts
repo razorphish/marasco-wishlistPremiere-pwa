@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { config } from '@app/features/marasco/core/smartadmin.config';
 import { LayoutService } from '@app/features/marasco/core/services/layout.service'
-import { Subscription } from 'rxjs';
+import { Subscription, Subject } from 'rxjs';
 
 declare var $: any;
 
@@ -25,7 +25,7 @@ export class LayoutSwitcherComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe()
+    this.sub.unsubscribe();
   }
 
 

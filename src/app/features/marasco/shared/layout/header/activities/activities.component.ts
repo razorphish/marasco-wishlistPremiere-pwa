@@ -1,5 +1,7 @@
 import {Component, OnInit, ElementRef, Renderer, OnDestroy} from '@angular/core';
 import {ActivitiesService} from "./activities.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -9,6 +11,7 @@ declare var $: any;
   providers: [ActivitiesService],
 })
 export class ActivitiesComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   count:number;
   lastUpdate:any;
   active:boolean;
@@ -29,7 +32,9 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activitiesService.getActivities().subscribe(data=> {
+    this.activitiesService.getActivities()
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe(data=> {
       this.activities = data;
       this.count = data.reduce((sum, it)=> sum + it.data.length, 0);
       this.currentActivity = data[0];
@@ -76,7 +81,9 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy(){
-    this.documentUnsub()
+    this.documentUnsub();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   documentUnsub(){

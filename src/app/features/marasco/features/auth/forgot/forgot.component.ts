@@ -1,15 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-forgot',
   templateUrl: './forgot.component.html',
   styles: []
 })
-export class ForgotComponent implements OnInit {
+export class ForgotComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
   public showAddToHomeScreenButton: boolean = true;
 
   public validationOptions: any = {
@@ -44,9 +47,11 @@ export class ForgotComponent implements OnInit {
   };
 
   constructor(private _store: Store<any>, private _pwaService: PwaService) {
-    this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
-      this.showAddToHomeScreenButton = !!prompt;
-    });
+    this._pwaService.onBeforeInstallPrompt
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((prompt) => {
+        this.showAddToHomeScreenButton = !!prompt;
+      });
   }
 
   addToHome($event) {
@@ -77,5 +82,10 @@ export class ForgotComponent implements OnInit {
   signInWithLinkedIn(): void {
     //this.authService.signIn(LinkedInLoginProvider.PROVIDER_ID);
     this._store.dispatch(new fromAuth.LinkedInSign());
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

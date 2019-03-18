@@ -1,25 +1,28 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
-
   selector: 'sa-navigation',
   templateUrl: './navigation.component.html'
 })
-export class NavigationComponent implements OnInit {
+export class NavigationComponent implements OnInit, OnDestroy {
 
-  public user:any;
+  private unsubscribe$ = new Subject<void>();
+  
+  public user: any;
   public wishlists: Wishlist[];
 
-  constructor(
-    private _store: Store<fromWishlist.WishlistState>
-  ) {
-  }
+  constructor(private _store: Store<fromWishlist.WishlistState>) {}
 
   ngOnInit() {
-    const currentWishlistsState = this._store.pipe(select(fromWishlist.getUserWishlists));
+    const currentWishlistsState = this._store.pipe(
+      select(fromWishlist.getUserWishlists),
+      takeUntil(this.unsubscribe$)
+    );
     currentWishlistsState.subscribe((wishlists: Wishlist[]) => {
       this.wishlists = wishlists;
     });
@@ -35,5 +38,10 @@ export class NavigationComponent implements OnInit {
     }
 
     return foundRole;
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
