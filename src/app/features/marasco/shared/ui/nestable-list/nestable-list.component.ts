@@ -25,7 +25,7 @@ export class NestableListComponent implements OnChanges {
   constructor(private el: ElementRef, private renderer: Renderer) {}
 
   ngOnInit() {
-    this.render();
+    //this.render();
   }
 
   ngOnChanges() {
@@ -48,14 +48,21 @@ export class NestableListComponent implements OnChanges {
   private createChild(item) {
     const li = document.createElement("li");
 
-    li.className = "dd-item";
+    li.className = "dd-item dd3-item";
     li.dataset["id"] = item.id || "NestableListComponent" + counter++;
 
     if (item.content) {
       const div = document.createElement("div");
-      div.className = "dd-handle";
-      div.innerHTML = item.content;
+      const divContent = document.createElement('div');
+
+      div.className = "dd-handle dd3-handle";
+      divContent.className = "dd3-content";
+
+      div.innerHTML = "&nbsp;";
+      divContent.innerHTML = item.content;
+
       li.appendChild(div);
+      li.appendChild(divContent);
     }
 
     if (item.children) {

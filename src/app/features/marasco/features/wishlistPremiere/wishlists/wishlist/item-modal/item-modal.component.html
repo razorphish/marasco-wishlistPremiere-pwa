@@ -11,7 +11,7 @@
   <h4 class="modal-title" id="myModalLabel">Wishlist Item</h4>
 </div>
 <div class="modal-body custom-scroll">
-  <dropzone2-upload [dbName]="dbName" (downloadURL)="onImageUploaded($event)"></dropzone2-upload>
+  <dropzone2-upload [dbName]="dbName" [configOptions]="configOptions" (imageUpload)="onImageUploaded($event)"></dropzone2-upload>
   <form
     id="form-add-wishlist-item"
     class="smart-form"
@@ -67,7 +67,8 @@
               type="checkbox"
               name="purchased"
               id="purchased"
-              [checked]="wishlistItem.purchased"
+              [ngModel]="wishlistItem.purchased"
+              value="true"
             />
             <i></i>
             Purchased?
@@ -86,10 +87,9 @@
               class="input-lg"
               ngModel
             >
-              <option value="" disabled>Choose a Category</option>
               <option
                 *ngFor="let category of dropdownList"
-                [ngValue]="category._id"
+                [value]="category._id"
               >
                 {{ category.name }}
               </option>

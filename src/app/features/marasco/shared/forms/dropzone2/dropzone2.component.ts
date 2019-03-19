@@ -10,6 +10,8 @@ import { Observable } from 'rxjs';
 
 import { finalize, tap } from 'rxjs/operators';
 
+import { FirebaseStorageConfigOptions } from './firebase-storage-config-options.interface';
+
 @Component({
   selector: 'dropzone2-upload',
   templateUrl: './dropzone2.component.html',
@@ -29,8 +31,7 @@ export class Dropzone2Component {
 
   @Output() imageUpload = new EventEmitter<string>();
   @Input() dbName: string;
-  @Input() document: any;
-  @Input() meta: any;
+  @Input() configOptions: FirebaseStorageConfigOptions;
 
   // State for dropzone CSS toggling
   isHovering: boolean;
@@ -39,10 +40,6 @@ export class Dropzone2Component {
     private _storage: AngularFireStorage,
     private _db: AngularFirestore
   ) {}
-
-  onImageUpload(value) {
-    this.imageUpload.emit(value);
-  }
 
   toggleHover(event: boolean) {
     this.isHovering = event;
@@ -59,10 +56,17 @@ export class Dropzone2Component {
     }
 
     // The storage path
-    const path = `test/${new Date().getTime()}_${file.name}`;
+    let path = `test/${new Date().getTime()}_${file.name}`;
 
     // Totally optional metadata
-    const customMetadata = this.meta || {};
+    let customMetadata = {};
+
+    if (!!this.configOptions) {
+      path = `${this.configOptions.path}${file.name}`;
+      if (!!this.configOptions.meta) {
+        customMetadata = this.configOptions.meta;
+      }
+    }
 
     const fileRef = this._storage.ref(path);
 
@@ -80,14 +84,20 @@ export class Dropzone2Component {
             this._db
               .collection(this.dbName)
               .add(
-                Object.assign({ url: path, size: snap.totalBytes }, this.meta)
+                Object.assign({ url: path, size: snap.totalBytes }, customMetadata)
               );
           }
         }
       }),
-      finalize(() => (this.downloadURL = fileRef.getDownloadURL()))
+      finalize(() => this.onImageUploadSuccess(fileRef))
     );
+  }
 
+  onImageUploadSuccess(fileRef) {
+    this.downloadURL = fileRef.getDownloadURL();
+    this.downloadURL.subscribe((data) => {
+      this.imageUpload.emit(data);
+    });
   }
 
   // Determines if the upload task is active

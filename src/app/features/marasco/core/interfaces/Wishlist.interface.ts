@@ -1,4 +1,5 @@
 import { WishlistPreference } from './Wishlist-Preference.interface'
+import { WishlistItem } from './Wishlist-item.interface';
 
 export interface Wishlist {
     _id?: string;
@@ -11,4 +12,5 @@ export interface Wishlist {
     dateModified?: Date;
     shares?: any;
     notifications?: any;
+    items?: WishlistItem[];
 }

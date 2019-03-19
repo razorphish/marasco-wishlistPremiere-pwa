@@ -1,5 +1,7 @@
 <!-- MAIN CONTENT -->
+
 <div id="content">
+  
   <div class="row">
     <sa-big-breadcrumbs
       [items]="[wishlist.name || 'Wishlist', 'Details']"
@@ -11,14 +13,27 @@
 
   <!-- widget grid -->
   <sa-widgets-grid>
+      <div class="row">
+          <!-- NEW WIDGET START -->
+          <article class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div sa-widget class="well" saSparklineContainer saEasyPieChartContainer>
+      <div class="widget-body">
+          <sa-nestable-list [items]="demo3" (change)="onChange3($event)"
+          [options]="{
+            group: 2,
+            maxDepth: 5
+          }"
+        ></sa-nestable-list></div>
+      </div></article></div>
     <!-- START ROW -->
     <div class="row">
+      
       <!-- NEW COL START -->
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <div
           sa-widget
-          
           [colorbutton]="false"
           [editbutton]="false"
           [custombutton]="false"
@@ -26,15 +41,17 @@
           [fullscreenbutton]="false"
           [togglebutton]="false"
           [sortable]="false"
+          class="well"
         >
           <header>
             <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
 
-            <h2>{{ isUpdate ? 'Edit': 'Create A New Wishlist' }}</h2>
+            <h2>{{ isUpdate ? 'Edit' : 'Create A New Wishlist' }}</h2>
           </header>
 
           <!-- widget div-->
           <div>
+
             <form
               #wishlistDetailsForm="ngForm"
               [saUiValidate]="validationOptions"
@@ -227,11 +244,10 @@
   <!-- end widget grid -->
 </div>
 
-
 <ng-template #wishlistItemModal>
-    <wishlist-item-modal
-      [wishlist]="wishlist"
-      (save)="addItem()"
-      (close)="onModalClose()"
-    ></wishlist-item-modal>
-  </ng-template>
+  <wishlist-item-modal
+    [wishlist]="wishlist"
+    (save)="addItem()"
+    (close)="onModalClose()"
+  ></wishlist-item-modal>
+</ng-template>

@@ -62,6 +62,7 @@ export const effects = [
   layout.LayoutEffects,
   menu.MenuEffects,
   wishlist.WishlistEffects,
+  wishlist.WishlistItemEffects,
   wishlist.WishlistItemCategoryEffects
 ];
 

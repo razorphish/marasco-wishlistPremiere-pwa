@@ -20,6 +20,7 @@ import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-ite
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { FirebaseStorageConfigOptions } from '@app/features/marasco/shared/forms/dropzone2/firebase-storage-config-options.interface';
 
 @Component({
   selector: 'wishlist-item-modal',
@@ -28,20 +29,23 @@ import { takeUntil } from 'rxjs/operators';
 export class WishlistItemModalComponent implements OnInit, OnDestroy {
   //*=================I/O============================= */
   @Input() wishlist: Wishlist;
-  @Output() save = new EventEmitter();
-  @Output() close = new EventEmitter();
-  @Output() upload = new EventEmitter();
   @Input() public options = {
     mode: 'popup',
     disabled: false,
     inline: true
   };
+
+  @Output() save = new EventEmitter();
+  @Output() close = new EventEmitter();
+  @Output() upload = new EventEmitter();
+
   /**============Privately exposed properties ========= */
   private unsubscribe$ = new Subject<void>();
 
   /**============Publicly exposed properties ========== */
   public bsModalRef: BsModalRef;
   public dbName = environment.wishlist.firebaseDbName;
+  public configOptions: FirebaseStorageConfigOptions;
   public dropdownList = [];
   public dropdownSettings = {};
   public imageName: string;
@@ -50,7 +54,8 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   public validationOptions: any;
 
   public wishlistItem: WishlistItem = {
-    name: ''
+    name: '',
+    purchased: false
   };
 
   public wishlistItemCategories: WishlistItemCategory[];
@@ -64,15 +69,31 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
     const currentWishlistItemCategoryState = this._store.pipe(
       select(fromWishlist.getUserWishlistCategories)
     );
+
+    this.configOptions = {
+      path: `${this.wishlist._id}/${new Date().getTime()}_`,
+      meta: {
+        wishlistId: this.wishlist._id,
+        nativelySaved: false
+      }
+    };
+
     currentWishlistItemCategoryState
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((wishlistItemCategories: WishlistItemCategory[]) => {
         this.wishlistItemCategories = wishlistItemCategories;
 
         this.wishlistItemCategories.push({
-          _id: '0',
-          name: 'Miscellaneous'
-        });
+          _id: '',
+          name: 'Choose a Category'
+        })
+
+        if (this.wishlistItemCategories.length === 0) {
+          this.wishlistItemCategories.push({
+            _id: '0',
+            name: 'Miscellaneous'
+          });
+        }
 
         this.dropdownList = this.wishlistItemCategories;
       });
@@ -90,6 +111,8 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
     this.validationOptions = {
       // Rules for form validation
       wishlistId: this.wishlist._id,
+      userId: this.wishlist.userId,
+      store: this._store,
       rules: {
         // username: {
         //   required: true
@@ -128,15 +151,16 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       name: $event.elements.name.value,
       price: $event.elements.price.value,
       url: $event.elements.url.value,
-      purchased: $event.elements.purchased.value,
+      purchased: $event.elements.purchased.checked,
       categoryId: $event.elements.categoryId.value,
       notes: $event.elements.notes.value,
       image: $event.elements.image.value,
-      wishlistId: this['settings'].wishlistId
+      wishlistId: this['settings'].wishlistId,
+      //userId: this['settings'].userId
     };
 
     this['settings'].store.dispatch(
-      new fromWishlist.CreateWishlistItemCategoryAction(model)
+      new fromWishlist.CreateWishlistItemAction(model)
     );
 
     //this.bsModalRef.hide();

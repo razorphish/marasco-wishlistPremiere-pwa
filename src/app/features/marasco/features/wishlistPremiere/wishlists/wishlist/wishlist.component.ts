@@ -39,6 +39,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   //\\\END Private variables ////////
 
   //////////////////Publicly exposed variables///////////
+  public demo3: any;
+
+  public nestable3DemoOutput: any;
+
   public defaultWishlist: Wishlist = {
     name: '',
     userId: '',
@@ -130,7 +134,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   public wishlist: Wishlist = this.defaultWishlist;
 
-  // @Input() filter = "ion ([7-9]|[1][0-2])";
+  // @Input() filter = 'ion ([7-9]|[1][0-2])';
   @Input() filter = '';
 
   @ViewChild('wishlistDetailsForm') wishlistDetailsForm;
@@ -163,6 +167,25 @@ export class WishlistComponent implements OnInit, OnDestroy {
     } else {
       this.isUpdate = false;
     }
+
+    this.demo3 = [
+      {
+        id: 100,
+        content: ' Drag 100 '
+      },
+      {
+        id: 101,
+        content: ' Drag 101 '
+      },
+      {
+        id: 102,
+        content: ' Drag 102 '
+      },
+      {
+        id: 105,
+        content: ' Drag 105 '
+      }
+    ];
 
     this.activate();
   }
@@ -201,6 +224,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.insert();
       }
     }
+  }
+
+  public onChange3(payload){
+    this.nestable3DemoOutput = payload;
   }
 
   public uploadFile(event) {
@@ -293,7 +320,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   private displayErrors(errors: string[]): void {
-    // event.errors.join("<br>").toString()
+    // event.errors.join('<br>').toString()
     const notificationService = new NotificationService();
     notificationService.bigBox({
       title: 'Oops!  There are some validation errors',

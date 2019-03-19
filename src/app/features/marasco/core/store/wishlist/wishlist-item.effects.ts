@@ -18,6 +18,7 @@ export class WishlistItemEffects {
   @Effect({ dispatch: false })
   createWishlistItem$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistItemAction),
+    map((data: any) => data.payload),
     tap((wishlistItem: any) => {
       this._wishlistItemService.insert(wishlistItem).subscribe(
         (result: any) => {
@@ -118,9 +119,9 @@ export class WishlistItemEffects {
     private _wishlistStateService: WishlistStateService,
     private _wishlistItemService: WishlistItemService
   ) {
-    this._wishlistItemService.onWishlistItemCreated.subscribe((wishlist) => {
-      if (!!wishlist) {
-        this._store.dispatch(new actions.CreateWishlistSuccess(wishlist));
+    this._wishlistItemService.onWishlistItemCreated.subscribe((wishlistItem) => {
+      if (!!wishlistItem) {
+        this._store.dispatch(new actions.CreateWishlistItemSuccess(wishlistItem));
       }
     });
   }

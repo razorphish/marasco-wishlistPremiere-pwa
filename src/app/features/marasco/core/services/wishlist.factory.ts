@@ -35,11 +35,11 @@ export class WishlistFactory {
     }
 
     // Only check on updated obects
-    if (Wishlist._id) {
-      if (!Wishlist.dateCreated) {
-        errors.push('Date Created not set');
-      }
-    }
+    // if (Wishlist._id) {
+    //   if (!Wishlist.dateCreated) {
+    //     errors.push('Date Created not set');
+    //   }
+    // }
 
     // Set errors
     if (errors.length > 0) {

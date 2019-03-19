@@ -26,8 +26,8 @@ import {
 
 import { WishlistService } from './wishlists.service';
 import { WishlistFactory } from './wishlist.factory';
+import { WishlistItemService } from './wishlist-item.service';
 import { WishlistItemCategoryService } from './wishlist-item-category.service';
-
 
 export const services = [
   StorageService,
@@ -44,6 +44,7 @@ export const services = [
   PwaService,
   WishlistService,
   WishlistStateService,
+  WishlistItemService,
   WishlistItemCategoriesStateService,
   WishlistItemCategoryService,
   WishlistFactory
@@ -68,3 +69,4 @@ export * from './wishlists.state.service';
 export * from './wishlist-item-category.service';
 export * from './wishlist-item-categories.state.service';
 export * from './wishlists.service';
+export * from './wishlist-item.service';

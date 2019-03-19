@@ -7,7 +7,9 @@ import { SmartadminValidationModule } from '../../../shared/forms/validation/sma
 import { SmartadminInputModule } from '../../../shared/forms/input/smartadmin-input.module';
 
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+
 import { Dropzone2Module } from '@app/features/marasco/shared/forms/dropzone2/dropzone2.module';
+import { NestableListModule } from '@app/features/marasco/shared/ui/nestable-list/nestable-list.module';
 
 import {
   WishlistsComponent,
@@ -29,6 +31,7 @@ import {
     SmartadminInputModule,
     WishlistsRoutingModule,
     Dropzone2Module,
+    NestableListModule,
     NgMultiSelectDropDownModule.forRoot()
   ],
   exports: [],

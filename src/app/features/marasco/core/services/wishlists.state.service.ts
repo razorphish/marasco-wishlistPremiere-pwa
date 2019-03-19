@@ -51,6 +51,9 @@ export class WishlistStateService {
       (x) => x._id === wishlistItem.wishlistId
     );
 
+    //Add item
+    foundWishlist.items.push(wishlistItem);
+
     this.wishlists[foundIndex] = foundWishlist;
 
     return new Promise((resolve) => {
