@@ -1,14 +1,15 @@
 import { Observable, Subject } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import {
   Component,
   OnInit,
   ViewChild,
   Input,
   TemplateRef,
-  OnDestroy
+  OnDestroy,
+  ElementRef
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -23,8 +24,10 @@ import { WishlistService } from '../../../../core/services/wishlists.service';
 import { WishlistFactory } from '../../../../core/services/wishlist.factory';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
-import { AngularFireStorage } from '@angular/fire/storage';
 
+/**
+ * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
+ */
 @Component({
   selector: 'marasco-wishlist',
   templateUrl: 'wishlist.component.html',
@@ -35,13 +38,9 @@ export class WishlistComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   private unsubscribe2$ = new Subject<void>();
   private unsubscribe3$ = new Subject<void>();
-  private unsubscribe4$ = new Subject<void>();
   //\\\END Private variables ////////
 
   //////////////////Publicly exposed variables///////////
-  public demo3: any;
-
-  public nestable3DemoOutput: any;
 
   public defaultWishlist: Wishlist = {
     name: '',
@@ -63,6 +62,19 @@ export class WishlistComponent implements OnInit, OnDestroy {
   public optionsTokenTable: any = {};
 
   public selectedStatus = [];
+
+  public itemSortOptions = {
+    onUpdate: (event: any) => {
+      let sortObject = {
+        id: event.item.children[0].children[0].children[0].value,
+        oldIndex: event.oldIndex,
+        newIndex: event.newIndex
+      }
+
+      console.log(sortObject);
+    },
+    animation: 150
+  }
   public state: any = {
     tabs: {
       demo1: 0
@@ -147,12 +159,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _wishlistService: WishlistService,
     private _route: ActivatedRoute,
     private _notificationService: NotificationService,
-    private _router: Router,
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
     private _store: Store<fromAuth.AuthState>,
     private _modalService: BsModalService,
-    private _storage: AngularFireStorage
+    private el: ElementRef,
   ) {}
 
   /////////////////////////////////////
@@ -168,35 +179,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       this.isUpdate = false;
     }
 
-    this.demo3 = [
-      {
-        id: 100,
-        content: ' Drag 100 '
-      },
-      {
-        id: 101,
-        content: ' Drag 101 '
-      },
-      {
-        id: 102,
-        content: ' Drag 102 '
-      },
-      {
-        id: 105,
-        content: ' Drag 105 '
-      }
-    ];
-
     this.activate();
-  }
-
-  onItemSelect(item: any) {
-    // Clear out current wishlist roles
-    //console.log(item);
-  }
-
-  onSelectAll(items: any) {
-    //console.log(items);
   }
 
   /////////////////////////////////////
@@ -224,28 +207,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.insert();
       }
     }
-  }
-
-  public onChange3(payload){
-    this.nestable3DemoOutput = payload;
-  }
-
-  public uploadFile(event) {
-    const file = event.target.files[0];
-    const filePath = 'name-your-file-path-here';
-    const fileRef = this._storage.ref(filePath);
-    const task = this._storage.upload(filePath, file, { customMetadata: {} });
-
-    // observe percentage changes
-    this.uploadPercent = task.percentageChanges();
-
-    // get notified when the download URL is available
-    task
-      .snapshotChanges()
-      .pipe(
-        takeUntil(this.unsubscribe4$),
-        finalize(() => (this.downloadURL = fileRef.getDownloadURL())))
-      .subscribe();
   }
 
   /////////////////////////////////////
@@ -337,52 +298,55 @@ export class WishlistComponent implements OnInit, OnDestroy {
    */
   private insert() {
     this.wishlist.statusId = this.selectedStatus[0];
-    this._wishlistService.insert(this.wishlist)
-    .pipe(takeUntil(this.unsubscribe3$))
-    .subscribe(
-      (item) => {
-        if (item) {
-          this._activityLogService.addInserts(`Inserted wishlist ${item._id}`);
-          this._notificationService.smallBox({
-            title: 'wishlist created',
-            content: 'wishlist has been created successfully. ',
-            color: '#739E73',
-            timeout: 4000,
-            icon: 'fa fa-check',
-            number: '4'
-          });
-          this.isUpdate = true;
-          this.wishlist._id = item._id;
-        } else {
-          this._activityLogService.addError(
-            'wishlist not returned from database on insert'
-          );
+    this._wishlistService
+      .insert(this.wishlist)
+      .pipe(takeUntil(this.unsubscribe3$))
+      .subscribe(
+        (item) => {
+          if (item) {
+            this._activityLogService.addInserts(
+              `Inserted wishlist ${item._id}`
+            );
+            this._notificationService.smallBox({
+              title: 'wishlist created',
+              content: 'wishlist has been created successfully. ',
+              color: '#739E73',
+              timeout: 4000,
+              icon: 'fa fa-check',
+              number: '4'
+            });
+            this.isUpdate = true;
+            this.wishlist._id = item._id;
+          } else {
+            this._activityLogService.addError(
+              'wishlist not returned from database on insert'
+            );
+            this._notificationService.bigBox({
+              title: 'Oops! the database has returned an error',
+              content:
+                'wishlist was not returned indicating that wishlist was not in fact updated',
+              color: '#C46A69',
+              icon: 'fa fa-warning shake animated',
+              number: '1',
+              timeout: 6000 // 6 seconds
+            });
+          }
+        },
+        (errInfo) => {
+          this._activityLogService.addError(errInfo);
           this._notificationService.bigBox({
-            title: 'Oops! the database has returned an error',
-            content:
-              'wishlist was not returned indicating that wishlist was not in fact updated',
+            title: 'Oops!  there is an issue with the call to create',
+            content: errInfo.error.message || errInfo.message,
             color: '#C46A69',
             icon: 'fa fa-warning shake animated',
             number: '1',
             timeout: 6000 // 6 seconds
           });
+        },
+        () => {
+          // Clean up
         }
-      },
-      (errInfo) => {
-        this._activityLogService.addError(errInfo);
-        this._notificationService.bigBox({
-          title: 'Oops!  there is an issue with the call to create',
-          content: errInfo.error.message || errInfo.message,
-          color: '#C46A69',
-          icon: 'fa fa-warning shake animated',
-          number: '1',
-          timeout: 6000 // 6 seconds
-        });
-      },
-      () => {
-        // Clean up
-      }
-    );
+      );
   }
 
   /**
@@ -451,7 +415,5 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.unsubscribe2$.complete();
     this.unsubscribe3$.next();
     this.unsubscribe3$.complete();
-    this.unsubscribe4$.next();
-    this.unsubscribe4$.complete();
   }
 }

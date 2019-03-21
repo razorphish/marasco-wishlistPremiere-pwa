@@ -74,6 +74,21 @@ export class WishlistItemService {
       );
   }
 
+  sort(wishlistItem: WishlistItem): Observable<WishlistItem> {
+    return this._authHttp
+      .post(
+        `${this._url}/${wishlistItem.wishlistId}/item/sort`,
+        JSON.stringify(wishlistItem)
+      )
+      .pipe(
+        map((wishlistItem: WishlistItem) => {
+          this.onWishlistItemCreated.next(wishlistItem);
+          return wishlistItem;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
   update(wishlist: WishlistItem): Observable<WishlistItem> {
     return this._authHttp
       .put(`${this._url}${wishlist._id}`, JSON.stringify(wishlist))

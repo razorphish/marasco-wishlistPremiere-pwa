@@ -10,6 +10,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 
 import { Dropzone2Module } from '@app/features/marasco/shared/forms/dropzone2/dropzone2.module';
 import { NestableListModule } from '@app/features/marasco/shared/ui/nestable-list/nestable-list.module';
+import { SortablejsModule } from 'angular-sortablejs';
 
 import {
   WishlistsComponent,
@@ -32,7 +33,8 @@ import {
     WishlistsRoutingModule,
     Dropzone2Module,
     NestableListModule,
-    NgMultiSelectDropDownModule.forRoot()
+    NgMultiSelectDropDownModule.forRoot(),
+    SortablejsModule.forRoot({ animation: 150 })
   ],
   exports: [],
   declarations: [

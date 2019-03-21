@@ -1,7 +1,6 @@
 <!-- MAIN CONTENT -->
 
 <div id="content">
-  
   <div class="row">
     <sa-big-breadcrumbs
       [items]="[wishlist.name || 'Wishlist', 'Details']"
@@ -13,22 +12,8 @@
 
   <!-- widget grid -->
   <sa-widgets-grid>
-      <div class="row">
-          <!-- NEW WIDGET START -->
-          <article class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
-            <!-- Widget ID (each widget will need unique ID)-->
-            <div sa-widget class="well" saSparklineContainer saEasyPieChartContainer>
-      <div class="widget-body">
-          <sa-nestable-list [items]="demo3" (change)="onChange3($event)"
-          [options]="{
-            group: 2,
-            maxDepth: 5
-          }"
-        ></sa-nestable-list></div>
-      </div></article></div>
     <!-- START ROW -->
     <div class="row">
-      
       <!-- NEW COL START -->
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
@@ -51,7 +36,6 @@
 
           <!-- widget div-->
           <div>
-
             <form
               #wishlistDetailsForm="ngForm"
               [saUiValidate]="validationOptions"
@@ -95,6 +79,8 @@
                 <!-- end widget content -->
               </div>
             </form>
+
+            <!-- Widget ID (each widget will need unique ID)-->
 
             <!-- widget content -->
             <!-- <div class="widget-body">
@@ -240,8 +226,102 @@
       <!-- END COL -->
     </div>
     <!-- END ROW -->
+
+    <!-- START ROW -->
+    <div class="row">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div
+          sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [custombutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [togglebutton]="false"
+          [sortable]="false"
+          class="well"
+        >
+          <div [sortablejs]="wishlist.items" [sortablejsOptions]="itemSortOptions">
+            <div
+              class="chat-body no-padding profile-message"
+              *ngFor="let item of wishlist.items"
+            >
+              <ul>
+                <li class="message">
+                  <input type="hidden" id="wishlistItemId" name="wishlistItemId" [(ngModel)]="item._id">
+                  <!-- <img
+                    alt="sunny"
+                    class="portrait"
+                    src="assets/img/avatars/sunny.png"
+                    [src]="item.image || 'assets/img/avatars/sunny.png'"
+                  /> -->
+                  
+                  <img
+                    alt="sunny"
+                    class="online"
+                    src="assets/img/avatars/sunny.png"
+                  />
+                  <span class="message-text"
+                    ><a class="username" href="">
+                        {{ item.price | currency}}&nbsp;-&nbsp;{{ item.name }}
+                      <!-- <small class="text-muted pull-right ultra-light">
+                        2 Minutes ago
+                      </small> --> </a
+                    >&nbsp;
+                    {{ item.notes }}
+                  </span>
+                  <ul class="list-inline font-xs">
+                    <!-- <li>
+                      <a class="text-info" href=""
+                        ><i class="fa fa-reply"></i> Reply</a
+                      >
+                    </li> -->
+                    <li>
+                      <a class="text-danger" href=""
+                        ><i class="fa fa-thumbs-up"></i> Like</a
+                      >
+                    </li>
+                    <li><a class="text-primary" href="">Edit</a></li>
+                    <li><a class="text-primary" href="">[GO TO]-></a></li>
+                    <li><a class="text-danger" href="">Delete</a></li>
+                    <li>
+                      <span class="fa fa-sort"></span>
+                    </li>
+                    <li>
+                      <a class="text-muted" href="">2 minutes ago</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- END ROW -->
   </sa-widgets-grid>
   <!-- end widget grid -->
+
+  <!-- <sa-widgets-grid>
+    <div class="row">
+      <article class="col-md-12 col-sm-12 col-lg-12">
+        <div sa-widget>
+          <div class="widget-body">
+            <sa-nestable-list
+            [items]="demo3"
+            (change)="onChange3($event)"
+            [options]="{
+              group: 2,
+              maxDepth: 5
+            }"
+          ></sa-nestable-list>
+          </div>
+        </div>
+      </article>
+    </div>
+  </sa-widgets-grid> -->
 </div>
 
 <ng-template #wishlistItemModal>

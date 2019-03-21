@@ -61,9 +61,14 @@ export class WishlistStateService {
     });
   }
 
+  sortItem(wishlistItem: WishlistItem) {
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
-
       this._storage.get(USER_WISHLISTS).then(
         (wishlists) => {
           environment.log.wishlist &&
@@ -83,9 +88,7 @@ export class WishlistStateService {
           this.wishlists = wishlists;
 
           this.wishlists$
-            .pipe(
-              switchMap(this.dumpWishlists)
-            )
+            .pipe(switchMap(this.dumpWishlists))
             .subscribe(() => {});
 
           resolve(wishlists);

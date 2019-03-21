@@ -18,6 +18,8 @@ export enum WishlistActionTypes {
   CreateWishlistItemSuccess = '[WishlistItem] Create Wishlist Success',
   DeleteWishlistItemAction = '[WishlistItem] Delete Wishlist Action',
   EditWishlistItemAction = '[WishlistItem] Edit Wishlist Action',
+  SortWishlistItemAction = '[WishlistItem] Sort Wishlist Item',
+  SortWishlistItemSuccess = '[WishlistItem] Sort Wishlist Success',
 
   //Wishlist Item Category Actions
   WishlistItemCategoriesLoad = '[WishlistItemCategory] Load Item Categories',
@@ -96,6 +98,18 @@ export class EditWishlistItemAction implements Action {
   readonly type = WishlistActionTypes.EditWishlistItemAction;
   constructor(readonly payload: any) {}
 }
+
+export class SortWishlistItemAction implements Action {
+  readonly type = WishlistActionTypes.SortWishlistItemAction;
+  constructor(readonly payload: any) {}
+}
+
+export class SortWishlistItemSuccess implements Action {
+  readonly type = WishlistActionTypes.SortWishlistItemAction;
+  constructor(readonly payload: any) {}
+}
+
+
 //==============[END] Wishlist Item Actions==============///
 
 //==============Wishlist Item Category Actions===========///
@@ -156,6 +170,8 @@ export type WishlistActions =
   | CreateWishlistItemSuccess
   | DeleteWishlistItemAction
   | EditWishlistItemAction
+  | SortWishlistItemAction
+  | SortWishlistItemSuccess
   //==============Wishlist Item Actions====================///
 
   //==============Wishlist Item Category Actions===========///

@@ -41,6 +41,31 @@ export class WishlistItemEffects {
     })
   );
 
+  sortWishlistItem$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.SortWishlistItemAction),
+    map((data: any) => data.payload),
+    tap((wishlistItem: any) => {
+      this._wishlistItemService.sort(wishlistItem).subscribe(
+        (result: any) => {
+          if (!!result.error) {
+            this.dispatchErrorNotification(result.error);
+            return;
+          }
+
+          this.notify(
+            'Item Created!',
+            'Item has been added to your wishlist.',
+            null,
+            true
+          );
+        },
+        (error: any) => {
+          this.dispatchError(error);
+        }
+      );
+    })
+  );
+
   // @Effect()
   // wishlistItemChange$ = this._actions$.pipe(
   //   ofType(actions.WishlistActionTypes.WishlistItemChange),
@@ -53,6 +78,14 @@ export class WishlistItemEffects {
   wishlistItemCreateSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistItemSuccess),
     switchMap((data: any) => this._wishlistStateService.addItem(data.payload)),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+
+  @Effect()
+  wishlistItemSortSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.SortWishlistItemSuccess),
+    switchMap((data: any) => this._wishlistStateService.sortItem(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
