@@ -1,5 +1,3 @@
-import { WishlistItemCategoryService } from './../../services/wishlist-item-category.service';
-import { WishlistItemCategoriesStateService } from '../../services/wishlist-item-categories.state.service';
 import { WishlistService } from '../../services/wishlists.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';

@@ -6,12 +6,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
-import {
-  tap,
-  map,
-  switchMap,
-  delay
-} from 'rxjs/operators';
+import { tap, map, switchMap, delay } from 'rxjs/operators';
 
 import { WishlistState } from './wishlist.reducer';
 import { AuthService } from '../../services/auth.service';
@@ -24,8 +19,7 @@ import { NotificationService } from '@app/features/marasco/core/services/notific
  */
 @Injectable()
 export class WishlistItemCategoryEffects {
-
-    @Effect()
+  @Effect()
   wishlistItemCategoriesChange$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.WishlistItemCategoriesChange),
     delay(1000),
@@ -37,7 +31,7 @@ export class WishlistItemCategoryEffects {
     map((_) => new actions.WishlistItemCategoriesPayload(_))
   );
 
-  @Effect({dispatch: false})
+  @Effect({ dispatch: false })
   wishlistItemCategoriesNull$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.WishlistItemCategoriesNull),
     delay(1000),
@@ -76,8 +70,13 @@ export class WishlistItemCategoryEffects {
   @Effect()
   createWishlistItemCategorySuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistItemCategorySuccess),
-    switchMap((data: any) => this._wishlistItemCategoriesStateService.add(data.payload)),
-    tap<WishlistItemCategory[]>((_) => (this._wishlistItemCategoriesStateService.wishlistItemCategories = _)),
+    switchMap((data: any) =>
+      this._wishlistItemCategoriesStateService.add(data.payload)
+    ),
+    tap<WishlistItemCategory[]>(
+      (_) =>
+        (this._wishlistItemCategoriesStateService.wishlistItemCategories = _)
+    ),
     map((_) => new actions.WishlistsPayload(_))
   );
 
@@ -144,11 +143,10 @@ export class WishlistItemCategoryEffects {
     private _wishlistItemCategoriesStateService: WishlistItemCategoriesStateService,
     private _wishlistItemCategoryService: WishlistItemCategoryService
   ) {
-
     //Login, Logout
     this._auth.onAuthStateChanged.subscribe((user) => {
       if (!!user) {
-          this._store.dispatch(new actions.WishlistItemCategoriesChange(user));
+        this._store.dispatch(new actions.WishlistItemCategoriesChange(user));
       } else {
         this._store.dispatch(new actions.WishlistItemCategoriesNull());
       }

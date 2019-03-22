@@ -41,6 +41,7 @@ export class WishlistItemEffects {
     })
   );
 
+  @Effect({dispatch:false})
   sortWishlistItem$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.SortWishlistItemAction),
     map((data: any) => data.payload),
@@ -53,7 +54,7 @@ export class WishlistItemEffects {
           }
 
           this.notify(
-            'Item Created!',
+            'Item Sorted!',
             'Item has been added to your wishlist.',
             null,
             true
@@ -155,6 +156,12 @@ export class WishlistItemEffects {
     this._wishlistItemService.onWishlistItemCreated.subscribe((wishlistItem) => {
       if (!!wishlistItem) {
         this._store.dispatch(new actions.CreateWishlistItemSuccess(wishlistItem));
+      }
+    });
+
+    this._wishlistItemService.onWishlistItemsSorted.subscribe((wishlistItems) => {
+      if (!!wishlistItems) {
+        this._store.dispatch(new actions.SortWishlistItemSuccess(wishlistItems));
       }
     });
   }

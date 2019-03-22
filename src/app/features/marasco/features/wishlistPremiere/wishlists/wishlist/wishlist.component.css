@@ -1,3 +1,7 @@
+.bottom-color-black{
+  border-bottom-color: #3276b1;
+}
+
 .chat-body li.message img {
   max-width: 54px;
   min-height: 50px;
@@ -8,9 +12,9 @@
   /* margin-top: -52px; */
 }
 
-/* .thumbnail {
-  position: relative;
-  width: 50px;
+.thumbnail {
+  position: absolute;
+  width: 54px;
   height: 50px;
   overflow: hidden;
   margin-bottom: 0px;
@@ -28,4 +32,4 @@
 .thumbnail img.portrait {
   width: 100%;
   height: auto;
-} */
+}

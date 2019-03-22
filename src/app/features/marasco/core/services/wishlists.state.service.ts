@@ -61,7 +61,22 @@ export class WishlistStateService {
     });
   }
 
-  sortItem(wishlistItem: WishlistItem) {
+  sortItem(wishlistItems: WishlistItem[]) {
+    //Get wishlist Id
+    const wishlistId = wishlistItems[0].wishlistId;
+
+    var foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistId;
+    });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlistId
+    );
+
+    foundWishlist.items = wishlistItems
+
+    this.wishlists[foundIndex] = foundWishlist;
+
     return new Promise((resolve) => {
       resolve(this.wishlists);
     });

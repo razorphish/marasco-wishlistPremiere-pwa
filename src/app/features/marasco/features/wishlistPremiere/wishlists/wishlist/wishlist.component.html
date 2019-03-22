@@ -244,24 +244,25 @@
         >
           <div [sortablejs]="wishlist.items" [sortablejsOptions]="itemSortOptions">
             <div
-              class="chat-body no-padding profile-message"
+              class="chat-body no-padding profile-message bottom-color-black"
               *ngFor="let item of wishlist.items"
             >
               <ul>
                 <li class="message">
+                  <div class="thumbnail">
                   <input type="hidden" id="wishlistItemId" name="wishlistItemId" [(ngModel)]="item._id">
-                  <!-- <img
+                  <img
                     alt="sunny"
-                    class="portrait"
+                    class="online portrait"
                     src="assets/img/avatars/sunny.png"
                     [src]="item.image || 'assets/img/avatars/sunny.png'"
-                  /> -->
-                  
-                  <img
+                  />
+                </div>
+                  <!-- <img
                     alt="sunny"
                     class="online"
                     src="assets/img/avatars/sunny.png"
-                  />
+                  /> -->
                   <span class="message-text"
                     ><a class="username" href="">
                         {{ item.price | currency}}&nbsp;-&nbsp;{{ item.name }}

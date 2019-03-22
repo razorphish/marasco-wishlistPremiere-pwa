@@ -1,3 +1,4 @@
+import { WishlistItemSort } from './../../../../core/interfaces/Wishlist-item-sort.interface';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
@@ -6,8 +7,7 @@ import {
   ViewChild,
   Input,
   TemplateRef,
-  OnDestroy,
-  ElementRef
+  OnDestroy
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -22,6 +22,7 @@ import { ActivityLogSubjectService } from '../../../../shared/activitylog.subjec
 import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
 import { WishlistService } from '../../../../core/services/wishlists.service';
 import { WishlistFactory } from '../../../../core/services/wishlist.factory';
+import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 
@@ -65,13 +66,16 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   public itemSortOptions = {
     onUpdate: (event: any) => {
-      let sortObject = {
-        id: event.item.children[0].children[0].children[0].value,
+      let wishlistItemSort : WishlistItemSort = {
+        wishlistId: this.wishlist._id,
+        wishlistItemId: event.item.children[0].children[0].children[0].children[0].value,
         oldIndex: event.oldIndex,
         newIndex: event.newIndex
       }
 
-      console.log(sortObject);
+      this._storeWishlist.dispatch(
+        new fromWishlist.SortWishlistItemAction(wishlistItemSort)
+      );
     },
     animation: 150
   }
@@ -161,9 +165,9 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _notificationService: NotificationService,
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
-    private _store: Store<fromAuth.AuthState>,
+    private _storeWishlist: Store<fromWishlist.WishlistState>,
+    private _storeAuth: Store<fromAuth.AuthState>,
     private _modalService: BsModalService,
-    private el: ElementRef,
   ) {}
 
   /////////////////////////////////////
@@ -208,7 +212,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
       }
     }
   }
-
   /////////////////////////////////////
   // Private Metods
   /////////////////////////////////////
@@ -268,7 +271,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   private activateState() {
-    const currentState = this._store.pipe(
+    const currentState = this._storeWishlist.pipe(
       select(fromAuth.getUser),
       takeUntil(this.unsubscribe2$)
     );

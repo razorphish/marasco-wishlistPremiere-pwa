@@ -1,3 +1,4 @@
+import { WishlistItemSort } from './../interfaces/Wishlist-item-sort.interface';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 
@@ -12,7 +13,9 @@ import { WishlistItem } from '../interfaces/Wishlist-item.interface';
 @Injectable()
 export class WishlistItemService {
   private _url: string = `${environment.apiUrl}wishlist`;
+
   private _wishlistSource: WishlistItem;
+  private _wishlistItemsSource: WishlistItem[];
 
   public onWishlistItemChanged = new BehaviorSubject<WishlistItem>(
     this._wishlistSource
@@ -20,6 +23,10 @@ export class WishlistItemService {
 
   public onWishlistItemCreated = new BehaviorSubject<WishlistItem>(
     this._wishlistSource
+  );
+
+  public onWishlistItemsSorted = new BehaviorSubject<WishlistItem[]>(
+    this._wishlistItemsSource
   );
 
   constructor(private _authHttp: AuthHttpService) {}
@@ -74,16 +81,16 @@ export class WishlistItemService {
       );
   }
 
-  sort(wishlistItem: WishlistItem): Observable<WishlistItem> {
+  sort(wishlistItemSort: WishlistItemSort): Observable<WishlistItem[]> {
     return this._authHttp
       .post(
-        `${this._url}/${wishlistItem.wishlistId}/item/sort`,
-        JSON.stringify(wishlistItem)
+        `${this._url}/${wishlistItemSort.wishlistId}/item/${wishlistItemSort.wishlistItemId}/sort`,
+        JSON.stringify(wishlistItemSort)
       )
       .pipe(
-        map((wishlistItem: WishlistItem) => {
-          this.onWishlistItemCreated.next(wishlistItem);
-          return wishlistItem;
+        map((wishlistItems: WishlistItem[]) => {
+          this.onWishlistItemsSorted.next(wishlistItems);
+          return wishlistItems;
         }),
         catchError(this.handleError)
       );
