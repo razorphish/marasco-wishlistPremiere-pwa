@@ -52,7 +52,11 @@ export class WishlistStateService {
     );
 
     //Add item
-    foundWishlist.items.push(wishlistItem);
+    if (foundWishlist.items) {
+      foundWishlist.items.push(wishlistItem);
+    } else {
+      foundWishlist.items = [wishlistItem];
+    }
 
     this.wishlists[foundIndex] = foundWishlist;
 
@@ -73,7 +77,7 @@ export class WishlistStateService {
       (x) => x._id === wishlistId
     );
 
-    foundWishlist.items = wishlistItems
+    foundWishlist.items = wishlistItems;
 
     this.wishlists[foundIndex] = foundWishlist;
 

@@ -85,7 +85,7 @@ export class AuthEffects {
       this._auth.forgotPassword(data.payload).subscribe(
         (_: any) => {
           this.notify(
-            'Request Forgot Password Sucess',
+            'Request Forgot Password Success',
             'Please check your email for further instructions.',
             null,
             true
@@ -112,7 +112,7 @@ export class AuthEffects {
         .subscribe(
           (_: any) => {
             this.notify(
-              'Reset Sucess',
+              'Reset Success',
               "You're password has been changed.  Please login at your earliest convenience",
               null,
               true
@@ -135,30 +135,31 @@ export class AuthEffects {
     })
   );
 
-  @Effect({ dispatch: true })
+  @Effect({ dispatch: false })
   signup$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.SignupAction),
     map((data: any) => data.payload),
     tap((user: UserInfo) => {
-      //setup
-    }),
-    switchMap((user: UserInfo) =>
-      this._auth.createUserWithEmailAndPassword(user).pipe(
-        tap((result: UserInfo) => {
+      this._auth.createUserWithEmailAndPassword(user).subscribe(
+        (_: any) => {
+          if (!!_.error) {
+            this.dispatchErrorNotification(_.error);
+            return;
+          }
+
           this.notify(
-            'Registration Success!',
+            'Registration Success',
             'You can now enjoy our Wishlist Premiere Platform.',
             null,
             true
           );
-        }),
-        map((result: UserInfo) => new actions.MobileSign(result)),
-        catchError((error) => {
+          this._router.navigate([this.loginUrl]);
+        },
+        (error: any) => {
           this.dispatchError(error);
-          return empty();
-        })
-      )
-    )
+        }
+      );
+    })
   );
 
   @Effect({ dispatch: true })
@@ -169,7 +170,7 @@ export class AuthEffects {
       this._auth.createUserWithEmail(user).pipe(
         tap((result: UserInfo) => {
           this.notify(
-            'Registration Sucess!',
+            'Registration Success!',
             'You can now enjoy our Wishlist Premiere Platform.',
             null,
             true
@@ -361,9 +362,7 @@ export class AuthEffects {
     private _router: Router,
     private _authService: SocialAuthService,
     private _notificationService: NotificationService
-
   ) {
-
     //Login, Logout, Token Refresh
     this._auth.onIdTokenChanged.subscribe((authUser) => {
       if (authUser) {

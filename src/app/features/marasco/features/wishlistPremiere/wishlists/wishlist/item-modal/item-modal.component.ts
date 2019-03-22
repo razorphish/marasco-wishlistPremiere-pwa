@@ -152,12 +152,15 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       price: $event.elements.price.value,
       url: $event.elements.url.value,
       purchased: $event.elements.purchased.checked,
-      categoryId: $event.elements.categoryId.value,
       notes: $event.elements.notes.value,
       image: $event.elements.image.value,
       wishlistId: this['settings'].wishlistId,
       //userId: this['settings'].userId
     };
+
+    if (!!$event.elements.categoryId.value){
+      model.categoryId = $event.elements.categoryId.value;
+    }
 
     this['settings'].store.dispatch(
       new fromWishlist.CreateWishlistItemAction(model)
