@@ -85,8 +85,10 @@
               name="categoryId"
               id="categoryId"
               class="input-lg"
+              placeholder="Choose a Category"
               ngModel
             >
+             <option value="" disabled selected>Select your Category</option>
               <option
                 *ngFor="let category of dropdownList"
                 [value]="category._id"

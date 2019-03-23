@@ -9,7 +9,7 @@ import {
   TemplateRef,
   OnDestroy
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -36,6 +36,7 @@ import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 })
 export class WishlistComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
+  private pageIdUnsubscribe$ = new Subject<void>();
   private unsubscribe$ = new Subject<void>();
   private unsubscribe2$ = new Subject<void>();
   private unsubscribe3$ = new Subject<void>();
@@ -51,18 +52,14 @@ export class WishlistComponent implements OnInit, OnDestroy {
       markPurchasedItem: false,
       hideFromMe: false,
       currencyUnitSymbol: '$'
-    }
+    },
+    items: []
   };
+
 
   public dropdownSettingsStatus = {};
 
   public isUpdate = true;
-
-  public options = [];
-  public optionsNotificationTable: any = {};
-  public optionsTokenTable: any = {};
-
-  public selectedStatus = [];
 
   public itemSortOptions = {
     onUpdate: (event: any) => {
@@ -79,6 +76,14 @@ export class WishlistComponent implements OnInit, OnDestroy {
     },
     animation: 150
   }
+
+  public pageIdSubscription :any;
+  public options = [];
+  public optionsNotificationTable: any = {};
+  public optionsTokenTable: any = {};
+
+  public selectedStatus = [];
+
   public state: any = {
     tabs: {
       demo1: 0
@@ -145,9 +150,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
     }
   };
 
-  public uploadPercent: Observable<number>;
-  public downloadURL: Observable<string>;
-
   public wishlist: Wishlist = this.defaultWishlist;
 
   // @Input() filter = 'ion ([7-9]|[1][0-2])';
@@ -166,7 +168,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
     private _storeWishlist: Store<fromWishlist.WishlistState>,
-    private _storeAuth: Store<fromAuth.AuthState>,
     private _modalService: BsModalService,
   ) {}
 
@@ -175,13 +176,17 @@ export class WishlistComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   ngOnInit() {
-    const id = this._route.snapshot.params['id'];
-    if (id !== '0') {
-      this.wishlist = this._route.snapshot.data['wishlist'];
-      this.selectedStatus.push(this.wishlist.statusId);
-    } else {
-      this.isUpdate = false;
-    }
+    this.pageIdSubscription = this._route.params
+    .pipe(takeUntil(this.pageIdUnsubscribe$))
+    .subscribe(params => {
+      const id = params['id'];
+      if (id !== '0') {
+        this.wishlist = this._route.snapshot.data['wishlist'];
+        this.selectedStatus.push(this.wishlist.statusId);
+      } else {
+        this.isUpdate = false;
+      }
+    })
 
     this.activate();
   }
@@ -319,7 +324,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
               number: '4'
             });
             this.isUpdate = true;
-            this.wishlist._id = item._id;
+            this.wishlist = item;
           } else {
             this._activityLogService.addError(
               'wishlist not returned from database on insert'
@@ -412,6 +417,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.pageIdUnsubscribe$.next();
+    this.pageIdUnsubscribe$.complete();
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
     this.unsubscribe2$.next();

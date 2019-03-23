@@ -83,11 +83,6 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       .subscribe((wishlistItemCategories: WishlistItemCategory[]) => {
         this.wishlistItemCategories = wishlistItemCategories;
 
-        this.wishlistItemCategories.push({
-          _id: '',
-          name: 'Choose a Category'
-        })
-
         if (this.wishlistItemCategories.length === 0) {
           this.wishlistItemCategories.push({
             _id: '0',
@@ -154,11 +149,10 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       purchased: $event.elements.purchased.checked,
       notes: $event.elements.notes.value,
       image: $event.elements.image.value,
-      wishlistId: this['settings'].wishlistId,
-      //userId: this['settings'].userId
+      wishlistId: this['settings'].wishlistId
     };
 
-    if (!!$event.elements.categoryId.value){
+    if (!!$event.elements.categoryId.value) {
       model.categoryId = $event.elements.categoryId.value;
     }
 
@@ -170,6 +164,7 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.dropdownList = [];
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

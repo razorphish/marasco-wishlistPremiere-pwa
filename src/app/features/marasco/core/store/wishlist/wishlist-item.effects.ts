@@ -27,7 +27,7 @@ export class WishlistItemEffects {
             return;
           }
 
-          this.notify(
+          this.notifysm(
             'Item Created!',
             'Item has been added to your wishlist.',
             null,
@@ -53,7 +53,7 @@ export class WishlistItemEffects {
             return;
           }
 
-          this.notify(
+          this.notifysm(
             'Item Sorted!',
             'Item has been added to your wishlist.',
             null,
@@ -137,6 +137,20 @@ export class WishlistItemEffects {
     var icon = isMessage ? 'fa fa-check' : 'fa fa-warning shake animated';
 
     this._notificationService.bigBox({
+      title: title,
+      content: content,
+      color: color,
+      icon: icon,
+      number: number || '1',
+      timeout: 6000
+    });
+  }
+
+  notifysm(title, content, number?, isMessage?) {
+    var color = isMessage ? '#739E73' : '#C46A69';
+    var icon = isMessage ? 'fa fa-check' : 'fa fa-warning shake animated';
+
+    this._notificationService.smallBox({
       title: title,
       content: content,
       color: color,
