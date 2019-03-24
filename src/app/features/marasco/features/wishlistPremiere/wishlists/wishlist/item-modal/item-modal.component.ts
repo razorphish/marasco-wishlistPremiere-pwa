@@ -81,16 +81,18 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
     currentWishlistItemCategoryState
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((wishlistItemCategories: WishlistItemCategory[]) => {
-        this.wishlistItemCategories = wishlistItemCategories;
+        if (Array.isArray(wishlistItemCategories)) {
+          this.wishlistItemCategories = wishlistItemCategories;
 
-        if (this.wishlistItemCategories.length === 0) {
-          this.wishlistItemCategories.push({
-            _id: '0',
-            name: 'Miscellaneous'
-          });
+          // if (this.wishlistItemCategories.length === 0) {
+          //   this.wishlistItemCategories.push({
+          //     _id: '0',
+          //     name: 'Miscellaneous'
+          //   });
+          // }
+  
+          this.dropdownList = this.wishlistItemCategories;
         }
-
-        this.dropdownList = this.wishlistItemCategories;
       });
 
     this.selectedItems.push(this.dropdownList[0]);
@@ -164,7 +166,7 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.dropdownList = [];
+    //this.dropdownList = [];
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

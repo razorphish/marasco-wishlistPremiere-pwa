@@ -156,12 +156,14 @@ export class AuthService {
   }
 
   loginSocial(socialUser: any): Observable<TokenResult> {
+    socialUser.applicationId = environment.application;
     const params: any = {
       username: 'social',
       password: '784#@#sd',
       client_id: this._clientId,
       client_secret: this._clientSecret,
       grant_type: 'password',
+      applicationId: environment.application,
       socialUser: socialUser
     };
 

@@ -77,7 +77,7 @@ export class WishlistItemCategoryEffects {
       (_) =>
         (this._wishlistItemCategoriesStateService.wishlistItemCategories = _)
     ),
-    map((_) => new actions.WishlistsPayload(_))
+    map((_) => new actions.WishlistItemCategoriesPayload(_))
   );
 
   dispatchErrorNotification(error: any) {

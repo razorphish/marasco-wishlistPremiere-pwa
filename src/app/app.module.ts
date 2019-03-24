@@ -4,8 +4,10 @@ import { NgModule } from '@angular/core';
 import { SocialLoginModule, AuthServiceConfig, LoginOpt } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider} from 'angularx-social-login';
 
+//https://developers.facebook.com/apps/872380819606437/dashboard/
 const fbLoginOptions: LoginOpt = {
-  scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
+  //scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
+  scope: 'email',
   return_scopes: true,
   enable_profile_selector: true
 }; // https://developers.facebook.com/docs/reference/javascript/FB.login/v2.11
