@@ -228,7 +228,7 @@
     <!-- END ROW -->
 
     <!-- START ROW -->
-    <div class="row" *ngIf="wishlist.items.length > 0">
+    <div class="row" *ngIf="!!wishlist.items">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <div
@@ -283,7 +283,7 @@
                         ><i class="fa fa-thumbs-up"></i> Like</a
                       >
                     </li>
-                    <li><a class="text-primary" href="">Edit</a></li>
+                    <li><a class="text-primary" href="" (click)="openModal($event,wishlistItemModal, item)">Edit</a></li>
                     <li><a class="text-primary" href="">[GO TO]-></a></li>
                     <li><a class="text-danger" href="">Delete</a></li>
                     <li>

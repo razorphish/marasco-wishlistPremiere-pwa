@@ -25,6 +25,7 @@ import { WishlistFactory } from '../../../../core/services/wishlist.factory';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
+import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
 
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
@@ -52,10 +53,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
       markPurchasedItem: false,
       hideFromMe: false,
       currencyUnitSymbol: '$'
-    },
-    items: []
+    }
   };
-
 
   public dropdownSettingsStatus = {};
 
@@ -63,21 +62,22 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   public itemSortOptions = {
     onUpdate: (event: any) => {
-      let wishlistItemSort : WishlistItemSort = {
+      let wishlistItemSort: WishlistItemSort = {
         wishlistId: this.wishlist._id,
-        wishlistItemId: event.item.children[0].children[0].children[0].children[0].value,
+        wishlistItemId:
+          event.item.children[0].children[0].children[0].children[0].value,
         oldIndex: event.oldIndex,
         newIndex: event.newIndex
-      }
+      };
 
       this._storeWishlist.dispatch(
         new fromWishlist.SortWishlistItemAction(wishlistItemSort)
       );
     },
     animation: 150
-  }
+  };
 
-  public pageIdSubscription :any;
+  public pageIdSubscription: any;
   public options = [];
   public optionsNotificationTable: any = {};
   public optionsTokenTable: any = {};
@@ -168,7 +168,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
     private _storeWishlist: Store<fromWishlist.WishlistState>,
-    private _modalService: BsModalService,
+    private _modalService: BsModalService
   ) {}
 
   /////////////////////////////////////
@@ -177,16 +177,16 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.pageIdSubscription = this._route.params
-    .pipe(takeUntil(this.pageIdUnsubscribe$))
-    .subscribe(params => {
-      const id = params['id'];
-      if (id !== '0') {
-        this.wishlist = this._route.snapshot.data['wishlist'];
-        this.selectedStatus.push(this.wishlist.statusId);
-      } else {
-        this.isUpdate = false;
-      }
-    })
+      .pipe(takeUntil(this.pageIdUnsubscribe$))
+      .subscribe((params) => {
+        const id = params['id'];
+        if (id !== '0') {
+          this.wishlist = this._route.snapshot.data['wishlist'];
+          this.selectedStatus.push(this.wishlist.statusId);
+        } else {
+          this.isUpdate = false;
+        }
+      });
 
     this.activate();
   }
@@ -195,9 +195,16 @@ export class WishlistComponent implements OnInit, OnDestroy {
   // Public Methods
   /////////////////////////////////////
 
-  public openModal(event, template: TemplateRef<any>) {
+  public openModal(event, template: TemplateRef<any>, wishlistItem: WishlistItem) {
+    const initialState = {
+      wishlistItem: wishlistItem || {
+        name: '',
+        purchased: false
+      }
+    };
+
     event.preventDefault();
-    this.bsModalRef = this._modalService.show(template);
+    this.bsModalRef = this._modalService.show(template, { initialState });
   }
 
   public onModalClose() {

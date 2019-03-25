@@ -48,22 +48,24 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   public configOptions: FirebaseStorageConfigOptions;
   public dropdownList = [];
   public dropdownSettings = {};
+  public isUpdate: boolean;
   public imageName: string;
   public selectedItems = [];
 
   public validationOptions: any;
 
-  public wishlistItem: WishlistItem = {
-    name: '',
-    purchased: false
-  };
+  public wishlistItem: WishlistItem;
 
   public wishlistItemCategories: WishlistItemCategory[];
 
   constructor(
     private _store: Store<fromWishlist.WishlistState>,
     private _modalService: BsModalService
-  ) {}
+  ) {
+    const initialState: any = this._modalService.config.initialState;
+    this.wishlistItem = initialState.wishlistItem;
+    this.isUpdate = !!this.wishlistItem._id;
+  }
 
   ngOnInit() {
     const currentWishlistItemCategoryState = this._store.pipe(

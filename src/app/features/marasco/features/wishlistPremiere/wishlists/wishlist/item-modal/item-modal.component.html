@@ -28,6 +28,7 @@
               name="name"
               placeholder="Name"
               class="input-lg"
+              [ngModel]="wishlistItem.name"
             />
             <b class="tooltip tooltip-bottom-right">Name of the wishlist</b>
           </label>
@@ -40,6 +41,7 @@
               name="price"
               placeholder="Price"
               class="input-lg"
+              [ngModel]="wishlistItem.price"
             />
             <b class="tooltip tooltip-bottom-right">Price of the item</b>
           </label>
@@ -120,6 +122,7 @@
             name="notes"
             id="notes"
             class="textarea-lg"
+            [ngModel]="wishlistItem.notes"
           ></textarea>
         </label>
       </section>
