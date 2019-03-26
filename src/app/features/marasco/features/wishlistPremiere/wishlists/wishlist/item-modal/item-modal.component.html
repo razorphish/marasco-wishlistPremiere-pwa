@@ -11,7 +11,7 @@
   <h4 class="modal-title" id="myModalLabel">Wishlist Item</h4>
 </div>
 <div class="modal-body custom-scroll">
-  <dropzone2-upload [dbName]="dbName" [configOptions]="configOptions" (imageUpload)="onImageUploaded($event)"></dropzone2-upload>
+  <dropzone2-upload [dbName]="dbName" [configOptions]="configOptions" (imageUpload)="onImageUploaded($event)" [imageUrl]="wishlistItem.image"></dropzone2-upload>
   <form
     id="form-add-wishlist-item"
     class="smart-form"
@@ -88,7 +88,7 @@
               id="categoryId"
               class="input-lg"
               placeholder="Choose a Category"
-              ngModel
+              [ngModel]="wishlistItem.categoryId"
             >
              <option value="" disabled selected>Select your Category</option>
               <option
@@ -141,7 +141,7 @@
           </button>
 
           &nbsp;
-          <input type="hidden" id="image" name="image" [ngModel]="imageName"> 
+          <input type="hidden" id="image" name="image" [ngModel]="wishlistItem.image"> 
           <button
             type="submit"
             class="btn btn-primary btn-lg"

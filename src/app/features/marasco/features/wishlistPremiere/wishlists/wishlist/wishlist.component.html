@@ -251,12 +251,13 @@
                 <li class="message">
                   <div class="thumbnail">
                   <input type="hidden" id="wishlistItemId" name="wishlistItemId" [(ngModel)]="item._id">
+                  <a href="#" (click)="openModal($event,wishlistItemModal, item)">
                   <img
                     alt="sunny"
                     class="online portrait"
                     src="assets/img/avatars/sunny.png"
                     [src]="item.image || 'assets/img/avatars/sunny.png'"
-                  />
+                  /></a>
                 </div>
                   <!-- <img
                     alt="sunny"
@@ -264,7 +265,7 @@
                     src="assets/img/avatars/sunny.png"
                   /> -->
                   <span class="message-text"
-                    ><a class="username" href="">
+                    ><a class="username" href="#" (click)="openModal($event,wishlistItemModal, item)">
                         {{ item.price | currency}}&nbsp;-&nbsp;{{ item.name }}
                       <!-- <small class="text-muted pull-right ultra-light">
                         2 Minutes ago
@@ -283,9 +284,9 @@
                         ><i class="fa fa-thumbs-up"></i> Like</a
                       >
                     </li>
-                    <li><a class="text-primary" href="" (click)="openModal($event,wishlistItemModal, item)">Edit</a></li>
-                    <li><a class="text-primary" href="">[GO TO]-></a></li>
-                    <li><a class="text-danger" href="">Delete</a></li>
+                    <!-- <li><a class="text-primary" href="#" (click)="openModal($event,wishlistItemModal, item)">Edit</a></li> -->
+                    <li><a class="text-primary" href="#">Url</a></li>
+                    <li><a class="text-danger" href="#" (click)="deleteItem($event, item)">Delete</a></li>
                     <li>
                       <span class="fa fa-sort"></span>
                     </li>

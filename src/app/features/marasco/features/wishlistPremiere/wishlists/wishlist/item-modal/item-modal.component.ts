@@ -49,7 +49,6 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   public dropdownList = [];
   public dropdownSettings = {};
   public isUpdate: boolean;
-  public imageName: string;
   public selectedItems = [];
 
   public validationOptions: any;
@@ -85,13 +84,6 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       .subscribe((wishlistItemCategories: WishlistItemCategory[]) => {
         if (Array.isArray(wishlistItemCategories)) {
           this.wishlistItemCategories = wishlistItemCategories;
-
-          // if (this.wishlistItemCategories.length === 0) {
-          //   this.wishlistItemCategories.push({
-          //     _id: '0',
-          //     name: 'Miscellaneous'
-          //   });
-          // }
   
           this.dropdownList = this.wishlistItemCategories;
         }
@@ -110,12 +102,10 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
     this.validationOptions = {
       // Rules for form validation
       wishlistId: this.wishlist._id,
+      wishlistItemId: this.wishlistItem._id,
       userId: this.wishlist.userId,
       store: this._store,
       rules: {
-        // username: {
-        //   required: true
-        // },
         name: {
           required: true
         }
@@ -142,7 +132,7 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   }
 
   public onImageUploaded($event) {
-    this.imageName = $event;
+    this.wishlistItem.image = $event;
   }
 
   public addItem($event) {
@@ -153,22 +143,29 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       purchased: $event.elements.purchased.checked,
       notes: $event.elements.notes.value,
       image: $event.elements.image.value,
-      wishlistId: this['settings'].wishlistId
+      wishlistId: this['settings'].wishlistId,
+      _id: this['settings'].wishlistItemId
     };
 
     if (!!$event.elements.categoryId.value) {
       model.categoryId = $event.elements.categoryId.value;
     }
 
-    this['settings'].store.dispatch(
-      new fromWishlist.CreateWishlistItemAction(model)
-    );
-
-    //this.bsModalRef.hide();
+    // Save
+    if (model._id){
+      this['settings'].store.dispatch(
+        new fromWishlist.EditWishlistItemAction(model)
+      );
+      // Update
+    } else {
+      // Insert
+      this['settings'].store.dispatch(
+        new fromWishlist.CreateWishlistItemAction(model)
+      );
+    }
   }
 
   ngOnDestroy() {
-    //this.dropdownList = [];
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

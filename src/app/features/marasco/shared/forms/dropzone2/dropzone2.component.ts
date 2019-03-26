@@ -32,6 +32,7 @@ export class Dropzone2Component {
   @Output() imageUpload = new EventEmitter<string>();
   @Input() dbName: string;
   @Input() configOptions: FirebaseStorageConfigOptions;
+  @Input() imageUrl: string;
 
   // State for dropzone CSS toggling
   isHovering: boolean;
@@ -94,6 +95,7 @@ export class Dropzone2Component {
   }
 
   onImageUploadSuccess(fileRef) {
+    this.imageUrl = null;
     this.downloadURL = fileRef.getDownloadURL();
     this.downloadURL.subscribe((data) => {
       this.imageUpload.emit(data);

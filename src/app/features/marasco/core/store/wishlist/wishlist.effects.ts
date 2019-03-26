@@ -98,7 +98,8 @@ export class WishlistEffects {
       color: color,
       icon: icon,
       number: number || '1',
-      timeout: 6000
+      timeout: 2000,
+      sound: false
     });
   }
 

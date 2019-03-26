@@ -70,7 +70,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
         newIndex: event.newIndex
       };
 
-      this._storeWishlist.dispatch(
+      this._store.dispatch(
         new fromWishlist.SortWishlistItemAction(wishlistItemSort)
       );
     },
@@ -167,7 +167,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _notificationService: NotificationService,
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
-    private _storeWishlist: Store<fromWishlist.WishlistState>,
+    private _store: Store<fromWishlist.WishlistState>,
     private _modalService: BsModalService
   ) {}
 
@@ -195,7 +195,22 @@ export class WishlistComponent implements OnInit, OnDestroy {
   // Public Methods
   /////////////////////////////////////
 
-  public openModal(event, template: TemplateRef<any>, wishlistItem: WishlistItem) {
+  public addItem() {
+    this.bsModalRef.hide();
+  }
+
+  public deleteItem($event, wishlistItem: WishlistItem) {
+    $event.preventDefault();
+    this._store.dispatch(
+      new fromWishlist.DeleteWishlistItemAction(wishlistItem)
+    );
+  }
+
+  public openModal(
+    event,
+    template: TemplateRef<any>,
+    wishlistItem: WishlistItem
+  ) {
     const initialState = {
       wishlistItem: wishlistItem || {
         name: '',
@@ -208,10 +223,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   public onModalClose() {
-    this.bsModalRef.hide();
-  }
-
-  public addItem() {
     this.bsModalRef.hide();
   }
 
@@ -283,7 +294,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   private activateState() {
-    const currentState = this._storeWishlist.pipe(
+    const currentState = this._store.pipe(
       select(fromAuth.getUser),
       takeUntil(this.unsubscribe2$)
     );

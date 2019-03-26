@@ -41,7 +41,59 @@ export class WishlistItemEffects {
     })
   );
 
-  @Effect({dispatch:false})
+  @Effect({ dispatch: false })
+  editWishlistItem$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.EditWishlistItemAction),
+    map((data: any) => data.payload),
+    tap((wishlistItem: any) => {
+      this._wishlistItemService.update(wishlistItem).subscribe(
+        (result: any) => {
+          if (!!result.error) {
+            this.dispatchErrorNotification(result.error);
+            return;
+          }
+
+          this.notifysm(
+            'Item Updated!',
+            'Item has been added to your wishlist.',
+            null,
+            true
+          );
+        },
+        (error: any) => {
+          this.dispatchError(error);
+        }
+      );
+    })
+  );
+
+  @Effect({ dispatch: false })
+  deleteWishlistItem$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.DeleteWishlistItemAction),
+    map((data: any) => data.payload),
+    tap((wishlistItem: any) => {
+      this._wishlistItemService.delete(wishlistItem).subscribe(
+        (result: any) => {
+          if (!!result.error) {
+            this.dispatchErrorNotification(result.error);
+            return;
+          }
+
+          this.notifysm(
+            'Item Deleted!',
+            'Item has been removed from your wishlist.',
+            null,
+            true
+          );
+        },
+        (error: any) => {
+          this.dispatchError(error);
+        }
+      );
+    })
+  );
+
+  @Effect({ dispatch: false })
   sortWishlistItem$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.SortWishlistItemAction),
     map((data: any) => data.payload),
@@ -67,18 +119,26 @@ export class WishlistItemEffects {
     })
   );
 
-  // @Effect()
-  // wishlistItemChange$ = this._actions$.pipe(
-  //   ofType(actions.WishlistActionTypes.WishlistItemChange),
-  //   switchMap((data: any) => data.payload.getWishlists()),
-  //   tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-  //   map((_) => new actions.WishlistsPayload(_))
-  // );
-
   @Effect()
   wishlistItemCreateSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistItemSuccess),
     switchMap((data: any) => this._wishlistStateService.addItem(data.payload)),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+
+  @Effect()
+  wishlistItemEditSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.EditWishlistItemSuccess),
+    switchMap((data: any) => this._wishlistStateService.editItem(data.payload)),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+
+  @Effect()
+  wishlistItemDeleteSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.DeleteWishlistItemSuccess),
+    switchMap((data: any) => this._wishlistStateService.deleteItem(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
@@ -142,7 +202,8 @@ export class WishlistItemEffects {
       color: color,
       icon: icon,
       number: number || '1',
-      timeout: 6000
+      timeout: 2000,
+      sound: false
     });
   }
 
@@ -156,7 +217,8 @@ export class WishlistItemEffects {
       color: color,
       icon: icon,
       number: number || '1',
-      timeout: 6000
+      timeout: 2000,
+      sound: false
     });
   }
 
@@ -167,16 +229,47 @@ export class WishlistItemEffects {
     private _wishlistStateService: WishlistStateService,
     private _wishlistItemService: WishlistItemService
   ) {
-    this._wishlistItemService.onWishlistItemCreated.subscribe((wishlistItem) => {
-      if (!!wishlistItem) {
-        this._store.dispatch(new actions.CreateWishlistItemSuccess(wishlistItem));
+    // Item created
+    this._wishlistItemService.onWishlistItemCreated.subscribe(
+      (wishlistItem) => {
+        if (!!wishlistItem) {
+          this._store.dispatch(
+            new actions.CreateWishlistItemSuccess(wishlistItem)
+          );
+        }
       }
-    });
+    );
 
-    this._wishlistItemService.onWishlistItemsSorted.subscribe((wishlistItems) => {
-      if (!!wishlistItems) {
-        this._store.dispatch(new actions.SortWishlistItemSuccess(wishlistItems));
+    // Item changed/edited
+    this._wishlistItemService.onWishlistItemChanged.subscribe(
+      (wishlistItem) => {
+        if (!!wishlistItem) {
+          this._store.dispatch(
+            new actions.EditWishlistItemSuccess(wishlistItem)
+          );
+        }
       }
-    });
+    );
+
+    // Item sorted
+    this._wishlistItemService.onWishlistItemsSorted.subscribe(
+      (wishlistItems) => {
+        if (!!wishlistItems) {
+          this._store.dispatch(
+            new actions.SortWishlistItemSuccess(wishlistItems)
+          );
+        }
+      }
+    );
+
+    this._wishlistItemService.onWishlistItemDeleted.subscribe(
+      (wishlistItem) => {
+        if (!!wishlistItem) {
+          this._store.dispatch(
+            new actions.DeleteWishlistItemSuccess(wishlistItem)
+          );
+        }
+      }
+    );
   }
 }

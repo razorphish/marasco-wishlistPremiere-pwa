@@ -131,7 +131,8 @@ export class WishlistItemCategoryEffects {
       color: color,
       icon: icon,
       number: number || '1',
-      timeout: 6000
+      timeout: 2000,
+      sound: false
     });
   }
 

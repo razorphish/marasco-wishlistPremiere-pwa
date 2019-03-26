@@ -14,12 +14,14 @@ export enum WishlistActionTypes {
   EditWishlistAction = '[Wishlist] Edit Wishlist Action',
 
   //Wishlist Item actions
-  CreateWishlistItemAction = '[WishlistItem] Create Wishlist Action',
-  CreateWishlistItemSuccess = '[WishlistItem] Create Wishlist Success',
-  DeleteWishlistItemAction = '[WishlistItem] Delete Wishlist Action',
-  EditWishlistItemAction = '[WishlistItem] Edit Wishlist Action',
+  CreateWishlistItemAction = '[WishlistItem] Create Wishlist Item Action',
+  CreateWishlistItemSuccess = '[WishlistItem] Create Wishlist Item Success',
+  DeleteWishlistItemAction = '[WishlistItem] Delete Wishlist Item Action',
+  DeleteWishlistItemSuccess = '[WishlistItem] Delete Wishlist Item Success',
+  EditWishlistItemAction = '[WishlistItem] Edit Wishlist Item Action',
+  EditWishlistItemSuccess = '[WishlistItem] Edit Wishlist Item Success',
   SortWishlistItemAction = '[WishlistItem] Sort Wishlist Item Action',
-  SortWishlistItemSuccess = '[WishlistItem] Sort Wishlist Success',
+  SortWishlistItemSuccess = '[WishlistItem] Sort Wishlist Item Success',
 
   //Wishlist Item Category Actions
   WishlistItemCategoriesLoad = '[WishlistItemCategory] Load Item Categories',
@@ -94,8 +96,18 @@ export class DeleteWishlistItemAction implements Action {
   constructor(readonly payload: any) {}
 }
 
+export class DeleteWishlistItemSuccess implements Action {
+  readonly type = WishlistActionTypes.DeleteWishlistItemSuccess;
+  constructor(readonly payload: any) {}
+}
+
 export class EditWishlistItemAction implements Action {
   readonly type = WishlistActionTypes.EditWishlistItemAction;
+  constructor(readonly payload: any) {}
+}
+
+export class EditWishlistItemSuccess implements Action {
+  readonly type = WishlistActionTypes.EditWishlistItemSuccess;
   constructor(readonly payload: any) {}
 }
 
@@ -169,7 +181,9 @@ export type WishlistActions =
   | CreateWishlistItemAction
   | CreateWishlistItemSuccess
   | DeleteWishlistItemAction
+  | DeleteWishlistItemSuccess
   | EditWishlistItemAction
+  | EditWishlistItemSuccess
   | SortWishlistItemAction
   | SortWishlistItemSuccess
   //==============Wishlist Item Actions====================///

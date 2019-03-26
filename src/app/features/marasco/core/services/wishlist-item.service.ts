@@ -14,15 +14,19 @@ import { WishlistItem } from '../interfaces/Wishlist-item.interface';
 export class WishlistItemService {
   private _url: string = `${environment.apiUrl}wishlist`;
 
-  private _wishlistSource: WishlistItem;
+  private _wishlistItemSource: WishlistItem;
   private _wishlistItemsSource: WishlistItem[];
 
   public onWishlistItemChanged = new BehaviorSubject<WishlistItem>(
-    this._wishlistSource
+    this._wishlistItemSource
   );
 
   public onWishlistItemCreated = new BehaviorSubject<WishlistItem>(
-    this._wishlistSource
+    this._wishlistItemSource
+  );
+
+  public onWishlistItemDeleted = new BehaviorSubject<WishlistItem>(
+    this._wishlistItemSource
   );
 
   public onWishlistItemsSorted = new BehaviorSubject<WishlistItem[]>(
@@ -45,11 +49,19 @@ export class WishlistItemService {
     );
   }
 
-  delete(id: string): Observable<any> {
-    return this._authHttp.delete(`${this._url}${id}`).pipe(
-      map((result: any) => result),
-      catchError(this.handleError)
-    );
+  delete(wishlistItem: WishlistItem): Observable<any> {
+    return this._authHttp
+      .delete(
+        `${this._url}/${wishlistItem.wishlistId}/item/${wishlistItem._id}`,
+        JSON.stringify(wishlistItem)
+      )
+      .pipe(
+        map((result: any) => {
+          this.onWishlistItemDeleted.next(wishlistItem);
+          return result;
+        }),
+        catchError(this.handleError)
+      );
   }
 
   get(id: string): Observable<WishlistItem> {
@@ -84,7 +96,9 @@ export class WishlistItemService {
   sort(wishlistItemSort: WishlistItemSort): Observable<WishlistItem[]> {
     return this._authHttp
       .post(
-        `${this._url}/${wishlistItemSort.wishlistId}/item/${wishlistItemSort.wishlistItemId}/sort`,
+        `${this._url}/${wishlistItemSort.wishlistId}/item/${
+          wishlistItemSort.wishlistItemId
+        }/sort`,
         JSON.stringify(wishlistItemSort)
       )
       .pipe(
@@ -96,11 +110,17 @@ export class WishlistItemService {
       );
   }
 
-  update(wishlist: WishlistItem): Observable<WishlistItem> {
+  update(wishlistItem: WishlistItem): Observable<WishlistItem> {
     return this._authHttp
-      .put(`${this._url}${wishlist._id}`, JSON.stringify(wishlist))
+      .put(
+        `${this._url}/${wishlistItem.wishlistId}/item/${wishlistItem._id}`,
+        JSON.stringify(wishlistItem)
+      )
       .pipe(
-        map((wishlistItem: WishlistItem) => wishlistItem),
+        map((wishlistItem: WishlistItem) => {
+          this.onWishlistItemChanged.next(wishlistItem);
+          return wishlistItem;
+        }),
         catchError(this.handleError)
       );
   }

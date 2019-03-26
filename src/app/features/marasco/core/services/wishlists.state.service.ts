@@ -86,6 +86,52 @@ export class WishlistStateService {
     });
   }
 
+  deleteItem(wishlistItem: WishlistItem) {
+    let foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistItem.wishlistId;
+    });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlistItem.wishlistId
+    );
+
+    //find item
+    let foundItemIndex: number = foundWishlist.items.findIndex(
+      (x) => x._id === wishlistItem._id
+    );
+
+    foundWishlist.items.splice(foundItemIndex, 1);
+
+    this.wishlists[foundIndex] = foundWishlist;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
+  editItem(wishlistItem: WishlistItem) {
+    let foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistItem.wishlistId;
+    });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlistItem.wishlistId
+    );
+
+    //find item index
+    let foundItemIndex: number = foundWishlist.items.findIndex(
+      (x) => x._id === wishlistItem._id
+    );
+
+    foundWishlist.items[foundItemIndex] = wishlistItem;
+
+    this.wishlists[foundIndex] = foundWishlist;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
       this._storage.get(USER_WISHLISTS).then(
