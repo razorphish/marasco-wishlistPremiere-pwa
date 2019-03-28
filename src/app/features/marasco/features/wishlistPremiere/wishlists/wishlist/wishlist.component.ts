@@ -64,6 +64,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   public isUpdate = true;
 
   public itemSortOptions = {
+    handle: '.handle', // handle's class
     onUpdate: (event: any) => {
       let wishlistItemSort: WishlistItemSort = {
         wishlistId: this.wishlist._id,

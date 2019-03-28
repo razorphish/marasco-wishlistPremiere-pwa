@@ -275,7 +275,7 @@
               <div class="col-sm-12">
                 <div class="row">
                   <div class="col-sm-1 col-xs-2">
-                    <div class="thumbnail">
+                    <div class="thumbnail handle">
                       <input
                         type="hidden"
                         id="wishlistItemId"
@@ -303,7 +303,7 @@
                         </div>
                         <div class="col col-md-2 col-xs-3">
                           <span class="pull-right font-md">
-                          {{ item.price | currency }}
+                            {{ item.price | currency }}
                           </span>
                         </div>
                       </div>
@@ -345,25 +345,6 @@
     <!-- END ROW -->
   </sa-widgets-grid>
   <!-- end widget grid -->
-
-  <!-- <sa-widgets-grid>
-    <div class="row">
-      <article class="col-md-12 col-sm-12 col-lg-12">
-        <div sa-widget>
-          <div class="widget-body">
-            <sa-nestable-list
-            [items]="demo3"
-            (change)="onChange3($event)"
-            [options]="{
-              group: 2,
-              maxDepth: 5
-            }"
-          ></sa-nestable-list>
-          </div>
-        </div>
-      </article>
-    </div>
-  </sa-widgets-grid> -->
 </div>
 
 <ng-template #wishlistItemModal>
