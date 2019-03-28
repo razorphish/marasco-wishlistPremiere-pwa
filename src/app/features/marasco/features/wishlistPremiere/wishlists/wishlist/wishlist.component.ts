@@ -26,6 +26,7 @@ import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
+import { LayoutService } from '@app/features/marasco/core/services';
 
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
@@ -59,6 +60,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   public dropdownSettingsStatus = {};
 
+  public isMobile = true;
   public isUpdate = true;
 
   public itemSortOptions = {
@@ -169,7 +171,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
     private _store: Store<fromWishlist.WishlistState>,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private _layoutService: LayoutService
   ) {}
 
   /////////////////////////////////////
@@ -305,6 +308,9 @@ export class WishlistComponent implements OnInit, OnDestroy {
         this.user = data.user;
       }
     });
+
+    //Sets mobile
+    this.isMobile = this._layoutService.store.isMobile;
   }
 
   private displayErrors(errors: string[]): void {

@@ -77,28 +77,28 @@
                       </button>
                     </div>
                     <div class="col col-md-12 visible-xs visible-mobile">
-                        <button
-                          type="button"
-                          (click)="openModal($event, wishlistItemModal)"
-                          class="btn btn-primary btn-lg"
-                          *ngIf="isUpdate"
-                        >
-                          <i class="fa fa-cog fa-lg"></i>
-                        </button>
-                        &nbsp;
-                        <button type="submit" class="btn btn-primary btn-lg">
-                          <i class="fa fa-save fa-lg"></i>
-                        </button>
-                        &nbsp;
-                        <button
-                          type="button"
-                          (click)="openModal($event, wishlistItemModal)"
-                          class="btn btn-primary btn-lg"
-                          *ngIf="isUpdate"
-                        >
-                          <i class="fa fa-plus fa-lg"></i>
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        (click)="openModal($event, wishlistItemModal)"
+                        class="btn btn-primary btn-lg"
+                        *ngIf="isUpdate"
+                      >
+                        <i class="fa fa-cog fa-lg"></i>
+                      </button>
+                      &nbsp;
+                      <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fa fa-save fa-lg"></i>
+                      </button>
+                      &nbsp;
+                      <button
+                        type="button"
+                        (click)="openModal($event, wishlistItemModal)"
+                        class="btn btn-primary btn-lg"
+                        *ngIf="isUpdate"
+                      >
+                        <i class="fa fa-plus fa-lg"></i>
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <!-- end widget content -->
@@ -271,80 +271,71 @@
             [sortablejs]="wishlist.items"
             [sortablejsOptions]="itemSortOptions"
           >
-            <div
-              class="chat-body no-padding profile-message bottom-color-black"
-              *ngFor="let item of wishlist.items"
-            >
-              <ul>
-                <li class="message">
-                  <div class="thumbnail">
-                    <input
-                      type="hidden"
-                      id="wishlistItemId"
-                      name="wishlistItemId"
-                      [(ngModel)]="item._id"
-                    />
-                    <a
-                      href="#"
-                      (click)="openModal($event, wishlistItemModal, item)"
-                    >
+            <div class="row" *ngFor="let item of wishlist.items">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-1 col-xs-2">
+                    <div class="thumbnail">
+                      <input
+                        type="hidden"
+                        id="wishlistItemId"
+                        name="wishlistItemId"
+                        [(ngModel)]="item._id"
+                      />
                       <img
                         alt="sunny"
                         class="online portrait"
                         src="assets/img/avatars/sunny.png"
                         [src]="item.image || 'assets/img/avatars/sunny.png'"
-                    /></a>
+                      />
+                    </div>
                   </div>
-                  <!-- <img
-                    alt="sunny"
-                    class="online"
-                    src="assets/img/avatars/sunny.png"
-                  /> -->
-                  <span class="message-text"
-                    ><a
-                      class="username"
-                      href="#"
-                      (click)="openModal($event, wishlistItemModal, item)"
-                    >
-                      {{ item.price | currency }}&nbsp;-&nbsp;{{ item.name }}
-                      <!-- <small class="text-muted pull-right ultra-light">
-                        2 Minutes ago
-                      </small> --> </a
-                    >&nbsp;
-                    {{ item.notes }}
-                  </span>
-                  <ul class="list-inline font-xs">
-                    <!-- <li>
-                      <a class="text-info" href=""
-                        ><i class="fa fa-reply"></i> Reply</a
-                      >
-                    </li> -->
-                    <li>
-                      <a class="text-danger" href=""
-                        ><i class="fa fa-thumbs-up"></i> Like</a
-                      >
-                    </li>
-                    <!-- <li><a class="text-primary" href="#" (click)="openModal($event,wishlistItemModal, item)">Edit</a></li> -->
-                    <li><a class="text-primary" href="#">Url</a></li>
-                    <li>
-                      <a
-                        class="text-danger"
-                        href="#"
-                        (click)="deleteItem($event, item)"
-                        >Delete</a
-                      >
-                    </li>
-                    <li>
-                      <span class="fa fa-sort"></span>
-                    </li>
-                    <li>
-                      <span class="text-muted">{{
-                        item.dateCreated | amTimeAgo
-                      }}</span>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
+                  <div class="col-sm-11 col-xs-10">
+                    <div class="well well-sm ">
+                      <div class="row">
+                        <div class="col col-md-10 col-xs-9">
+                          <button
+                            class="btn btn-xs btn-link btn-default"
+                            (click)="openModal($event, wishlistItemModal, item)"
+                          >
+                            {{ item.name }}
+                          </button>
+                        </div>
+                        <div class="col col-md-2 col-xs-3">
+                          <span class="pull-right font-md">
+                          {{ item.price | currency }}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col col-md-12 col-xs-12">
+                          <div class="pull-right">
+                            <!-- <button class="btn btn-primary btn-xs">
+                            <i class="fa fa-thumbs-up"></i>
+                          </button>
+                          &nbsp; -->
+                            <button
+                              class="btn btn-warning btn-xs"
+                              (click)="
+                                openModal($event, wishlistItemModal, item)
+                              "
+                            >
+                              <i class="fa fa-edit"></i>
+                            </button>
+                            &nbsp;
+                            <button
+                              class="btn btn-danger btn-xs"
+                              (click)="deleteItem($event, item)"
+                            >
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

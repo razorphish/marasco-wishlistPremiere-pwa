@@ -72,22 +72,35 @@ export class WishlistItemEffects {
     ofType(actions.WishlistActionTypes.DeleteWishlistItemAction),
     map((data: any) => data.payload),
     tap((wishlistItem: any) => {
-      this._wishlistItemService.delete(wishlistItem).subscribe(
-        (result: any) => {
-          if (!!result.error) {
-            this.dispatchErrorNotification(result.error);
-            return;
-          }
-
-          this.notifysm(
-            'Item Deleted!',
-            'Item has been removed from your wishlist.',
-            null,
-            true
-          );
+      this._notificationService.smartMessageBox(
+        {
+          title: 'Delete?',
+          content: 'Are you sure you want to delete this item?',
+          buttons: '[No][Yes]'
         },
-        (error: any) => {
-          this.dispatchError(error);
+        (ButtonPressed) => {
+          if (ButtonPressed === 'Yes') {
+            this._wishlistItemService.delete(wishlistItem).subscribe(
+              (result: any) => {
+                if (!!result.error) {
+                  this.dispatchErrorNotification(result.error);
+                  return;
+                }
+
+                this.notifysm(
+                  'Item Deleted!',
+                  'Item has been removed from your wishlist.',
+                  null,
+                  true
+                );
+              },
+              (error: any) => {
+                this.dispatchError(error);
+              }
+            );
+          }
+          if (ButtonPressed === 'No') {
+          }
         }
       );
     })
@@ -138,7 +151,9 @@ export class WishlistItemEffects {
   @Effect()
   wishlistItemDeleteSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.DeleteWishlistItemSuccess),
-    switchMap((data: any) => this._wishlistStateService.deleteItem(data.payload)),
+    switchMap((data: any) =>
+      this._wishlistStateService.deleteItem(data.payload)
+    ),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
