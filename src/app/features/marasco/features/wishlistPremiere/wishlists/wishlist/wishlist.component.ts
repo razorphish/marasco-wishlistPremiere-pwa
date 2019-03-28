@@ -41,7 +41,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   private unsubscribe2$ = new Subject<void>();
   private unsubscribe3$ = new Subject<void>();
-  //\\\END Private variables ////////
+  //////////////END Private variables //////////
 
   //////////////////Publicly exposed variables///////////
 
@@ -53,7 +53,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
       markPurchasedItem: false,
       hideFromMe: false,
       currencyUnitSymbol: '$'
-    }
+    },
+    items: []
   };
 
   public dropdownSettingsStatus = {};

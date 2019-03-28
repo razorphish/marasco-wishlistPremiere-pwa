@@ -7,7 +7,7 @@
       icon="gift"
       class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
     ></sa-big-breadcrumbs>
-    <sa-stats></sa-stats>
+    <wp-settings [wishlist]="wishlist"></wp-settings>
   </div>
 
   <!-- widget grid -->
@@ -61,19 +61,44 @@
                     </div>
                   </fieldset>
 
-                  <div class="form-actions">
-                    <button type="submit" class="btn btn-primary btn-lg">
-                      Save
-                    </button>
-                    &nbsp;
-                    <button
-                      type="button"
-                      (click)="openModal($event, wishlistItemModal)"
-                      class="btn btn-primary btn-lg"
-                      *ngIf="isUpdate"
-                    >
-                      Add Item
-                    </button>
+                  <div class="form-actions row">
+                    <div class="col col-md-12 hidden-xs hidden-mobile">
+                      <button type="submit" class="btn btn-primary btn-lg">
+                        Save
+                      </button>
+                      &nbsp;
+                      <button
+                        type="button"
+                        (click)="openModal($event, wishlistItemModal)"
+                        class="btn btn-primary btn-lg"
+                        *ngIf="isUpdate"
+                      >
+                        Add Item
+                      </button>
+                    </div>
+                    <div class="col col-md-12 visible-xs visible-mobile">
+                        <button
+                          type="button"
+                          (click)="openModal($event, wishlistItemModal)"
+                          class="btn btn-primary btn-lg"
+                          *ngIf="isUpdate"
+                        >
+                          <i class="fa fa-cog fa-lg"></i>
+                        </button>
+                        &nbsp;
+                        <button type="submit" class="btn btn-primary btn-lg">
+                          <i class="fa fa-save fa-lg"></i>
+                        </button>
+                        &nbsp;
+                        <button
+                          type="button"
+                          (click)="openModal($event, wishlistItemModal)"
+                          class="btn btn-primary btn-lg"
+                          *ngIf="isUpdate"
+                        >
+                          <i class="fa fa-plus fa-lg"></i>
+                        </button>
+                      </div>
                   </div>
                 </div>
                 <!-- end widget content -->
@@ -228,7 +253,7 @@
     <!-- END ROW -->
 
     <!-- START ROW -->
-    <div class="row" *ngIf="!!wishlist.items">
+    <div class="row" *ngIf="wishlist.items.length !== 0">
       <article class="col-sm-12 col-md-12 col-lg-12">
         <!-- Widget ID (each widget will need unique ID)-->
         <div
@@ -242,7 +267,10 @@
           [sortable]="false"
           class="well"
         >
-          <div [sortablejs]="wishlist.items" [sortablejsOptions]="itemSortOptions">
+          <div
+            [sortablejs]="wishlist.items"
+            [sortablejsOptions]="itemSortOptions"
+          >
             <div
               class="chat-body no-padding profile-message bottom-color-black"
               *ngFor="let item of wishlist.items"
@@ -250,23 +278,35 @@
               <ul>
                 <li class="message">
                   <div class="thumbnail">
-                  <input type="hidden" id="wishlistItemId" name="wishlistItemId" [(ngModel)]="item._id">
-                  <a href="#" (click)="openModal($event,wishlistItemModal, item)">
-                  <img
-                    alt="sunny"
-                    class="online portrait"
-                    src="assets/img/avatars/sunny.png"
-                    [src]="item.image || 'assets/img/avatars/sunny.png'"
-                  /></a>
-                </div>
+                    <input
+                      type="hidden"
+                      id="wishlistItemId"
+                      name="wishlistItemId"
+                      [(ngModel)]="item._id"
+                    />
+                    <a
+                      href="#"
+                      (click)="openModal($event, wishlistItemModal, item)"
+                    >
+                      <img
+                        alt="sunny"
+                        class="online portrait"
+                        src="assets/img/avatars/sunny.png"
+                        [src]="item.image || 'assets/img/avatars/sunny.png'"
+                    /></a>
+                  </div>
                   <!-- <img
                     alt="sunny"
                     class="online"
                     src="assets/img/avatars/sunny.png"
                   /> -->
                   <span class="message-text"
-                    ><a class="username" href="#" (click)="openModal($event,wishlistItemModal, item)">
-                        {{ item.price | currency}}&nbsp;-&nbsp;{{ item.name }}
+                    ><a
+                      class="username"
+                      href="#"
+                      (click)="openModal($event, wishlistItemModal, item)"
+                    >
+                      {{ item.price | currency }}&nbsp;-&nbsp;{{ item.name }}
                       <!-- <small class="text-muted pull-right ultra-light">
                         2 Minutes ago
                       </small> --> </a
@@ -286,12 +326,21 @@
                     </li>
                     <!-- <li><a class="text-primary" href="#" (click)="openModal($event,wishlistItemModal, item)">Edit</a></li> -->
                     <li><a class="text-primary" href="#">Url</a></li>
-                    <li><a class="text-danger" href="#" (click)="deleteItem($event, item)">Delete</a></li>
+                    <li>
+                      <a
+                        class="text-danger"
+                        href="#"
+                        (click)="deleteItem($event, item)"
+                        >Delete</a
+                      >
+                    </li>
                     <li>
                       <span class="fa fa-sort"></span>
                     </li>
                     <li>
-                      <a class="text-muted" href="">2 minutes ago</a>
+                      <span class="text-muted">{{
+                        item.dateCreated | amTimeAgo
+                      }}</span>
                     </li>
                   </ul>
                 </li>

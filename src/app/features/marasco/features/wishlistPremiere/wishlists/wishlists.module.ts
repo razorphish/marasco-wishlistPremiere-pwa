@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
+import { MomentModule } from 'ngx-moment';
 
 import { SharedModule } from '../../../shared/shared.module';
 import { SmartadminDatatableModule } from '../../../shared/ui/datatable/smartadmin-datatable.module';
@@ -11,6 +12,8 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { Dropzone2Module } from '@app/features/marasco/shared/forms/dropzone2/dropzone2.module';
 import { NestableListModule } from '@app/features/marasco/shared/ui/nestable-list/nestable-list.module';
 import { SortablejsModule } from 'angular-sortablejs';
+
+import { SettingsModule } from './shared/settings/settings.module';
 
 import {
   WishlistsComponent,
@@ -27,6 +30,7 @@ import {
 @NgModule({
   imports: [
     SharedModule,
+    SettingsModule,
     SmartadminDatatableModule,
     SmartadminValidationModule,
     SmartadminInputModule,
@@ -34,7 +38,12 @@ import {
     Dropzone2Module,
     NestableListModule,
     NgMultiSelectDropDownModule.forRoot(),
-    SortablejsModule.forRoot({ animation: 150 })
+    SortablejsModule.forRoot({ animation: 150 }),
+    MomentModule.forRoot({
+      relativeTimeThresholdOptions: {
+        'm': 59
+      }
+    })
   ],
   exports: [],
   declarations: [

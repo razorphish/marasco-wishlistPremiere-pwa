@@ -4,6 +4,7 @@ import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interfa
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LayoutService } from '@app/features/marasco/core/services';
 
 @Component({
   selector: 'sa-navigation',
@@ -16,7 +17,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
   public user: any;
   public wishlists: Wishlist[];
 
-  constructor(private _store: Store<fromWishlist.WishlistState>) {}
+  constructor(private _store: Store<fromWishlist.WishlistState>,
+    public layoutService: LayoutService) {}
+
+  onClick($event){
+    if (this.layoutService.store.mobileViewActivated) {
+      this.layoutService.onCollapseMenu()
+    }
+  }
 
   ngOnInit() {
     const currentWishlistsState = this._store.pipe(
