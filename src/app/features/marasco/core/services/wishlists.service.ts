@@ -13,13 +13,12 @@ import { Wishlist } from '../interfaces/Wishlist.interface';
 export class WishlistService {
   private _url: string = `${environment.apiUrl}wishlist/`;
   private _wishlistSource: Wishlist;
-  private _wishlistsSource: Wishlist[];
 
-  public onWishlistsChanged = new BehaviorSubject<Wishlist[]>(
-    this._wishlistsSource
+  public onWishlistChanged = new BehaviorSubject<Wishlist>(
+    this._wishlistSource
   );
 
-  public onWishlistsCreated = new BehaviorSubject<Wishlist>(
+  public onWishlistCreated = new BehaviorSubject<Wishlist>(
     this._wishlistSource
   );
 
@@ -63,7 +62,7 @@ export class WishlistService {
   insert(wishlist: Wishlist): Observable<Wishlist> {
     return this._authHttp.post(this._url, JSON.stringify(wishlist)).pipe(
       map((wishlist: Wishlist) => {
-        this.onWishlistsCreated.next(wishlist);
+        this.onWishlistCreated.next(wishlist);
         return wishlist;
       }),
       catchError(this.handleError)
@@ -74,7 +73,10 @@ export class WishlistService {
     return this._authHttp
       .put(`${this._url}${wishlist._id}`, JSON.stringify(wishlist))
       .pipe(
-        map((wishlist: Wishlist) => wishlist),
+        map((result: Wishlist) => {
+          this.onWishlistChanged.next(wishlist)
+          return wishlist;
+        }),
         catchError(this.handleError)
       );
   }

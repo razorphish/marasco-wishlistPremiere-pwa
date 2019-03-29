@@ -10,4 +10,6 @@ export * from './wishlist/wishlist.guard';
 export * from './wishlist/item-modal/item-modal.component';
 export * from './wishlist/item-modal/item-category-modal/item-category-modal.component';
 
+export * from './wishlist/options-modal/options-modal.component';
+
 export * from './wishlists-routing.module';

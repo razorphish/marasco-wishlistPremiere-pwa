@@ -47,6 +47,14 @@ export class WishlistEffects {
     map((_) => new actions.WishlistsPayload(_))
   );
 
+  @Effect()
+  wishlistEditSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.EditWishlistSuccess),
+    switchMap((data: any) => this._wishlistStateService.edit(data.payload)),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+
   dispatchErrorNotification(error: any) {
     if (!error.code) {
       this.notify(
@@ -121,9 +129,15 @@ export class WishlistEffects {
       }
     });
 
-    this._wishlistService.onWishlistsCreated.subscribe((wishlist) => {
+    this._wishlistService.onWishlistCreated.subscribe((wishlist) => {
       if (!!wishlist) {
         this._store.dispatch(new actions.CreateWishlistSuccess(wishlist));
+      }
+    });
+
+    this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
+      if (!!wishlist) {
+        this._store.dispatch(new actions.EditWishlistSuccess(wishlist));
       }
     });
   }

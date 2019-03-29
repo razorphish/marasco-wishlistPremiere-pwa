@@ -24,7 +24,8 @@ import {
   WishlistResolve,
   WishlistGuard,
   WishlistItemModalComponent,
-  WishlistItemCategoryModalComponent
+  WishlistItemCategoryModalComponent,
+  WishlistOptionsModalComponent
 } from '../wishlists';
 
 @NgModule({
@@ -51,7 +52,8 @@ import {
     WishlistListComponent,
     WishlistComponent,
     WishlistItemModalComponent,
-    WishlistItemCategoryModalComponent
+    WishlistItemCategoryModalComponent,
+    WishlistOptionsModalComponent
   ],
   providers: [
     WishlistGuard,

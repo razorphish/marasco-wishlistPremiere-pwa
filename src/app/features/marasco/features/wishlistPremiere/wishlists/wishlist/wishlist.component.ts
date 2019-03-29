@@ -1,5 +1,5 @@
 import { WishlistItemSort } from './../../../../core/interfaces/Wishlist-item-sort.interface';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
   Component,
@@ -9,7 +9,7 @@ import {
   TemplateRef,
   OnDestroy
 } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -27,9 +27,11 @@ import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
 import { LayoutService } from '@app/features/marasco/core/services';
+import { WishlistOptionsModalComponent } from './options-modal/options-modal.component';
 
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
+ * http://sortablejs.github.io/Sortable/
  */
 @Component({
   selector: 'marasco-wishlist',
@@ -53,7 +55,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
       includePriceWhenSharing: true,
       markPurchasedItem: false,
       hideFromMe: false,
-      currencyUnitSymbol: '$'
+      currencyUnitSymbol: '$',
+      notifyOnAddItem: false,
+      notifyOnRemoveItem: false,
+      notifyOnClose: false
     },
     items: []
   };
@@ -200,7 +205,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   // Public Methods
   /////////////////////////////////////
 
-  public addItem() {
+  public closeModal() {
     this.bsModalRef.hide();
   }
 
@@ -240,6 +245,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   /////////////////////////////////////
   // Private Metods
   /////////////////////////////////////
@@ -399,13 +405,14 @@ export class WishlistComponent implements OnInit, OnDestroy {
               title: 'Wishlist Updated',
               content: 'Wishlist has been updated successfully. ',
               color: '#739E73',
-              timeout: 4000,
+              timeout: 2000,
               icon: 'fa fa-check',
-              number: '4'
+              number: '4',
+              sound: false
             });
           } else {
             this._activityLogService.addError(
-              'No wishlist present: Update Faile'
+              'No wishlist present: Update Failed'
             );
             this._notificationService.bigBox({
               title: 'Oops! the database has returned an error',
@@ -414,7 +421,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
               color: '#C46A69',
               icon: 'fa fa-warning shake animated',
               number: '1',
-              timeout: 6000 // 6 seconds
+              timeout: 2000, // 6 seconds
+              sound: false
             });
           }
         },

@@ -109,6 +109,18 @@ export class WishlistStateService {
     });
   }
 
+  edit(wishlist: Wishlist) {
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlist._id
+    );
+
+    this.wishlists[foundIndex] = wishlist;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
   editItem(wishlistItem: WishlistItem) {
     let foundWishlist = this.wishlists.find((wishlist) => {
       return wishlist._id === wishlistItem.wishlistId;

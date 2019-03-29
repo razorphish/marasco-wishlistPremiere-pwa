@@ -63,31 +63,14 @@
 
                   <div class="form-actions row">
                     <div class="col col-md-12 hidden-xs hidden-mobile">
-                      <button type="submit" class="btn btn-primary btn-lg">
-                        Save
-                      </button>
-                      &nbsp;
                       <button
                         type="button"
-                        (click)="openModal($event, wishlistItemModal)"
-                        class="btn btn-primary btn-lg"
-                        *ngIf="isUpdate"
-                      >
-                        Add Item
-                      </button>
-                    </div>
-                    <div class="col col-md-12 visible-xs visible-mobile">
-                      <button
-                        type="button"
-                        (click)="openModal($event, wishlistItemModal)"
-                        class="btn btn-primary btn-lg"
+                        (click)="openModal($event, wishlistOptionsModal)"
+                        class="btn btn-default btn-lg"
                         *ngIf="isUpdate"
                       >
                         <i class="fa fa-cog fa-lg"></i>
-                      </button>
-                      &nbsp;
-                      <button type="submit" class="btn btn-primary btn-lg">
-                        <i class="fa fa-save fa-lg"></i>
+                        Options
                       </button>
                       &nbsp;
                       <button
@@ -97,6 +80,35 @@
                         *ngIf="isUpdate"
                       >
                         <i class="fa fa-plus fa-lg"></i>
+                        Add Item
+                      </button>
+                      &nbsp;
+                      <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fa fa-save fa-lg"></i>
+                        Save
+                      </button>
+                    </div>
+                    <div class="col col-md-12 visible-xs visible-mobile">
+                      <button
+                        type="button"
+                        (click)="openModal($event, wishlistOptionsModal)"
+                        class="btn btn-default btn-lg"
+                        *ngIf="isUpdate"
+                      >
+                        <i class="fa fa-cog fa-lg"></i>
+                      </button>
+                      &nbsp;
+                      <button
+                        type="button"
+                        (click)="openModal($event, wishlistItemModal)"
+                        class="btn btn-primary btn-lg"
+                        *ngIf="isUpdate"
+                      >
+                        <i class="fa fa-plus fa-lg"></i>
+                      </button>
+                      &nbsp;
+                      <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fa fa-save fa-lg"></i>
                       </button>
                     </div>
                   </div>
@@ -285,8 +297,10 @@
                       <img
                         alt="sunny"
                         class="online portrait"
-                        src="assets/img/avatars/sunny.png"
-                        [src]="item.image || 'assets/img/avatars/sunny.png'"
+                        src="assets/icons/icon-72x72_grey_out.png"
+                        [src]="
+                          item.image || 'assets/icons/icon-72x72_grey_out.png'
+                        "
                       />
                     </div>
                   </div>
@@ -337,6 +351,13 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col col-md-12 col-xs-12">
+                <span class="onoffswitch-title"
+                  ><i class="fa fa-info"></i> Scrollable: Drag by picture
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </article>
@@ -350,7 +371,15 @@
 <ng-template #wishlistItemModal>
   <wishlist-item-modal
     [wishlist]="wishlist"
-    (save)="addItem()"
+    (save)="closeModal()"
     (close)="onModalClose()"
   ></wishlist-item-modal>
+</ng-template>
+
+<ng-template #wishlistOptionsModal>
+  <wishlist-options-modal
+    [wishlist]="wishlist"
+    (save)="closeModal()"
+    (close)="onModalClose()"
+  ></wishlist-options-modal>
 </ng-template>

@@ -4,4 +4,7 @@ export interface WishlistPreference {
     hideFromMe: boolean;
     markPurchasedItem: boolean;
     currencyUnitSymbol: string;
+    notifyOnAddItem: boolean;
+    notifyOnRemoveItem: boolean;
+    notifyOnClose: boolean;
 }
