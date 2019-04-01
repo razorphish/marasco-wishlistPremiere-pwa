@@ -9,6 +9,9 @@ import {
   OnDestroy
 } from '@angular/core';
 
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -20,7 +23,7 @@ import { ActivityLogSubjectService } from '@app/features/marasco/shared/activity
 })
 export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
   //*=================I/O============================= */
-  @Input() wishlist: Wishlist;
+  @Input() wishlistObject: Wishlist;
   @Input() public options = {
     mode: 'popup',
     disabled: false,
@@ -29,6 +32,8 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
 
   @Output() save = new EventEmitter();
   @Output() close = new EventEmitter();
+
+  public wishlist : Wishlist;
 
   /**============Privately exposed properties ========= */
   private unsubscribe$ = new Subject<void>();
@@ -39,7 +44,11 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
   constructor(
     private _notificationService: NotificationService,
     private _activityLogService: ActivityLogSubjectService,
-    private _wishlistService: WishlistService) {}
+    private _wishlistService: WishlistService,
+    private _modalService: BsModalService) {
+      const initialState: any = this._modalService.config.initialState;
+      this.wishlist = initialState.wishlist;
+    }
 
   ngOnInit() {
     this.validationOptions = {
@@ -66,9 +75,9 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
       submitHandler: this.saveOptions
     };
 
-    this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
-      this.wishlist = wishlist;
-    });
+    // this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
+    //   this.wishlist = wishlist;
+    // });
   }
 
   public saveOptions($event) {

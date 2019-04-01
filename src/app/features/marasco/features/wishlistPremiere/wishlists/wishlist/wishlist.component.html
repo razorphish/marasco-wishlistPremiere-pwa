@@ -65,7 +65,7 @@
                     <div class="col col-md-12 hidden-xs hidden-mobile">
                       <button
                         type="button"
-                        (click)="openModal($event, wishlistOptionsModal)"
+                        (click)="openModalSettings($event, wishlistOptionsModal, wishlist)"
                         class="btn btn-default btn-lg"
                         *ngIf="isUpdate"
                       >
@@ -91,7 +91,7 @@
                     <div class="col col-md-12 visible-xs visible-mobile">
                       <button
                         type="button"
-                        (click)="openModal($event, wishlistOptionsModal)"
+                        (click)="openModalSettings($event, wishlistOptionsModal, wishlist)"
                         class="btn btn-default btn-lg"
                         *ngIf="isUpdate"
                       >
@@ -354,7 +354,7 @@
             <div class="row">
               <div class="col col-md-12 col-xs-12">
                 <span class="onoffswitch-title"
-                  ><i class="fa fa-info"></i> Scrollable: Drag by picture
+                  ><i class="fa fa-info"></i> Sortable: Drag by picture
                 </span>
               </div>
             </div>
@@ -378,7 +378,7 @@
 
 <ng-template #wishlistOptionsModal>
   <wishlist-options-modal
-    [wishlist]="wishlist"
+    [wishlistObject]="wishlist"
     (save)="closeModal()"
     (close)="onModalClose()"
   ></wishlist-options-modal>

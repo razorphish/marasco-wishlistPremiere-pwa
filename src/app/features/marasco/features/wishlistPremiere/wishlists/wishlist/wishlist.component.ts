@@ -232,6 +232,21 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.bsModalRef = this._modalService.show(template, { initialState });
   }
 
+  public openModalSettings(
+    event,
+    template: TemplateRef<any>,
+    wishlist: Wishlist
+  ) {
+    const initialState = {
+      wishlist: wishlist || {
+        name: ''
+      }
+    };
+
+    event.preventDefault();
+    this.bsModalRef = this._modalService.show(template, { initialState });
+  }
+
   public onModalClose() {
     this.bsModalRef.hide();
   }
@@ -318,6 +333,12 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
     //Sets mobile
     this.isMobile = this._layoutService.store.isMobile;
+
+    this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
+      if (!!wishlist && wishlist._id === this.wishlist._id) {
+        this.wishlist = wishlist;
+      }
+    });
   }
 
   private displayErrors(errors: string[]): void {
