@@ -1,4 +1,4 @@
-import { Wishlist } from './../../../../core/interfaces/Wishlist.interface';
+import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
 
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
@@ -12,7 +12,7 @@ import { ActivityLogSubjectService } from '../../../../shared/activitylog.subjec
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 
 @Injectable()
-export class WishlistResolve implements Resolve<any> {
+export class WishlistDetailsResolve implements Resolve<any> {
   constructor(
     private _store: Store<any>,
     private _activityLogService: ActivityLogSubjectService

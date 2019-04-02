@@ -1,4 +1,4 @@
-import { WishlistItemSort } from './../../../../core/interfaces/Wishlist-item-sort.interface';
+import { WishlistItemSort } from '../../../../core/interfaces/Wishlist-item-sort.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import {
@@ -9,7 +9,7 @@ import {
   TemplateRef,
   OnDestroy
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -35,10 +35,10 @@ import { WishlistOptionsModalComponent } from './options-modal/options-modal.com
  */
 @Component({
   selector: 'marasco-wishlist',
-  templateUrl: 'wishlist.component.html',
-  styleUrls: ['./wishlist.component.css']
+  templateUrl: 'wishlist-details.component.html',
+  styleUrls: ['./wishlist-details.component.css']
 })
-export class WishlistComponent implements OnInit, OnDestroy {
+export class WishlistDetailsComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
   private pageIdUnsubscribe$ = new Subject<void>();
   private unsubscribe$ = new Subject<void>();
@@ -173,6 +173,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   constructor(
     private _wishlistService: WishlistService,
     private _route: ActivatedRoute,
+    private _router: Router,
     private _notificationService: NotificationService,
     private _factory: WishlistFactory,
     private _activityLogService: ActivityLogSubjectService,
@@ -249,6 +250,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   public onModalClose() {
     this.bsModalRef.hide();
+  }
+
+  public previewWishlist($event, wishlist: Wishlist) {
+    $event.preventDefault();
+    this._router.navigate(['/wishlists', 'preview', wishlist._id]);
   }
 
   public save(wishlistDetailsForm: any) {

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { WishlistResolve } from './wishlist/wishlist.resolve';
-import { WishlistComponent } from './wishlist/wishlist.component';
+import { WishlistDetailsResolve } from './wishlist/wishlist-details.resolve';
+import { WishlistDetailsComponent } from './wishlist/wishlist-details.component';
 import { WishlistListResolve } from './wishlist-list/wishlist-list.resolve';
 import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
 import { WishlistsComponent } from './wishlists.component';
@@ -18,6 +18,15 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
+        path: ':id',
+        component: WishlistListComponent,
+        data: {
+          pageTitle: 'Wishlist'
+        },
+        resolve:
+        { wishlists: WishlistListResolve }
+      },
+      {
         path: 'list',
         component: WishlistListComponent,
         data: {
@@ -28,12 +37,12 @@ export const routes: Routes = [
       },
       {
         path: 'details/:id',
-        component: WishlistComponent,
+        component: WishlistDetailsComponent,
         data: {
           pageTitle: 'Details'
         },
         resolve: {
-          wishlist: WishlistResolve
+          wishlist: WishlistDetailsResolve
         }
       }
     ]

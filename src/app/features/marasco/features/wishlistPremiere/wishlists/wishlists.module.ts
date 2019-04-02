@@ -19,10 +19,10 @@ import {
   WishlistsComponent,
   WishlistsRoutingModule,
   WishlistListComponent,
-  WishlistComponent,
+  WishlistDetailsComponent,
   WishlistListResolve,
-  WishlistResolve,
-  WishlistGuard,
+  WishlistDetailsResolve,
+  WishlistDetailsGuard,
   WishlistItemModalComponent,
   WishlistItemCategoryModalComponent,
   WishlistOptionsModalComponent
@@ -50,15 +50,15 @@ import {
   declarations: [
     WishlistsComponent,
     WishlistListComponent,
-    WishlistComponent,
+    WishlistDetailsComponent,
     WishlistItemModalComponent,
     WishlistItemCategoryModalComponent,
     WishlistOptionsModalComponent
   ],
   providers: [
-    WishlistGuard,
+    WishlistDetailsGuard,
     WishlistListResolve,
-    WishlistResolve,
+    WishlistDetailsResolve,
     UpperCasePipe
   ]
 })
