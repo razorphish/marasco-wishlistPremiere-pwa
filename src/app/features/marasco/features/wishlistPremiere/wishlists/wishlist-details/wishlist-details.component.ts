@@ -194,6 +194,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         if (id !== '0') {
           this.wishlist = this._route.snapshot.data['wishlist'];
           this.selectedStatus.push(this.wishlist.statusId);
+          this.isUpdate = true;
         } else {
           this.isUpdate = false;
         }

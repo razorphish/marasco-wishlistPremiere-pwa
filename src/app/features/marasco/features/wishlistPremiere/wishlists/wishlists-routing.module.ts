@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { WishlistDetailsResolve } from './wishlist/wishlist-details.resolve';
-import { WishlistDetailsComponent } from './wishlist/wishlist-details.component';
+import { WishlistDetailsResolve } from './wishlist-details/wishlist-details.resolve';
+import { WishlistDetailsComponent } from './wishlist-details/wishlist-details.component';
 import { WishlistListResolve } from './wishlist-list/wishlist-list.resolve';
 import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
 import { WishlistsComponent } from './wishlists.component';
