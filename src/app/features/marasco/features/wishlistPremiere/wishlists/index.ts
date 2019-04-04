@@ -3,6 +3,10 @@ export * from './wishlists.component';
 export * from './wishlist-list/wishlist-list.component';
 export * from './wishlist-list/wishlist-list.resolve';
 
+export * from './wishlist/wishlist.component';
+export * from './wishlist/wishlist.resolve';
+export * from './wishlist/wishlist.guard';
+
 export * from './wishlist-details/wishlist-details.component';
 export * from './wishlist-details/wishlist-details.resolve';
 export * from './wishlist-details/wishlist-details.guard';

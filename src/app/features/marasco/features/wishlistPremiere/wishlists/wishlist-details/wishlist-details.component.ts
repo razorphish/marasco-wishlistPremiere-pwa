@@ -34,7 +34,7 @@ import { WishlistOptionsModalComponent } from './options-modal/options-modal.com
  * http://sortablejs.github.io/Sortable/
  */
 @Component({
-  selector: 'marasco-wishlist',
+  selector: 'marasco-wishlist-details',
   templateUrl: 'wishlist-details.component.html',
   styleUrls: ['./wishlist-details.component.css']
 })
@@ -255,7 +255,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
   public previewWishlist($event, wishlist: Wishlist) {
     $event.preventDefault();
-    this._router.navigate(['/wishlists', 'preview', wishlist._id]);
+    this._router.navigateByUrl(`wishlistPremiere/wishlists/${wishlist._id}`);
   }
 
   public save(wishlistDetailsForm: any) {

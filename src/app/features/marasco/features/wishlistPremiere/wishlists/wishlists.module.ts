@@ -18,9 +18,12 @@ import { SettingsModule } from './shared/settings/settings.module';
 import {
   WishlistsComponent,
   WishlistsRoutingModule,
+  WishlistComponent,
+  WishlistResolve,
+  WishlistGuard,
   WishlistListComponent,
-  WishlistDetailsComponent,
   WishlistListResolve,
+  WishlistDetailsComponent,
   WishlistDetailsResolve,
   WishlistDetailsGuard,
   WishlistItemModalComponent,
@@ -42,23 +45,33 @@ import {
     SortablejsModule.forRoot({ animation: 150 }),
     MomentModule.forRoot({
       relativeTimeThresholdOptions: {
-        'm': 59
+        m: 59
       }
     })
   ],
   exports: [],
   declarations: [
     WishlistsComponent,
+
     WishlistListComponent,
+
+    WishlistComponent,
+
     WishlistDetailsComponent,
+
     WishlistItemModalComponent,
     WishlistItemCategoryModalComponent,
     WishlistOptionsModalComponent
   ],
   providers: [
-    WishlistDetailsGuard,
     WishlistListResolve,
+
+    WishlistResolve,
+    WishlistGuard,
+
     WishlistDetailsResolve,
+    WishlistDetailsGuard,
+
     UpperCasePipe
   ]
 })

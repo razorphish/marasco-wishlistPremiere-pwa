@@ -5,6 +5,8 @@ import { WishlistDetailsResolve } from './wishlist-details/wishlist-details.reso
 import { WishlistDetailsComponent } from './wishlist-details/wishlist-details.component';
 import { WishlistListResolve } from './wishlist-list/wishlist-list.resolve';
 import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
+import { WishlistResolve } from './wishlist/wishlist.resolve';
+import { WishlistComponent } from './wishlist/wishlist.component';
 import { WishlistsComponent } from './wishlists.component';
 
 export const routes: Routes = [
@@ -19,12 +21,12 @@ export const routes: Routes = [
       },
       {
         path: ':id',
-        component: WishlistListComponent,
+        component: WishlistComponent,
         data: {
           pageTitle: 'Wishlist'
         },
         resolve:
-        { wishlists: WishlistListResolve }
+        { wishlist: WishlistResolve }
       },
       {
         path: 'list',

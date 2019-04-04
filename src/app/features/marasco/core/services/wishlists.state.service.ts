@@ -12,6 +12,7 @@ import { environment } from '../../../../../environments/environment';
 import { Wishlist } from '../interfaces/Wishlist.interface';
 import { StorageService } from './storage.service';
 import { WishlistItem } from '../interfaces/Wishlist-item.interface';
+import { WishlistFollow } from '../interfaces/Wishlist-Follow.interface';
 
 const USER_WISHLISTS = 'user_wishlists';
 
@@ -42,6 +43,29 @@ export class WishlistStateService {
     });
   }
 
+  addFollow(wishlistFollow: WishlistFollow) {
+    var foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistFollow.wishlistId;
+    });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlistFollow.wishlistId
+    );
+
+    //Add item
+    if (foundWishlist.items) {
+      foundWishlist.follows.push(wishlistFollow);
+    } else {
+      foundWishlist.follows = [wishlistFollow];
+    }
+
+    this.wishlists[foundIndex] = foundWishlist;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
   addItem(wishlistItem: WishlistItem) {
     var foundWishlist = this.wishlists.find((wishlist) => {
       return wishlist._id === wishlistItem.wishlistId;
@@ -65,19 +89,21 @@ export class WishlistStateService {
     });
   }
 
-  sortItem(wishlistItems: WishlistItem[]) {
-    //Get wishlist Id
-    const wishlistId = wishlistItems[0].wishlistId;
-
-    var foundWishlist = this.wishlists.find((wishlist) => {
-      return wishlist._id === wishlistId;
+  deleteFollow(wishlistFollow: WishlistFollow) {
+    let foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistFollow.wishlistId;
     });
 
     let foundIndex: number = this.wishlists.findIndex(
-      (x) => x._id === wishlistId
+      (x) => x._id === wishlistFollow.wishlistId
     );
 
-    foundWishlist.items = wishlistItems;
+    //find item
+    let foundItemIndex: number = foundWishlist.follows.findIndex(
+      (x) => x._id === wishlistFollow._id
+    );
+
+    foundWishlist.follows.splice(foundItemIndex, 1);
 
     this.wishlists[foundIndex] = foundWishlist;
 
@@ -115,6 +141,29 @@ export class WishlistStateService {
     );
 
     this.wishlists[foundIndex] = wishlist;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
+  }
+
+  editFollow(wishlistFollow: WishlistFollow) {
+    let foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistFollow.wishlistId;
+    });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlistFollow.wishlistId
+    );
+
+    //find item index
+    let foundItemIndex: number = foundWishlist.follows.findIndex(
+      (x) => x._id === wishlistFollow._id
+    );
+
+    foundWishlist.follows[foundItemIndex] = wishlistFollow;
+
+    this.wishlists[foundIndex] = foundWishlist;
 
     return new Promise((resolve) => {
       resolve(this.wishlists);
@@ -174,6 +223,27 @@ export class WishlistStateService {
           resolve(null);
         }
       );
+    });
+  }
+
+  sortItem(wishlistItems: WishlistItem[]) {
+    //Get wishlist Id
+    const wishlistId = wishlistItems[0].wishlistId;
+
+    var foundWishlist = this.wishlists.find((wishlist) => {
+      return wishlist._id === wishlistId;
+    });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlistId
+    );
+
+    foundWishlist.items = wishlistItems;
+
+    this.wishlists[foundIndex] = foundWishlist;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
     });
   }
 

@@ -1,0 +1,25 @@
+.bottom-color-black{
+  border-bottom-color: #3276b1;
+}
+
+.thumbnail {
+  position: absolute;
+  width: 75px;
+  height: 72px;
+  overflow: hidden;
+  margin-bottom: 0px;
+}
+.thumbnail img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  -webkit-transform: translate(-50%,-50%);
+      -ms-transform: translate(-50%,-50%);
+          transform: translate(-50%,-50%);
+}
+.thumbnail img.portrait {
+  width: 100%;
+  height: auto;
+}

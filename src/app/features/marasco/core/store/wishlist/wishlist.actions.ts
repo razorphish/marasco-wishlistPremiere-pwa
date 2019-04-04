@@ -24,6 +24,14 @@ export enum WishlistActionTypes {
   SortWishlistItemAction = '[WishlistItem] Sort Wishlist Item Action',
   SortWishlistItemSuccess = '[WishlistItem] Sort Wishlist Item Success',
 
+  //Wishlist Follow actions
+  CreateWishlistFollowAction = '[WishlistItem] Create Wishlist Follow Action',
+  CreateWishlistFollowSuccess = '[WishlistItem] Create Wishlist Follow Success',
+  DeleteWishlistFollowAction = '[WishlistItem] Delete Wishlist Follow Action',
+  DeleteWishlistFollowSuccess = '[WishlistItem] Delete Wishlist Follow Success',
+  EditWishlistFollowAction = '[WishlistItem] Edit Wishlist Follow Action',
+  EditWishlistFollowSuccess = '[WishlistItem] Edit Wishlist Follow Success',
+
   //Wishlist Item Category Actions
   WishlistItemCategoriesLoad = '[WishlistItemCategory] Load Item Categories',
   WishlistItemCategoriesRestore = '[WishlistItemCategory] Wishlist Item Categories Restore',
@@ -127,8 +135,40 @@ export class SortWishlistItemSuccess implements Action {
   constructor(readonly payload: any) {}
 }
 
-
 //==============[END] Wishlist Item Actions==============///
+
+//==============Wishlist Follow Actions===================///
+export class CreateWishlistFollowAction implements Action {
+  readonly type = WishlistActionTypes.CreateWishlistFollowAction;
+  constructor(readonly payload: any) {}
+}
+
+export class CreateWishlistFollowSuccess implements Action {
+  readonly type = WishlistActionTypes.CreateWishlistFollowSuccess;
+  constructor(readonly payload: any) {}
+}
+
+export class DeleteWishlistFollowAction implements Action {
+  readonly type = WishlistActionTypes.DeleteWishlistFollowAction;
+  constructor(readonly payload: any) {}
+}
+
+export class DeleteWishlistFollowSuccess implements Action {
+  readonly type = WishlistActionTypes.DeleteWishlistFollowSuccess;
+  constructor(readonly payload: any) {}
+}
+
+export class EditWishlistFollowAction implements Action {
+  readonly type = WishlistActionTypes.EditWishlistFollowAction;
+  constructor(readonly payload: any) {}
+}
+
+export class EditWishlistFollowSuccess implements Action {
+  readonly type = WishlistActionTypes.EditWishlistFollowSuccess;
+  constructor(readonly payload: any) {}
+}
+
+//==============[END] Wishlist Follow Actions==============///
 
 //==============Wishlist Item Category Actions===========///
 export class WishlistItemCategoriesLoad implements Action {
@@ -193,6 +233,15 @@ export type WishlistActions =
   | EditWishlistItemSuccess
   | SortWishlistItemAction
   | SortWishlistItemSuccess
+  //==============Wishlist Item Actions====================///
+
+  //==============Wishlist Follow Actions====================///
+  | CreateWishlistFollowAction
+  | CreateWishlistFollowSuccess
+  | DeleteWishlistFollowAction
+  | DeleteWishlistFollowSuccess
+  | EditWishlistFollowAction
+  | EditWishlistFollowSuccess
   //==============Wishlist Item Actions====================///
 
   //==============Wishlist Item Category Actions===========///

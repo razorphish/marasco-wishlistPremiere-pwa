@@ -1,0 +1,202 @@
+<!-- MAIN CONTENT -->
+
+<div id="content">
+  <div class="row">
+    <sa-big-breadcrumbs
+      [items]="[wishlist.name || 'Wishlist']"
+      icon="gift"
+      class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
+    ></sa-big-breadcrumbs>
+    <wp-settings [wishlist]="wishlist"></wp-settings>
+  </div>
+
+  <!-- widget grid -->
+  <sa-widgets-grid>
+    <!-- START ROW -->
+    <div class="row">
+      <!-- NEW COL START -->
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div
+          sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [custombutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [togglebutton]="false"
+          [sortable]="false"
+          class="well"
+        >
+          <header>
+            <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+            <h2>{{ wishlist.name }}</h2>
+          </header>
+
+          <!-- widget div-->
+          <div>
+            <!-- widget content -->
+            <div>
+              <div class="row">
+                <div class="col-md-12 hidden-xs hidden-mobile">
+                  <button
+                    type="button"
+                    (click)="openModal($event, wishlistFollowModal, wishlist)"
+                    class="btn btn-primary btn-lg"
+                  >
+                    <i class="fa fa-gift fa-lg"></i>
+                    Follow Wishlist
+                  </button>
+                  &nbsp;
+                  <button
+                    type="button"
+                    (click)="
+                      openModal($event, wishlistUserFollowModal, wishlist)
+                    "
+                    class="btn btn-primary btn-lg"
+                  >
+                    <i class="fa fa-user fa-lg"></i>
+                    Follow Me!
+                  </button>
+                  <br />&nbsp;
+                </div>
+                <div class="col-md-12 visible-xs visible-mobile">
+                  <button
+                    type="button"
+                    (click)="openModal($event, wishlistFollowModal, wishlist)"
+                    class="btn btn-primary btn-lg"
+                  >
+                    <i class="fa fa-gift fa-lg"></i>
+                  </button>
+                  &nbsp;
+                  <button
+                    type="button"
+                    (click)="
+                      openModal($event, wishlistUserFollowModal, wishlist)
+                    "
+                    class="btn btn-primary btn-lg"
+                  >
+                    <i class="fa fa-user fa-lg"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <!-- end widget content -->
+          </div>
+          <!-- end widget div -->
+        </div>
+        <!-- end widget -->
+      </article>
+      <!-- END COL -->
+    </div>
+    <!-- END ROW -->
+
+    <!-- START ROW -->
+    <div class="row" *ngIf="wishlist.items.length !== 0">
+      <article class="col-sm-12 col-md-12 col-lg-12">
+        <!-- Widget ID (each widget will need unique ID)-->
+        <div
+          sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [custombutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [togglebutton]="false"
+          [sortable]="false"
+          class="well"
+        >
+          <div>
+            <div class="row" *ngFor="let item of wishlist.items">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3">
+                    <div class="thumbnail handle">
+                      <input
+                        type="hidden"
+                        id="wishlistItemId"
+                        name="wishlistItemId"
+                        [(ngModel)]="item._id"
+                      />
+                      <img
+                        alt="sunny"
+                        class="online portrait"
+                        src="assets/icons/icon-72x72_grey_out.png"
+                        [src]="
+                          item.image || 'assets/icons/icon-72x72_grey_out.png'
+                        "
+                      />
+                    </div>
+                  </div>
+                  <div class="col-lg-11 col-md-11 col-sm-10 col-xs-9">
+                    <div class="well well-sm ">
+                      <div class="row">
+                        <div class="col col-md-10 col-xs-9">
+                          <b>{{ item.name }}</b>
+                        </div>
+                        <div class="col col-md-2 col-xs-3">
+                          <span class="pull-right font-md">
+                            {{ item.price | currency }}
+                          </span>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col col-md-12 col-xs-12">
+                          <div class="pull-right">
+                            <button
+                              *ngIf="item.purchased"
+                              class="btn btn-default btn-sm"
+                              (click)="markItemPurchase($event, item)"
+                            >
+                            <i class="fa fa-check"></i>
+                              Purchased
+                            </button>
+
+                            <button
+                              *ngIf="!item.purchased"
+                              class="btn btn-success btn-sm"
+                              (click)="markItemPurchase($event, item)"
+                            >
+                              <i class="fa fa-cart-plus"></i>
+                              Purchased
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-md-12 col-xs-12">
+                <span class="onoffswitch-title"
+                  ><i class="fa fa-info"></i> Sortable: Drag by picture
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <!-- END ROW -->
+  </sa-widgets-grid>
+  <!-- end widget grid -->
+</div>
+
+<ng-template #wishlistFollowModal>
+  <wishlist-item-modal
+    [wishlist]="wishlist"
+    (save)="closeModal()"
+    (close)="onModalClose()"
+  ></wishlist-item-modal>
+</ng-template>
+
+<ng-template #wishlistUserFollowModal>
+  <wishlist-item-modal
+    [wishlist]="wishlist"
+    (save)="closeModal()"
+    (close)="onModalClose()"
+  ></wishlist-item-modal>
+</ng-template>

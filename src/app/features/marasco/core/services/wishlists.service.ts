@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Response, Headers, RequestOptions } from '@angular/http';
+import { Response } from '@angular/http';
 
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -24,12 +24,12 @@ export class WishlistService {
 
   constructor(private _authHttp: AuthHttpService) {}
 
-  all(): Observable<Wishlist[]> {
-    return this._authHttp.get(this._url).pipe(
-      map((wishlists: any) => wishlists),
-      catchError(this.handleError)
-    );
-  }
+  // all(): Observable<Wishlist[]> {
+  //   return this._authHttp.get(this._url).pipe(
+  //     map((wishlists: any) => wishlists),
+  //     catchError(this.handleError)
+  //   );
+  // }
 
   allDetails(): Observable<Wishlist[]> {
     return this._authHttp.get(`${this._url}details`).pipe(
@@ -45,19 +45,19 @@ export class WishlistService {
     );
   }
 
-  get(id: string): Observable<Wishlist> {
-    return this._authHttp.get(`${this._url}${id}`).pipe(
-      map((wishlist: any) => wishlist),
-      catchError(this.handleError)
-    );
-  }
+  // get(id: string): Observable<Wishlist> {
+  //   return this._authHttp.get(`${this._url}${id}`).pipe(
+  //     map((wishlist: any) => wishlist),
+  //     catchError(this.handleError)
+  //   );
+  // }
 
-  getDetails(id: string): Observable<Wishlist> {
-    return this._authHttp.get(`${this._url}${id}/details`).pipe(
-      map((wishlist: any) => wishlist),
-      catchError(this.handleError)
-    );
-  }
+  // getDetails(id: string): Observable<Wishlist> {
+  //   return this._authHttp.get(`${this._url}${id}/details`).pipe(
+  //     map((wishlist: any) => wishlist),
+  //     catchError(this.handleError)
+  //   );
+  // }
 
   insert(wishlist: Wishlist): Observable<Wishlist> {
     return this._authHttp.post(this._url, JSON.stringify(wishlist)).pipe(
@@ -74,7 +74,7 @@ export class WishlistService {
       .put(`${this._url}${wishlist._id}`, JSON.stringify(wishlist))
       .pipe(
         map((result: Wishlist) => {
-          this.onWishlistChanged.next(wishlist)
+          this.onWishlistChanged.next(wishlist);
           return wishlist;
         }),
         catchError(this.handleError)

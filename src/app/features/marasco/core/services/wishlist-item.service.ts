@@ -35,20 +35,6 @@ export class WishlistItemService {
 
   constructor(private _authHttp: AuthHttpService) {}
 
-  all(): Observable<WishlistItem[]> {
-    return this._authHttp.get(this._url).pipe(
-      map((wishlists: any) => wishlists),
-      catchError(this.handleError)
-    );
-  }
-
-  allDetails(): Observable<WishlistItem[]> {
-    return this._authHttp.get(`${this._url}details`).pipe(
-      map((wishlists: any) => wishlists),
-      catchError(this.handleError)
-    );
-  }
-
   delete(wishlistItem: WishlistItem): Observable<any> {
     return this._authHttp
       .delete(
@@ -62,20 +48,6 @@ export class WishlistItemService {
         }),
         catchError(this.handleError)
       );
-  }
-
-  get(id: string): Observable<WishlistItem> {
-    return this._authHttp.get(`${this._url}${id}`).pipe(
-      map((wishlistItem: any) => wishlistItem),
-      catchError(this.handleError)
-    );
-  }
-
-  getDetails(id: string): Observable<WishlistItem> {
-    return this._authHttp.get(`${this._url}${id}/details`).pipe(
-      map((wishlist: any) => wishlist),
-      catchError(this.handleError)
-    );
   }
 
   insert(wishlistItem: WishlistItem): Observable<WishlistItem> {

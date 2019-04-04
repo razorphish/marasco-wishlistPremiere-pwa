@@ -11,16 +11,16 @@ import { NotificationService } from '@app/features/marasco/core/services/notific
 import { _daysInMonth } from 'ngx-bootstrap/chronos/utils/date-getters';
 import { WishlistStateService } from '../../services/wishlists.state.service';
 import { Wishlist } from '../../interfaces/Wishlist.interface';
-import { WishlistItemService } from '../../services/wishlist-item.service';
+import { WishlistFollowService } from '../../services/wishlist-follow.service';
 
 @Injectable()
-export class WishlistItemEffects {
+export class WishlistFollowEffects {
   @Effect({ dispatch: false })
-  createWishlistItem$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.CreateWishlistItemAction),
+  createWishlistFollow$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.CreateWishlistFollowAction),
     map((data: any) => data.payload),
-    tap((wishlistItem: any) => {
-      this._wishlistItemService.insert(wishlistItem).subscribe(
+    tap((wishlistFollow: any) => {
+      this._wishlistFollowService.insert(wishlistFollow).subscribe(
         (result: any) => {
           if (!!result.error) {
             this.dispatchErrorNotification(result.error);
@@ -28,8 +28,8 @@ export class WishlistItemEffects {
           }
 
           this.notifysm(
-            'Item Created!',
-            'Item has been added to your wishlist.',
+            'Follow Created!',
+            'Follow has been added to your wishlist.',
             null,
             true
           );
@@ -42,11 +42,11 @@ export class WishlistItemEffects {
   );
 
   @Effect({ dispatch: false })
-  editWishlistItem$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.EditWishlistItemAction),
+  editWishlistFollow$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.EditWishlistFollowAction),
     map((data: any) => data.payload),
-    tap((wishlistItem: any) => {
-      this._wishlistItemService.update(wishlistItem).subscribe(
+    tap((wishlistFollow: any) => {
+      this._wishlistFollowService.update(wishlistFollow).subscribe(
         (result: any) => {
           if (!!result.error) {
             this.dispatchErrorNotification(result.error);
@@ -54,8 +54,8 @@ export class WishlistItemEffects {
           }
 
           this.notifysm(
-            'Item Updated!',
-            'Item has been updated Successfully',
+            'Follow Updated!',
+            'Follow has been updated Successfully',
             null,
             true
           );
@@ -68,19 +68,19 @@ export class WishlistItemEffects {
   );
 
   @Effect({ dispatch: false })
-  deleteWishlistItem$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.DeleteWishlistItemAction),
+  deleteWishlistFollow$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.DeleteWishlistFollowAction),
     map((data: any) => data.payload),
-    tap((wishlistItem: any) => {
+    tap((wishlistFollow: any) => {
       this._notificationService.smartMessageBox(
         {
           title: 'Delete?',
-          content: 'Are you sure you want to delete this item?',
+          content: 'Are you sure you want to delete this Follow?',
           buttons: '[No][Yes]'
         },
         (ButtonPressed) => {
           if (ButtonPressed === 'Yes') {
-            this._wishlistItemService.delete(wishlistItem).subscribe(
+            this._wishlistFollowService.delete(wishlistFollow).subscribe(
               (result: any) => {
                 if (!!result.error) {
                   this.dispatchErrorNotification(result.error);
@@ -88,8 +88,8 @@ export class WishlistItemEffects {
                 }
 
                 this.notifysm(
-                  'Item Deleted!',
-                  'Item has been removed from your wishlist.',
+                  'Follow Deleted!',
+                  'Follow has been removed from your wishlist.',
                   null,
                   true
                 );
@@ -106,62 +106,28 @@ export class WishlistItemEffects {
     })
   );
 
-  @Effect({ dispatch: false })
-  sortWishlistItem$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.SortWishlistItemAction),
-    map((data: any) => data.payload),
-    tap((wishlistItem: any) => {
-      this._wishlistItemService.sort(wishlistItem).subscribe(
-        (result: any) => {
-          if (!!result.error) {
-            this.dispatchErrorNotification(result.error);
-            return;
-          }
-
-          this.notifysm(
-            'Item Sorted!',
-            'Item has been added to your wishlist.',
-            null,
-            true
-          );
-        },
-        (error: any) => {
-          this.dispatchError(error);
-        }
-      );
-    })
-  );
-
   @Effect()
-  wishlistItemCreateSuccess$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.CreateWishlistItemSuccess),
-    switchMap((data: any) => this._wishlistStateService.addItem(data.payload)),
+  wishlistFollowCreateSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.CreateWishlistFollowSuccess),
+    switchMap((data: any) => this._wishlistStateService.addFollow(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
 
   @Effect()
-  wishlistItemEditSuccess$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.EditWishlistItemSuccess),
-    switchMap((data: any) => this._wishlistStateService.editItem(data.payload)),
+  wishlistFollowEditSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.EditWishlistFollowSuccess),
+    switchMap((data: any) => this._wishlistStateService.editFollow(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
 
   @Effect()
-  wishlistItemDeleteSuccess$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.DeleteWishlistItemSuccess),
+  wishlistFollowDeleteSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.DeleteWishlistFollowSuccess),
     switchMap((data: any) =>
-      this._wishlistStateService.deleteItem(data.payload)
+      this._wishlistStateService.deleteFollow(data.payload)
     ),
-    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-    map((_) => new actions.WishlistsPayload(_))
-  );
-
-  @Effect()
-  wishlistItemSortSuccess$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.SortWishlistItemSuccess),
-    switchMap((data: any) => this._wishlistStateService.sortItem(data.payload)),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
@@ -242,46 +208,35 @@ export class WishlistItemEffects {
     private _store: Store<WishlistState>,
     private _notificationService: NotificationService,
     private _wishlistStateService: WishlistStateService,
-    private _wishlistItemService: WishlistItemService
+    private _wishlistFollowService: WishlistFollowService
   ) {
-    // Item created
-    this._wishlistItemService.onWishlistItemCreated.subscribe(
-      (wishlistItem) => {
-        if (!!wishlistItem) {
+    // Follow created
+    this._wishlistFollowService.onWishlistFollowCreated.subscribe(
+      (wishlistFollow) => {
+        if (!!wishlistFollow) {
           this._store.dispatch(
-            new actions.CreateWishlistItemSuccess(wishlistItem)
+            new actions.CreateWishlistFollowSuccess(wishlistFollow)
           );
         }
       }
     );
 
-    // Item changed/edited
-    this._wishlistItemService.onWishlistItemChanged.subscribe(
-      (wishlistItem) => {
-        if (!!wishlistItem) {
+    // Follow changed/edited
+    this._wishlistFollowService.onWishlistFollowChanged.subscribe(
+      (wishlistFollow) => {
+        if (!!wishlistFollow) {
           this._store.dispatch(
-            new actions.EditWishlistItemSuccess(wishlistItem)
+            new actions.EditWishlistFollowSuccess(wishlistFollow)
           );
         }
       }
     );
 
-    // Item sorted
-    this._wishlistItemService.onWishlistItemsSorted.subscribe(
-      (wishlistItems) => {
-        if (!!wishlistItems) {
+    this._wishlistFollowService.onWishlistFollowDeleted.subscribe(
+      (wishlistFollow) => {
+        if (!!wishlistFollow) {
           this._store.dispatch(
-            new actions.SortWishlistItemSuccess(wishlistItems)
-          );
-        }
-      }
-    );
-
-    this._wishlistItemService.onWishlistItemDeleted.subscribe(
-      (wishlistItem) => {
-        if (!!wishlistItem) {
-          this._store.dispatch(
-            new actions.DeleteWishlistItemSuccess(wishlistItem)
+            new actions.DeleteWishlistFollowSuccess(wishlistFollow)
           );
         }
       }
