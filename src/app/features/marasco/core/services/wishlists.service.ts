@@ -45,12 +45,12 @@ export class WishlistService {
     );
   }
 
-  // get(id: string): Observable<Wishlist> {
-  //   return this._authHttp.get(`${this._url}${id}`).pipe(
-  //     map((wishlist: any) => wishlist),
-  //     catchError(this.handleError)
-  //   );
-  // }
+  get(id: string): Observable<Wishlist> {
+    return this._authHttp.get(`${this._url}${id}`).pipe(
+      map((wishlist: any) => wishlist),
+      catchError(this.handleError)
+    );
+  }
 
   // getDetails(id: string): Observable<Wishlist> {
   //   return this._authHttp.get(`${this._url}${id}/details`).pipe(

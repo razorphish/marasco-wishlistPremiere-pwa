@@ -8,7 +8,6 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
-import { WishlistService } from '../../../../core/services/wishlists.service';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
@@ -129,8 +128,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
     //Gets current state of the app
     this.activateState();
 
-    //Set User info
-    this.wishlist.userId = this.user._id;
   }
 
   private activateState() {

@@ -10,12 +10,14 @@ import { Store, select } from '@ngrx/store';
 
 import { ActivityLogSubjectService } from '../../../../shared/activitylog.subject-service';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
+import { WishlistService } from '@app/features/marasco/core/services';
 
 @Injectable()
 export class WishlistResolve implements Resolve<any> {
   constructor(
     private _store: Store<any>,
-    private _activityLogService: ActivityLogSubjectService
+    private _activityLogService: ActivityLogSubjectService,
+    private _wishlistService: WishlistService
   ) {}
 
   resolve(route: ActivatedRouteSnapshot) {
@@ -26,11 +28,12 @@ export class WishlistResolve implements Resolve<any> {
       return of('0');
     }
 
-    return this._store.pipe(
-      select(fromWishlist.getUserWishlists),
-      take(1),
-      mergeMap((_) => _),
-      filter((wishlist: Wishlist) => wishlist._id === id)
-    );
+    // return this._store.pipe(
+    //   select(fromWishlist.getUserWishlists),
+    //   take(1),
+    //   mergeMap((_) => _),
+    //   filter((wishlist: Wishlist) => wishlist._id === id)
+    // );
+    return this._wishlistService.get(id);
   }
 }

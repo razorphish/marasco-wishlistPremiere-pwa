@@ -7,6 +7,8 @@ export * from './wishlist/wishlist.component';
 export * from './wishlist/wishlist.resolve';
 export * from './wishlist/wishlist.guard';
 
+export * from './wishlist/follow-modal/follow-modal.component';
+
 export * from './wishlist-details/wishlist-details.component';
 export * from './wishlist-details/wishlist-details.resolve';
 export * from './wishlist-details/wishlist-details.guard';

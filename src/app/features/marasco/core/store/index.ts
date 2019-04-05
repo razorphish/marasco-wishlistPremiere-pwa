@@ -63,7 +63,8 @@ export const effects = [
   menu.MenuEffects,
   wishlist.WishlistEffects,
   wishlist.WishlistItemEffects,
-  wishlist.WishlistItemCategoryEffects
+  wishlist.WishlistItemCategoryEffects,
+  wishlist.WishlistFollowEffects
 ];
 
 export const services = [notify.NotifyService];
