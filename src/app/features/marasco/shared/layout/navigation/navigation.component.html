@@ -48,7 +48,7 @@
 
       <li>
         <a href="#"><i class="fa fa-lg fa-fw fa-list"></i> <span
-            class="menu-item-parent">{{'Wishlists' | i18n}}</span></a>
+            class="menu-item-parent">{{'My Wishlists' | i18n}}</span></a>
         <ul>
           <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
             <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}" (click)="onClick($event)">
