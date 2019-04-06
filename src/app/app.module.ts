@@ -3,6 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { SocialLoginModule, AuthServiceConfig, LoginOpt } from 'angularx-social-login';
 import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider} from 'angularx-social-login';
+import { LightboxModule } from 'ngx-lightbox';
 
 //https://developers.facebook.com/apps/872380819606437/dashboard/
 const fbLoginOptions: LoginOpt = {
@@ -59,7 +60,8 @@ import { environment } from '../environments/environment';
     MatSnackBarModule,
     CoreModule,
     SocialLoginModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    LightboxModule
   ],
   providers: [
     {

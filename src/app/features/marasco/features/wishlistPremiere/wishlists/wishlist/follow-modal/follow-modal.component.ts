@@ -18,10 +18,13 @@ import { ActivityLogSubjectService } from '@app/features/marasco/shared/activity
 import { WishlistFollow } from '@app/features/marasco/core/interfaces/Wishlist-Follow.interface';
 import { WishlistFollowService } from '@app/features/marasco/core/services';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
+import { SwPush } from '@angular/service-worker';
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'wishlist-follow-modal',
-  templateUrl: './follow-modal.component.html'
+  templateUrl: './follow-modal.component.html',
+  styleUrls: ['./follow-modal.component.css']
 })
 export class WishlistFollowModalComponent implements OnInit, OnDestroy {
   //*=================I/O============================= */
@@ -48,7 +51,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
     private _notificationService: NotificationService,
     private _activityLogService: ActivityLogSubjectService,
     private _wishlistFollowService: WishlistFollowService,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private _swPush: SwPush
   ) {
     const initialState: any = this._modalService.config.initialState;
     this.wishlist = initialState.wishlist;
@@ -80,10 +84,88 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       wishlistFollowService: this._wishlistFollowService,
       activityService: this._activityLogService,
       notificationService: this._notificationService,
+      swPush: this._swPush,
       close: this.close,
       unsub: this.unsubscribe$,
-      submitHandler: this.saveThis
+      //submitHandler: this.saveThis,
+      submitHandler: this.followWishlist
     };
+  }
+
+  public followWishlist($event) {
+    let wishlist: Wishlist = this['settings'].wishlist;
+    let model: WishlistFollow = {
+      wishlistId: wishlist._id,
+      userId: this['settings'].user._id,
+      notifiedOnAddItem: $event.elements.notifiedOnAddItem.checked,
+      notifiedOnRemoveItem: $event.elements.notifiedOnRemoveItem.checked,
+      notifyOnCompletion: $event.elements.notifyOnCompletion.checked
+    };
+
+    let swPush = this['settings'].swPush;
+    swPush
+      .requestSubscription({
+        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
+      })
+      .then((pushSubscription) => {
+        // Save to
+        //console.log(pushSubscription.toJSON());
+        const follow = Object.assign(model, pushSubscription.toJSON());
+
+        console.log(follow);
+
+        this['settings'].wishlistFollowService
+          .insert(follow)
+          .pipe(takeUntil(this['settings'].unsub))
+          .subscribe(
+            (item) => {
+              if (item) {
+                this['settings'].activityService.addUpdate(
+                  `Inserted wishlist follow ${item._id}`
+                );
+                this['settings'].notificationService.smallBox({
+                  title: 'Wishlist Follow Success!',
+                  content: 'You are now following this wishlist ',
+                  color: '#739E73',
+                  timeout: 2000,
+                  icon: 'fa fa-check',
+                  number: '4',
+                  sound: false
+                });
+                this['settings'].close.emit(true);
+              } else {
+                this['settings'].activityLogService.addError(
+                  'No wishlist present: Insert Failed'
+                );
+                this['settings'].notificationService.bigBox({
+                  title: 'Oops! the database has returned an error',
+                  content:
+                    'No follow returned which means that the follow was not created',
+                  color: '#C46A69',
+                  icon: 'fa fa-warning shake animated',
+                  number: '1',
+                  timeout: 3000, // 3 seconds
+                  sound: false
+                });
+              }
+            },
+            (err) => {
+              this['settings'].activityLogService.addError(err);
+              this['settings'].notificationService.bigBox({
+                title: 'Oops!  there is an issue with the call to insert',
+                content: err,
+                color: '#C46A69',
+                icon: 'fa fa-warning shake animated',
+                number: '1',
+                timeout: 3000, // 3 seconds
+                sound: false
+              });
+            },
+            () => {
+              // Clean up
+            }
+          );
+      });
   }
 
   public saveThis($event) {

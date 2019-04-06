@@ -36,8 +36,10 @@ export const environment = {
 
   notificationStatus: ['pending', 'opened', 'archived'],
 
-  apiUrl: 'https://api.maras.co/api/',
-  apiUrlAuth: 'https://api.maras.co/oauth/',
+  // apiUrl: 'https://api.maras.co/api/',
+  // apiUrlAuth: 'https://api.maras.co/oauth/',
+  apiUrl: 'http://localhost:3002/api/',
+  apiUrlAuth: 'http://localhost:3002/oauth/',
   application: '5c4b1303fc13ae60b4000002',
   redirectUrl: '/',
   loginUrl:  '/auth/login',

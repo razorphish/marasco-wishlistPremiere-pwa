@@ -13,6 +13,7 @@ import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
 import { LayoutService } from '@app/features/marasco/core/services';
+import { Lightbox, IAlbum } from 'ngx-lightbox';
 
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
@@ -24,6 +25,7 @@ import { LayoutService } from '@app/features/marasco/core/services';
 })
 export class WishlistComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
+  private _albums: IAlbum[] = [];
   private pageIdUnsubscribe$ = new Subject<void>();
   private unsubscribe$ = new Subject<void>();
   private unsubscribe2$ = new Subject<void>();
@@ -68,7 +70,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     private _store: Store<fromWishlist.WishlistState>,
     private _modalService: BsModalService,
-    private _layoutService: LayoutService
+    private _layoutService: LayoutService,
+    private _lightbox: Lightbox
   ) {}
 
   /////////////////////////////////////
@@ -90,6 +93,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
   // Public Methods
   /////////////////////////////////////
 
+  public close(): void {
+    // close lightbox programmatically
+    this._lightbox.close();
+  }
+
   public closeModal() {
     this.bsModalRef.hide();
   }
@@ -97,9 +105,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   public markItemPurchase($event, item: WishlistItem) {
     item.purchased = !item.purchased;
 
-    this._store.dispatch(
-      new fromWishlist.EditWishlistItemAction(item)
-    );
+    this._store.dispatch(new fromWishlist.EditWishlistItemAction(item));
   }
 
   public openModal(event, template: TemplateRef<any>, wishlist: Wishlist) {
@@ -118,6 +124,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.bsModalRef.hide();
   }
 
+  public open(index: number) {
+    this._lightbox.open(this._albums, index);
+  }
+
   /////////////////////////////////////
   // Private Metods
   /////////////////////////////////////
@@ -127,7 +137,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
   private activate() {
     //Gets current state of the app
     this.activateState();
-
   }
 
   private activateState() {
@@ -144,6 +153,17 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
     //Sets mobile
     this.isMobile = this._layoutService.store.isMobile;
+
+    //Set album
+    this.wishlist.items.forEach((item, index) => {
+      const album = {
+        thumb: item.image || 'assets/icons/icon-72x72_grey_out.png',
+        src: item.image || 'assets/icons/icon-384x384.png',
+        caption: `${item.name} : $${item.price}`
+      };
+
+      this._albums.push(album);
+    });
   }
 
   /**

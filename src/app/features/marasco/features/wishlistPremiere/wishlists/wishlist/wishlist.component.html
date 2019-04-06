@@ -42,13 +42,14 @@
                   <button
                     type="button"
                     (click)="openModal($event, wishlistFollowModal, wishlist)"
-                    class="btn btn-primary btn-lg"
+                    class="btn btn-primary btn-lg btn-block"
                   >
                     <i class="fa fa-gift fa-lg"></i>
                     Follow Wishlist
                   </button>
                   &nbsp;
                   <button
+                    *ngIf="false"
                     type="button"
                     (click)="
                       openModal($event, wishlistUserFollowModal, wishlist)
@@ -64,12 +65,14 @@
                   <button
                     type="button"
                     (click)="openModal($event, wishlistFollowModal, wishlist)"
-                    class="btn btn-primary btn-lg"
+                    class="btn btn-primary btn-lg btn-block"
                   >
                     <i class="fa fa-gift fa-lg"></i>
+                    Follow Wishlist
                   </button>
                   &nbsp;
                   <button
+                    *ngIf="false"
                     type="button"
                     (click)="
                       openModal($event, wishlistUserFollowModal, wishlist)
@@ -108,7 +111,7 @@
           class="well"
         >
           <div>
-            <div class="row" *ngFor="let item of wishlist.items">
+            <div class="row" *ngFor="let item of wishlist.items; let i = index">
               <div class="col-sm-12">
                 <div class="row">
                   <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3">
@@ -122,10 +125,10 @@
                       <img
                         alt="sunny"
                         class="online portrait"
-                        src="assets/icons/icon-72x72_grey_out.png"
                         [src]="
                           item.image || 'assets/icons/icon-72x72_grey_out.png'
                         "
+                        (click)="open(i)"
                       />
                     </div>
                   </div>
@@ -133,8 +136,8 @@
                     <div class="well well-sm ">
                       <div class="row">
                         <div class="col col-md-10 col-xs-9">
-                          <b>{{ item.name }} [{{item.categoryId}}]</b><br/>
-                          {{item.notes}}
+                          <b>{{ item.name }}</b><br />
+                          {{ item.notes }}
                         </div>
                         <div class="col col-md-2 col-xs-3">
                           <span class="pull-right font-md">

@@ -69,14 +69,14 @@ export class PwaService {
           environment.serviceWorkerOptions.vap.publicKey
         );
 
-      this._swPush
-        .requestSubscription({
-          serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
-        })
-        .then((pushSubscription) => {
-          // Save to
-          console.log(pushSubscription.toJSON());
-        });
+      // this._swPush
+      //   .requestSubscription({
+      //     serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
+      //   })
+      //   .then((pushSubscription) => {
+      //     // Save to
+      //     console.log(pushSubscription.toJSON());
+      //   });
     });
   }
 

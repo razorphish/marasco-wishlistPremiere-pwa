@@ -27,7 +27,6 @@ import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
 import { LayoutService } from '@app/features/marasco/core/services';
-import { WishlistOptionsModalComponent } from './options-modal/options-modal.component';
 
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/

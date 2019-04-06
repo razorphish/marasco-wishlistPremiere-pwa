@@ -1,11 +1,10 @@
-import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
-import { Subject, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'wp-settings',
-  templateUrl: './settings.component.html'
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
   //////////////////Input variables////////////////////
