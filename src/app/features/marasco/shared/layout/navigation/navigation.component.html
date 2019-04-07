@@ -56,6 +56,12 @@
               {{wishlist.name}}
             </a>
           </li>
+          <li routerLinkActive="active" *ngIf="wishlists.length === 0">
+            <a routerLink="/wishlistPremiere/wishlists/details/0" (click)="onClick($event)">
+              <i class="fa fa-lg fa-fw fa-gift"></i>
+              Create New
+            </a>
+          </li>
         </ul>
       </li>
 

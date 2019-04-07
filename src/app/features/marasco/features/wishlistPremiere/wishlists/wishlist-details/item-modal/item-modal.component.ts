@@ -84,7 +84,7 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       .subscribe((wishlistItemCategories: WishlistItemCategory[]) => {
         if (Array.isArray(wishlistItemCategories)) {
           this.wishlistItemCategories = wishlistItemCategories;
-  
+
           this.dropdownList = this.wishlistItemCategories;
         }
       });
@@ -152,13 +152,17 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
     }
 
     // Save
-    if (model._id){
+    if (model._id) {
+      // Update
       this['settings'].store.dispatch(
         new fromWishlist.EditWishlistItemAction(model)
       );
-      // Update
     } else {
       // Insert
+      if (model.purchased) {
+        model.purchasedBy = this['settings'].userId;
+      }
+
       this['settings'].store.dispatch(
         new fromWishlist.CreateWishlistItemAction(model)
       );

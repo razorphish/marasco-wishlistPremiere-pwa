@@ -104,6 +104,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   public markItemPurchase($event, item: WishlistItem) {
     item.purchased = !item.purchased;
+    item.purchasedBy = this.user._id;
 
     this._store.dispatch(new fromWishlist.EditWishlistItemAction(item));
   }

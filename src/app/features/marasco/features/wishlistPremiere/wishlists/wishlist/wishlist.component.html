@@ -150,6 +150,7 @@
                           <div class="pull-right">
                             <button
                               *ngIf="item.purchased"
+                              [disabled]="item.purchasedBy !== user._id"
                               class="btn btn-default btn-sm"
                               (click)="markItemPurchase($event, item)"
                             >

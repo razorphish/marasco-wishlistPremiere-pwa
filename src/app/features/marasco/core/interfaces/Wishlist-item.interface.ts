@@ -2,9 +2,10 @@ import { Image } from './Image.interface';
 
 export interface WishlistItem {
   _id?: string;
-  wishlistId?: string;
-  name: string;
   categoryId?: any;
+  wishlistId?: string;
+  purchasedBy?: string;
+  name: string;
   price?: number;
   quantity?: number;
   url?: string;
