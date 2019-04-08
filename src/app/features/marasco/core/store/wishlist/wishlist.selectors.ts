@@ -5,5 +5,6 @@ export const getWishlistState = createFeatureSelector<fromWishlistPremiere.Wishl
 
 export const getUserWishlists = createSelector(getWishlistState, (state: fromWishlistPremiere.WishlistState) => state.wishlists);
 export const getUserWishlistCategories = createSelector(getWishlistState, (state: fromWishlistPremiere.WishlistState) => state.categories);
+export const getUserWishlistFollowings = createSelector(getWishlistState, (state: fromWishlistPremiere.WishlistState) => state.follows);
 
 

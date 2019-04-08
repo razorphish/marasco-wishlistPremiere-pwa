@@ -25,20 +25,25 @@ export enum WishlistActionTypes {
   SortWishlistItemSuccess = '[WishlistItem] Sort Wishlist Item Success',
 
   //Wishlist Follow actions
-  CreateWishlistFollowAction = '[WishlistItem] Create Wishlist Follow Action',
-  CreateWishlistFollowSuccess = '[WishlistItem] Create Wishlist Follow Success',
-  DeleteWishlistFollowAction = '[WishlistItem] Delete Wishlist Follow Action',
-  DeleteWishlistFollowSuccess = '[WishlistItem] Delete Wishlist Follow Success',
-  EditWishlistFollowAction = '[WishlistItem] Edit Wishlist Follow Action',
-  EditWishlistFollowSuccess = '[WishlistItem] Edit Wishlist Follow Success',
+  WishlistFollowLoad = '[WishlistFollow] Load User wishlist follows',
+  WishlistFollowRestore = '[WishlistFollow] User Wishlist Follows Restore',
+  WishlistFollowChange = '[WishlistFollow] User Wishlist Follows Change',
+  WishlistFollowPayload = '[WishlistFollow] User Wishlist Follows Payload',
+  WishlistFollowNull = '[WishlistFollow] User Wishlist Follows Null',
+
+  CreateWishlistFollowAction = '[WishlistFollow] Create Wishlist Follow Action',
+  CreateWishlistFollowSuccess = '[WishlistFollow] Create Wishlist Follow Success',
+  DeleteWishlistFollowAction = '[WishlistFollow] Delete Wishlist Follow Action',
+  DeleteWishlistFollowSuccess = '[WishlistFollow] Delete Wishlist Follow Success',
+  EditWishlistFollowAction = '[WishlistFollow] Edit Wishlist Follow Action',
+  EditWishlistFollowSuccess = '[WishlistFollow] Edit Wishlist Follow Success',
 
   //Wishlist Item Category Actions
   WishlistItemCategoriesLoad = '[WishlistItemCategory] Load Item Categories',
   WishlistItemCategoriesRestore = '[WishlistItemCategory] Wishlist Item Categories Restore',
   WishlistItemCategoriesChange = '[WishlistItemCategory] Wishlists Item Categories Change',
   WishlistItemCategoriesPayload = '[WishlistItemCategory] Wishlists Item Categories Payload',
-  WishlistItemCategoriesNull = '[WishlistItemCategory] Wishlist Item Categories Nulll',
-
+  WishlistItemCategoriesNull = '[WishlistItemCategory] Wishlist Item Categories Null',
   CreateWishlistItemCategoryAction = '[WishlistItemCategory] Create Wishlist Item Category',
   CreateWishlistItemCategorySuccess = '[WishlistItemCategory] Create Wishlist Item Category Success'
 }
@@ -138,6 +143,30 @@ export class SortWishlistItemSuccess implements Action {
 //==============[END] Wishlist Item Actions==============///
 
 //==============Wishlist Follow Actions===================///
+export class WishlistFollowLoad implements Action {
+  readonly type = WishlistActionTypes.WishlistFollowLoad;
+  constructor(readonly payload: any) {}
+}
+
+export class WishlistFollowRestore implements Action {
+  readonly type = WishlistActionTypes.WishlistFollowRestore;
+  constructor(readonly payload: any) {}
+}
+
+export class WishlistFollowChange implements Action {
+  readonly type = WishlistActionTypes.WishlistFollowChange;
+  constructor(readonly payload: any) {}
+}
+
+export class WishlistFollowPayload implements Action {
+  readonly type = WishlistActionTypes.WishlistFollowPayload;
+  constructor(readonly payload: any) {}
+}
+
+export class WishlistFollowNull implements Action {
+  readonly type = WishlistActionTypes.WishlistFollowNull;
+}
+
 export class CreateWishlistFollowAction implements Action {
   readonly type = WishlistActionTypes.CreateWishlistFollowAction;
   constructor(readonly payload: any) {}
@@ -195,10 +224,6 @@ export class WishlistItemCategoriesNull implements Action {
   readonly type = WishlistActionTypes.WishlistItemCategoriesNull;
 }
 
-export class WishlistPremiereNull implements Action {
-  readonly type = WishlistActionTypes.WishlistItemCategoriesNull;
-}
-
 export class CreateWishlistItemCategoryAction implements Action {
   readonly type = WishlistActionTypes.CreateWishlistItemCategoryAction;
   constructor(readonly payload: any) {}
@@ -236,6 +261,11 @@ export type WishlistActions =
   //==============Wishlist Item Actions====================///
 
   //==============Wishlist Follow Actions====================///
+  | WishlistFollowLoad
+  | WishlistFollowRestore
+  | WishlistFollowChange
+  | WishlistFollowPayload
+  | WishlistFollowNull
   | CreateWishlistFollowAction
   | CreateWishlistFollowSuccess
   | DeleteWishlistFollowAction

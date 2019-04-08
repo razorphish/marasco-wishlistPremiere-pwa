@@ -7,12 +7,12 @@ import { NotificationService } from './notification.service';
 import { BodyService } from './body.service';
 import { LayoutService } from './layout.service';
 
-import { AuthTokenFactory, AuthTokenService } from './auth-token.service';
+import { AuthTokenService } from './auth-token.service';
 
-import { MenuService, MenuFactory } from './menu.service';
+import { MenuService } from './menu.service';
 import { MenuItemService } from './menuItem.service';
 
-import { PwaService, PwaFactory } from './pwa.service';
+import { PwaService } from './pwa.service';
 
 import {
   WishlistStateService,
@@ -23,6 +23,11 @@ import {
   WishlistItemCategoriesStateService,
   WishlistItemCategoriesStateServiceFactory
 } from './wishlist-item-categories.state.service';
+
+import {
+  WishlistFollowStateService,
+  WishlistFollowStateServiceFactory
+} from './wishlist-follow.state.service';
 
 import { WishlistService } from './wishlists.service';
 import { WishlistFactory } from './wishlist.factory';
@@ -47,6 +52,7 @@ export const services = [
   WishlistStateService,
   WishlistItemService,
   WishlistFollowService,
+  WishlistFollowStateService,
   WishlistItemCategoriesStateService,
   WishlistItemCategoryService,
   WishlistFactory
@@ -68,8 +74,12 @@ export * from './menuItem.service';
 export * from './pwa.service';
 
 export * from './wishlists.state.service';
+
 export * from './wishlist-item-category.service';
 export * from './wishlist-item-categories.state.service';
+
 export * from './wishlists.service';
 export * from './wishlist-item.service';
+
 export * from './wishlist-follow.service';
+export * from './wishlist-follow.state.service';

@@ -112,10 +112,10 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
         //console.log(pushSubscription.toJSON());
         const follow = Object.assign(model, pushSubscription.toJSON());
 
-        console.log(follow);
+        let isCurrentUser = this['settings'].user._id === wishlist.userId;
 
         this['settings'].wishlistFollowService
-          .insert(follow)
+          .insert(follow, isCurrentUser)
           .pipe(takeUntil(this['settings'].unsub))
           .subscribe(
             (item) => {

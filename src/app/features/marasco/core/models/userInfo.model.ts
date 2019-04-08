@@ -1,3 +1,4 @@
+import { WishlistFollow } from '@app/features/marasco/core/interfaces/Wishlist-Follow.interface';
 import { WishlistItemCategory } from './../interfaces/Wishlist-item-category.interface';
 import { Wishlist } from './../interfaces/Wishlist.interface';
 import { User } from '../interfaces/UserInfo.interface';
@@ -27,6 +28,7 @@ export class UserInfo implements User {
   colo?: string; //colocation (native, mobile, web)
   wishlists?: Wishlist[];
   wishlistItemCategories?: WishlistItemCategory[];
+  wishlistFollows?: WishlistFollow[];
   //updatedExisting?: boolean;
   // constructor(init? : {
   //     _id: string; avatar?: string,
@@ -65,6 +67,12 @@ export class UserInfo implements User {
   getWishlistItemCategories() {
     return new Promise((resolve) => {
       resolve(this.wishlistItemCategories);
+    });
+  }
+
+  getWishlistFollows() {
+    return new Promise((resolve) => {
+      resolve(this.wishlistFollows);
     });
   }
 }

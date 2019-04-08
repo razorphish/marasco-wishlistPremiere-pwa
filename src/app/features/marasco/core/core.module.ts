@@ -28,10 +28,12 @@ import {
   AuthTokenFactory,
   AuthTokenService,
   TokenInterceptor,
-  WishlistStateService,
   WishlistStateServiceFactory,
+  WishlistStateService,
   WishlistItemCategoriesStateServiceFactory,
   WishlistItemCategoriesStateService,
+  WishlistFollowStateServiceFactory,
+  WishlistFollowStateService,
   PwaFactory,
   PwaService
 } from '@app/features/marasco/core/services';
@@ -83,6 +85,13 @@ import { AppGuard } from './guards/app.guard';
       provide: APP_INITIALIZER,
       useFactory: WishlistItemCategoriesStateServiceFactory,
       deps: [WishlistItemCategoriesStateService],
+      multi: true
+    },
+
+    {
+      provide: APP_INITIALIZER,
+      useFactory: WishlistFollowStateServiceFactory,
+      deps: [WishlistFollowStateService],
       multi: true
     },
 

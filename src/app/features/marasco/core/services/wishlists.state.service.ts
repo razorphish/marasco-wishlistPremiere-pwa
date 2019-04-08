@@ -48,6 +48,12 @@ export class WishlistStateService {
       return wishlist._id === wishlistFollow.wishlistId;
     });
 
+    if (!foundWishlist) {
+      return new Promise((resolve) => {
+        resolve(this.wishlists);
+      });
+    }
+
     let foundIndex: number = this.wishlists.findIndex(
       (x) => x._id === wishlistFollow.wishlistId
     );

@@ -1,8 +1,11 @@
+import { WishlistFollowStateService } from './../../services/wishlist-follow.state.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 
-import { tap, map, switchMap } from 'rxjs/operators';
+import { tap, map, switchMap, delay } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+
+import { AuthService } from '../../services/auth.service';
 
 import { WishlistState } from './wishlist.reducer';
 import * as actions from './wishlist.actions';
@@ -12,15 +15,38 @@ import { _daysInMonth } from 'ngx-bootstrap/chronos/utils/date-getters';
 import { WishlistStateService } from '../../services/wishlists.state.service';
 import { Wishlist } from '../../interfaces/Wishlist.interface';
 import { WishlistFollowService } from '../../services/wishlist-follow.service';
+import { WishlistFollow } from '../../interfaces/Wishlist-Follow.interface';
 
 @Injectable()
 export class WishlistFollowEffects {
+  @Effect()
+  wishlistFollowChange$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.WishlistFollowChange),
+    delay(1000),
+    switchMap((data: any) => data.payload.getWishlistFollows()),
+    tap<WishlistFollow[]>(
+      (_) =>
+        (this._wishlistFollowStateService.wishlistFollows = _)
+    ),
+    map((_) => new actions.WishlistFollowPayload(_))
+  );
+
+  @Effect({ dispatch: false })
+  wishlistFollowNull$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.WishlistFollowNull),
+    delay(1000),
+    tap<WishlistFollow[]>(
+      () =>
+        (this._wishlistFollowStateService.wishlistFollows = null)
+    )
+  );
+  
   @Effect({ dispatch: false })
   createWishlistFollow$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistFollowAction),
     map((data: any) => data.payload),
     tap((wishlistFollow: any) => {
-      this._wishlistFollowService.insert(wishlistFollow).subscribe(
+      this._wishlistFollowService.insert(wishlistFollow, false).subscribe(
         (result: any) => {
           if (!!result.error) {
             this.dispatchErrorNotification(result.error);
@@ -109,7 +135,9 @@ export class WishlistFollowEffects {
   @Effect()
   wishlistFollowCreateSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistFollowSuccess),
-    switchMap((data: any) => this._wishlistStateService.addFollow(data.payload)),
+    switchMap((data: any) =>
+      this._wishlistStateService.addFollow(data.payload)
+    ),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
@@ -117,7 +145,9 @@ export class WishlistFollowEffects {
   @Effect()
   wishlistFollowEditSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.EditWishlistFollowSuccess),
-    switchMap((data: any) => this._wishlistStateService.editFollow(data.payload)),
+    switchMap((data: any) =>
+      this._wishlistStateService.editFollow(data.payload)
+    ),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
   );
@@ -206,10 +236,21 @@ export class WishlistFollowEffects {
   constructor(
     private _actions$: Actions,
     private _store: Store<WishlistState>,
+    private _auth: AuthService,
     private _notificationService: NotificationService,
     private _wishlistStateService: WishlistStateService,
-    private _wishlistFollowService: WishlistFollowService
+    private _wishlistFollowService: WishlistFollowService,
+    private _wishlistFollowStateService: WishlistFollowStateService
   ) {
+    //Login, Logout
+    this._auth.onAuthStateChanged.subscribe((user) => {
+      if (!!user) {
+        this._store.dispatch(new actions.WishlistFollowChange(user));
+      } else {
+        this._store.dispatch(new actions.WishlistFollowNull());
+      }
+    });
+
     // Follow created
     this._wishlistFollowService.onWishlistFollowCreated.subscribe(
       (wishlistFollow) => {

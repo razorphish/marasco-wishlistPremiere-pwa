@@ -52,7 +52,10 @@ export class WishlistFollowService {
       );
   }
 
-  insert(WishlistFollow: WishlistFollow): Observable<WishlistFollow> {
+  insert(
+    WishlistFollow: WishlistFollow,
+    isCurrentUser: boolean
+  ): Observable<WishlistFollow> {
     return this._authHttp
       .post(
         `${this._url}/${WishlistFollow.wishlistId}/follow`,
@@ -60,7 +63,9 @@ export class WishlistFollowService {
       )
       .pipe(
         map((WishlistFollow: WishlistFollow) => {
-          this.onWishlistFollowCreated.next(WishlistFollow);
+          if (isCurrentUser) {
+            this.onWishlistFollowCreated.next(WishlistFollow);
+          }
           return WishlistFollow;
         }),
         catchError(this.handleError)
