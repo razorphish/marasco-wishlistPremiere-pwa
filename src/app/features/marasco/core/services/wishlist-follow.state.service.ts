@@ -9,7 +9,7 @@ import { environment } from '../../../../../environments/environment';
 import { StorageService } from './storage.service';
 
 import { WishlistState } from '../store/wishlist/wishlist.reducer';
-import { WishlistFollow } from '../interfaces/Wishlist-follow.interface';
+import { WishlistFollow } from '../interfaces/Wishlist-Follow.interface';
 import { WishlistFollowRestore } from '../store/wishlist/wishlist.actions';
 
 const USER_WISHLIST_FOLLOWS = 'user_wishlist_follows';
