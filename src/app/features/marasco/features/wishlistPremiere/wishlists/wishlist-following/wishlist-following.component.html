@@ -1,0 +1,63 @@
+<div id="content">
+  <div class="row">
+    <sa-big-breadcrumbs
+      [items]="['Following']"
+      icon="gift"
+      class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
+    ></sa-big-breadcrumbs>
+  </div>
+
+  <sa-widgets-grid>
+    <div class="row">
+      <article class="col-sm-12">
+        <div
+          sa-widget
+          [colorbutton]="false"
+          [editbutton]="false"
+          [custombutton]="false"
+          [deletebutton]="false"
+          [fullscreenbutton]="false"
+          [togglebutton]="false"
+          [sortable]="false"
+          class="well"
+        >
+          <header>
+            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+            <h2>Following wishlists</h2>
+          </header>
+          <div>
+            <div class="widget-body no-padding">
+              <sa-datatable
+                [options]="options"
+                tableClass="table table-striped table-bordered table-hover"
+                paginationLength="true"
+              >
+                <thead>
+                  <tr>
+                    <th [style.width]="'30%'" data-hide="mobile-p">Name</th>
+                    <th data-class="expand">Since</th>
+                  </tr>
+                </thead>
+
+                <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Since</th>
+                  </tr>
+                </tfoot>
+              </sa-datatable>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </sa-widgets-grid>
+</div>
+
+<ng-template #wishlistFollowModal>
+  <wishlist-follow-modal
+    [user]="user"
+    (save)="closeModal()"
+    (close)="onModalClose()"
+  ></wishlist-follow-modal>
+</ng-template>

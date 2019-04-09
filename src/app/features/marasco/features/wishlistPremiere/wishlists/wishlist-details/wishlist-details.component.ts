@@ -97,36 +97,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
       demo1: 0
     }
   };
-  public statusOptions = [
-    {
-      _id: 'active',
-      name: 'active'
-    },
-    {
-      _id: 'inactive',
-      name: 'inactive'
-    },
-    {
-      _id: 'disabled',
-      name: 'disabled'
-    },
-    {
-      _id: 'pending',
-      name: 'pending'
-    },
-    {
-      _id: 'archived',
-      name: 'archived'
-    },
-    {
-      _id: 'suspended',
-      name: 'suspended'
-    },
-    {
-      _id: 'deleted',
-      name: 'deleted'
-    }
-  ];
 
   public user: User;
 
@@ -378,9 +348,10 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
               title: 'wishlist created',
               content: 'wishlist has been created successfully. ',
               color: '#739E73',
-              timeout: 4000,
+              timeout: 2000,
               icon: 'fa fa-check',
-              number: '4'
+              number: '4',
+              sound: false
             });
             this.isUpdate = true;
             this.wishlist = item;
@@ -395,7 +366,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
               color: '#C46A69',
               icon: 'fa fa-warning shake animated',
               number: '1',
-              timeout: 6000 // 6 seconds
+              timeout: 3000, // 6 seconds
+              sound: false
             });
           }
         },
@@ -407,7 +379,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
             color: '#C46A69',
             icon: 'fa fa-warning shake animated',
             number: '1',
-            timeout: 6000 // 6 seconds
+            timeout: 3000 // 6 seconds
           });
         },
         () => {
@@ -448,7 +420,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
               color: '#C46A69',
               icon: 'fa fa-warning shake animated',
               number: '1',
-              timeout: 2000, // 6 seconds
+              timeout: 3000, // 6 seconds
               sound: false
             });
           }
@@ -461,7 +433,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
             color: '#C46A69',
             icon: 'fa fa-warning shake animated',
             number: '1',
-            timeout: 6000 // 6 seconds
+            timeout: 3000 // 6 seconds
           });
         },
         () => {

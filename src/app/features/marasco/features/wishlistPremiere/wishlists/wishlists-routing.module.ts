@@ -8,6 +8,8 @@ import { WishlistListComponent } from './wishlist-list/wishlist-list.component';
 import { WishlistResolve } from './wishlist/wishlist.resolve';
 import { WishlistComponent } from './wishlist/wishlist.component';
 import { WishlistsComponent } from './wishlists.component';
+import { WishlistFollowingResolve } from './wishlist-following/wishlist-following.resolve';
+import { WishlistFollowingComponent } from './wishlist-following/wishlist-following.component';
 
 export const routes: Routes = [
   {
@@ -20,13 +22,12 @@ export const routes: Routes = [
         pathMatch: 'full'
       },
       {
-        path: ':id',
-        component: WishlistComponent,
+        path: 'following',
+        component: WishlistFollowingComponent,
         data: {
-          pageTitle: 'Wishlist'
+          pageTitle: 'Following'
         },
-        resolve:
-        { wishlist: WishlistResolve }
+       resolve: { wishlists: WishlistFollowingResolve }
       },
       {
         path: 'list',
@@ -34,8 +35,7 @@ export const routes: Routes = [
         data: {
           pageTitle: 'List'
         },
-        resolve:
-        { wishlists: WishlistListResolve }
+        resolve: { wishlists: WishlistListResolve }
       },
       {
         path: 'details/:id',
@@ -46,6 +46,15 @@ export const routes: Routes = [
         resolve: {
           wishlist: WishlistDetailsResolve
         }
+      },
+      {
+        path: ':id',
+        pathMatch: 'full',
+        component: WishlistComponent,
+        data: {
+          pageTitle: 'Wishlist'
+        },
+        resolve: { wishlist: WishlistResolve }
       }
     ]
   }
@@ -53,6 +62,6 @@ export const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class WishlistsRoutingModule { }
+export class WishlistsRoutingModule {}

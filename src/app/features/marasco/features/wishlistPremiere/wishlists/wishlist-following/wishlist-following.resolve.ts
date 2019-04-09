@@ -1,9 +1,7 @@
-import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
-
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { filter, mergeMap, take } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { mergeMap, take, takeUntil, map } from 'rxjs/operators';
+import { of, Subject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
 // Local
@@ -12,25 +10,28 @@ import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 
 @Injectable()
 export class WishlistFollowingResolve implements Resolve<any> {
+  private unsubscribe$ = new Subject<void>();
+
   constructor(
     private _store: Store<any>,
     private _activityLogService: ActivityLogSubjectService
   ) {}
 
   resolve(route: ActivatedRouteSnapshot) {
-    const id = route.paramMap.get('id');
-    this._activityLogService.addGet(`Getting user id: ${id}`);
+    this._activityLogService.addGet(`Getting user wishlist follows`);
 
-    if (id === '0') {
-      return of('0');
-    }
-
-    return this._store.pipe(
-      select(fromWishlist.getUserWishlists),
+    let wishlists = this._store.pipe(
+      select(fromWishlist.getUserWishlistFollowings),
+      //takeUntil(this.unsubscribe$),
       take(1),
-      mergeMap((_) => _),
-      filter((wishlist: Wishlist) => wishlist._id === id)
+      map((_) => _)
     );
-    //return this._wishlistService.get(id);
+
+    return wishlists;
+  }
+
+  ngOnDestroy(){
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }

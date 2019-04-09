@@ -29,7 +29,7 @@ const routes: Routes = [
         loadChildren: "./features/wishlistPremiere/wishlistPremiere.module#WishlistPremiereModule",
         data: { pageTitle: "Wishlist" },
         canActivate: [AuthGuard]
-      },
+      }
     ]
   },
   {

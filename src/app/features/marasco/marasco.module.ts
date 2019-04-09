@@ -10,6 +10,6 @@ import { MarascoRoutingModule } from './marasco-routing.module';
 
     FormsModule,
     MarascoRoutingModule
-  ],
+  ]
 })
 export class MarascoModule { }

@@ -66,17 +66,9 @@
       </li>
 
       <li>
-        <a href="#">
+        <a routerLinkActive="active" routerLink="/wishlistPremiere/wishlists/following" title="Following">
           <i class="fa fa-lg fa-fw fa-user-plus"></i> <span
             class="menu-item-parent">{{'Following' | i18n}}</span></a>
-        <ul>
-          <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
-            <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}" (click)="onClick($event)">
-              <i class="fa fa-lg fa-fw fa-gift"></i>
-              {{wishlist.name}}
-            </a>
-          </li>
-        </ul>
       </li>
 
       <!-- <li aside-chat></li> -->

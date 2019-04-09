@@ -82,7 +82,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.pageIdSubscription = this._route.params
       .pipe(takeUntil(this.pageIdUnsubscribe$))
       .subscribe((params) => {
-        const id = params['id'];
         this.wishlist = this._route.snapshot.data['wishlist'];
       });
 
@@ -105,6 +104,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   public markItemPurchase($event, item: WishlistItem) {
     item.purchased = !item.purchased;
     item.purchasedBy = this.user._id;
+
+    if (!item.purchased) {
+      item.purchasedBy = null;
+    }
 
     this._store.dispatch(new fromWishlist.EditWishlistItemAction(item));
   }

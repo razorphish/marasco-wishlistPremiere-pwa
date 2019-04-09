@@ -5,25 +5,34 @@ import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LayoutService } from '@app/features/marasco/core/services';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'sa-navigation',
   templateUrl: './navigation.component.html'
 })
 export class NavigationComponent implements OnInit, OnDestroy {
-
   private unsubscribe$ = new Subject<void>();
-  
+
   public user: any;
   public wishlists: Wishlist[];
 
-  constructor(private _store: Store<fromWishlist.WishlistState>,
-    public layoutService: LayoutService) {}
+  constructor(
+    private _store: Store<fromWishlist.WishlistState>,
+    private _router: Router,
+    private _route: ActivatedRoute,
+    public layoutService: LayoutService
+  ) {}
 
-  onClick($event){
+  onClick($event) {
     if (this.layoutService.store.mobileViewActivated) {
-      this.layoutService.onCollapseMenu()
+      this.layoutService.onCollapseMenu();
     }
+  }
+
+  goToFollowing($event) {
+    $event.preventDefault();
+    this._router.navigateByUrl('/following', { replaceUrl: true});
   }
 
   ngOnInit() {
