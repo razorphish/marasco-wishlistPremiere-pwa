@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -68,6 +68,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
   constructor(
     private _route: ActivatedRoute,
+    private _router: Router,
     private _store: Store<fromWishlist.WishlistState>,
     private _modalService: BsModalService,
     private _layoutService: LayoutService,
@@ -83,6 +84,9 @@ export class WishlistComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.pageIdUnsubscribe$))
       .subscribe((params) => {
         this.wishlist = this._route.snapshot.data['wishlist'];
+        if (!this.wishlist) {
+          this._router.navigateByUrl('/wishlistPremiere/wishlists/following');
+        }
       });
 
     this.activate();

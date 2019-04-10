@@ -85,9 +85,9 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
     let model: Wishlist = {
       name: wishlist.name,
       preferences: {
-        includePriceWhenSharing: $event.elements.includePriceWhenSharing.checked,
-        markPurchasedItem: $event.elements.markPurchasedItem.checked,
-        hideFromMe: $event.elements.hideFromMe.checked,
+        //includePriceWhenSharing: $event.elements.includePriceWhenSharing.checked,
+        //markPurchasedItem: $event.elements.markPurchasedItem.checked,
+        //hideFromMe: $event.elements.hideFromMe.checked,
         currencyUnitSymbol: $event.elements.currencyUnitSymbol.value,
         notifyOnAddItem: $event.elements.notifyOnAddItem.checked,
         notifyOnRemoveItem: $event.elements.notifyOnRemoveItem.checked,

@@ -19,7 +19,7 @@
     novalidate="novalidate"
   >
     <fieldset>
-      <div class="row">
+      <!-- <div class="row">
         <section class="col col-md-6 col-xs-6">
           <label class="checkbox">
             <input
@@ -46,8 +46,8 @@
             Include Price when Sharing?
           </label>
         </section>
-      </div>
-      <div class="row">
+      </div> -->
+      <!-- <div class="row">
         <section class="col col-md-6 col-xs-6">
           <label class="checkbox">
             <input
@@ -74,19 +74,19 @@
             Notify when I add an item?
           </label>
         </section>
-      </div>
+      </div> -->
       <div class="row">
         <section class="col col-md-6 col-xs-6">
           <label class="checkbox">
             <input
               type="checkbox"
-              name="notifyOnRemoveItem"
-              id="notifyOnRemoveItem"
-              [ngModel]="wishlist.preferences.notifyOnRemoveItem"
+              name="notifyOnAddItem"
+              id="notifyOnAddItem"
+              [ngModel]="wishlist.preferences.notifyOnAddItem"
               value="true"
             />
             <i></i>
-            Notify when I remove an item?
+            Notify when I add an item?
           </label>
         </section>
         <section class="col col-md-6 col-xs-6">
@@ -104,7 +104,20 @@
         </section>
       </div>
       <div class="row">
-        <div class="col-md-12 col-xs-12">
+        <section class="col col-md-6 col-xs-6">
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              name="notifyOnRemoveItem"
+              id="notifyOnRemoveItem"
+              [ngModel]="wishlist.preferences.notifyOnRemoveItem"
+              value="true"
+            />
+            <i></i>
+            Notify when I remove an item?
+          </label>
+        </section>
+        <section class="col col-md-6 col-xs-6">
           <label class="input">
             <input
               type="text"
@@ -115,7 +128,7 @@
               [ngModel]="wishlist.preferences.currencyUnitSymbol"
             />
           </label>
-        </div>
+        </section>
       </div>
     </fieldset>
 
