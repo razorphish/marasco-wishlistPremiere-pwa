@@ -32,7 +32,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   goToFollowing($event) {
     $event.preventDefault();
-    this._router.navigateByUrl('/following', { replaceUrl: true});
+    this._router.navigateByUrl('/following', { replaceUrl: true });
   }
 
   ngOnInit() {
@@ -40,8 +40,13 @@ export class NavigationComponent implements OnInit, OnDestroy {
       select(fromWishlist.getUserWishlists),
       takeUntil(this.unsubscribe$)
     );
+
     currentWishlistsState.subscribe((wishlists: Wishlist[]) => {
-      this.wishlists = wishlists;
+      if (!!wishlists) {
+        this.wishlists = wishlists;
+      } else {
+        this.wishlists = [];
+      }
     });
   }
 
