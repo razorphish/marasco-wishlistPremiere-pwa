@@ -1,6 +1,3 @@
-
-import { Observable } from 'rxjs';
-
 export interface UserRegistration {
     email: string;
     firstName?: string;
@@ -11,4 +8,5 @@ export interface UserRegistration {
     termsAgreed?: boolean;
     applicationId?: string;
     wishlistItemCategories?: any;
+    devices: any;
 }

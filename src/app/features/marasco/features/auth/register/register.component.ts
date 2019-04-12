@@ -11,6 +11,8 @@ import { environment } from '@env/environment';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Plugins } from '@capacitor/core';
+const { Device } = Plugins;
 
 @Component({
   selector: 'app-register',
@@ -18,6 +20,8 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
+  private _device: any;
+
   public isMobile: boolean = false;
   public termsAgreed: boolean = false;
 
@@ -25,95 +29,9 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   public validationOptions: any;
 
-  public validationOptionsDesktop: any = {
-    //Custom method
-    store: this._store,
-    isMobile: false,
-    // Rules for form validation
-    rules: {
-      // username: {
-      //   required: true
-      // },
-      email: {
-        required: true,
-        email: true
-      },
-      password: {
-        required: true,
-        minlength: 6,
-        maxlength: 20
-      },
-      passwordConfirm: {
-        required: true,
-        equalTo: '#password'
-      },
-      firstName: {
-        required: true
-      },
-      lastName: {
-        required: true
-      },
-      termsAgreed: {
-        required: true
-      }
-    },
+  public validationOptionsDesktop: any;
 
-    // Messages for form validation
-    messages: {
-      // username: {
-      //   required: 'Please enter a username or email'
-      // },
-      email: {
-        required: 'Please enter your email address',
-        email: 'Please enter a VALID email address'
-      },
-      password: {
-        required: 'Please enter your password'
-      },
-      passwordConfirm: {
-        required: 'Please enter your password one more time',
-        equalTo: 'Please enter the same password as above'
-      },
-      firstName: {
-        required: 'Please select your first name'
-      },
-      lastName: {
-        required: 'Please select your last name'
-      },
-      termsAgreed: {
-        required: 'You must agree with Terms and Conditions'
-      }
-    },
-    submitHandler: this.register
-  };
-
-  public validationOptionsMobile: any = {
-    //Custom method
-    store: this._store,
-    isMobile: true,
-    // Rules for form validation
-    rules: {
-      // username: {
-      //   required: true
-      // },
-      email: {
-        required: true,
-        email: true
-      }
-    },
-
-    // Messages for form validation
-    messages: {
-      // username: {
-      //   required: 'Please enter a username or email'
-      // },
-      email: {
-        required: 'Please enter your email address',
-        email: 'Please enter a VALID email address'
-      }
-    },
-    submitHandler: this.register
-  };
+  public validationOptionsMobile: any;
 
   bsModalRef: BsModalRef;
 
@@ -128,6 +46,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .subscribe((prompt) => {
         this.showAddToHomeScreenButton = !!prompt;
       });
+
+    this.initDevice();
   }
 
   addToHome($event) {
@@ -135,17 +55,130 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.validationOptionsDesktop  = {
+      //Custom method
+      store: this._store,
+      device: this._device,
+      isMobile: false,
+      // Rules for form validation
+      rules: {
+        // username: {
+        //   required: true
+        // },
+        email: {
+          required: true,
+          email: true
+        },
+        password: {
+          required: true,
+          minlength: 6,
+          maxlength: 20
+        },
+        passwordConfirm: {
+          required: true,
+          equalTo: '#password'
+        },
+        firstName: {
+          required: true
+        },
+        lastName: {
+          required: true
+        },
+        termsAgreed: {
+          required: true
+        }
+      },
+  
+      // Messages for form validation
+      messages: {
+        // username: {
+        //   required: 'Please enter a username or email'
+        // },
+        email: {
+          required: 'Please enter your email address',
+          email: 'Please enter a VALID email address'
+        },
+        password: {
+          required: 'Please enter your password'
+        },
+        passwordConfirm: {
+          required: 'Please enter your password one more time',
+          equalTo: 'Please enter the same password as above'
+        },
+        firstName: {
+          required: 'Please select your first name'
+        },
+        lastName: {
+          required: 'Please select your last name'
+        },
+        termsAgreed: {
+          required: 'You must agree with Terms and Conditions'
+        }
+      },
+      submitHandler: this.register
+    };
+
+    this.validationOptionsMobile = {
+      //Custom method
+      store: this._store,
+      device: this._device,
+      isMobile: true,
+      // Rules for form validation
+      rules: {
+        // username: {
+        //   required: true
+        // },
+        email: {
+          required: true,
+          email: true
+        }
+      },
+  
+      // Messages for form validation
+      messages: {
+        // username: {
+        //   required: 'Please enter a username or email'
+        // },
+        email: {
+          required: 'Please enter your email address',
+          email: 'Please enter a VALID email address'
+        }
+      },
+      submitHandler: this.register
+    };
+
     this.isMobile = this._layoutService.store.isMobile;
     this.validationOptions = this.isMobile
       ? this.validationOptionsMobile
       : this.validationOptionsDesktop;
   }
 
+  async initDevice() {
+    const info = await Device.getInfo();
+    let device = {
+      uuid: info.uuid,
+      diskFree: info.diskFree,
+      osVersion: info.osVersion,
+      memUsed: info.memUsed,
+      batteryLevel: info.batteryLevel,
+      model: info.model,
+      platform: info.platform,
+      manufacturer: info.manufacturer,
+      isVirtual: info.isVirtual,
+      appVersion: info.appVersion
+    };
+
+    this._device = device;
+    this.validationOptionsDesktop.device = device;
+    this.validationOptionsMobile.device = device;
+  }
+
   register($event) {
     if (this['settings'].isMobile) {
       let model: UserRegistration = {
         email: $event.elements.email.value,
-        applicationId: environment.application
+        applicationId: environment.application,
+        devices: [this['settings'].device]
       };
       this['settings'].store.dispatch(new fromAuth.SignupMobileAction(model));
     } else {
@@ -157,7 +190,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
         password: $event.elements.password.value,
         passwordConfirm: $event.elements.passwordConfirm.value,
         termsAgreed: $event.elements.termsAgreed.value,
-        applicationId: environment.application
+        applicationId: environment.application,
+        devices: [this['settings'].device]
       };
       this['settings'].store.dispatch(new fromAuth.SignupAction(model));
     }

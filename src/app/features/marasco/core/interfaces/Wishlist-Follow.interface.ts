@@ -13,6 +13,7 @@ export interface WishlistFollow {
   endpoint?: string;
   expirationTime?: string;
   keys?: NotificationKey;
+  device?: any;
   dateCreated?: Date;
   dateModified?: Date;
 }
