@@ -95,6 +95,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       submitHandler: this.followWishlist
     };
     
+    this.initDevice();
   }
 
   async initDevice() {
@@ -213,7 +214,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
                   title: 'Wishlist Follow Success!',
                   content: 'You are now following this wishlist!  Notifications are not supported on this device ',
                   color: '#C79121',
-                  timeout: 6000,
+                  timeout: 6000, // 6 seconds
                   icon: 'fa fa-shield fadeInLeft animated',
                   number: '4',
                   sound: false
@@ -277,9 +278,10 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
               title: 'Wishlist Follow Success!',
               content: 'You are now following this wishlist ',
               color: '#739E73',
-              timeout: 4000,
+              timeout: 2000, // 2 seconds
               icon: 'fa fa-check',
-              number: '4'
+              number: '4',
+              sound:false
             });
             this['settings'].close.emit(true);
           } else {
@@ -293,7 +295,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
               color: '#C46A69',
               icon: 'fa fa-warning shake animated',
               number: '1',
-              timeout: 6000 // 6 seconds
+              timeout: 3000, // 3 seconds
+              sound: false
             });
           }
         },
@@ -305,7 +308,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
             color: '#C46A69',
             icon: 'fa fa-warning shake animated',
             number: '1',
-            timeout: 6000 // 6 seconds
+            timeout: 3000, // 3 seconds
+            sound: false
           });
         },
         () => {
