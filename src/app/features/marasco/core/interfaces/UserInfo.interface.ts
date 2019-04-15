@@ -10,11 +10,13 @@
 import { Role } from '../models/role.model';
 import { Address } from '../models/address.model';
 import { TokenModel } from '../models/token.model';
+import { DeviceInfo } from '@capacitor/core';
 
 export interface User {
     _id: string;
     applicationId?: string;
     avatar?: string;
+    devices?: DeviceInfo[];
     email: string;
     firstName: string;
     homePhone?: string;

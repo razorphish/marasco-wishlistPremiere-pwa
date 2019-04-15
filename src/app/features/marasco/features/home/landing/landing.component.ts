@@ -5,7 +5,10 @@ import { User } from './../../../core/interfaces/UserInfo.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
-import { Plugins } from '@capacitor/core';
+import { Plugins, DeviceInfo } from '@capacitor/core';
+import { PwaService } from '@app/features/marasco/core/services';
+import { environment } from '@env/environment';
+import { SwPush } from '@angular/service-worker';
 const { Device } = Plugins;
 
 @Component({
@@ -20,7 +23,12 @@ export class LandingComponent implements OnInit {
   public isLoggedIn: boolean;
   public user: User;
 
-  constructor(private _store: Store<any>, private _router: Router) {}
+  constructor(
+    private _store: Store<any>,
+    private _router: Router,
+    private _swPush: SwPush,
+    private _pwaService: PwaService
+  ) {}
 
   ngOnInit() {
     const currentState = this._store.pipe(select(fromAuth.getUser));
@@ -39,22 +47,51 @@ export class LandingComponent implements OnInit {
   }
 
   async initDevice() {
-    const info = await Device.getInfo();
-    let device = {
-      uuid: info.uuid,
-      diskFree: info.diskFree,
-      osVersion: info.osVersion,
-      memUsed: info.memUsed,
-      batteryLevel: info.batteryLevel,
-      model: info.model,
-      platform: info.platform,
-      manufacturer: info.manufacturer,
-      isVirtual: info.isVirtual,
-      mode: info.model,
-      appVersion: info.appVersion
-    };
+    Device.getInfo()
+      .then((result) => {
+        let device = {
+          uuid: result.uuid,
+          diskFree: result.diskFree,
+          osVersion: result.osVersion,
+          memUsed: result.memUsed,
+          batteryLevel: result.batteryLevel,
+          model: result.model,
+          platform: result.platform,
+          manufacturer: result.manufacturer,
+          isVirtual: result.isVirtual,
+          mode: result.model,
+          appVersion: result.appVersion
+        };
+        this.initNotification(device);
+      })
+      .catch((error) => {
+        //For now do not disrupt user experience
+      });
+    //localStorage.setItem('device', JSON.stringify(device));
+  }
 
-    localStorage.setItem('device', JSON.stringify(device));
+  initNotification(deviceInfo: DeviceInfo) {
+    let device = this.user.devices.find((result) => {
+      return result.uuid === deviceInfo.uuid;
+    });
+
+    if (!!device) {
+      return;
+    }
+
+    this._swPush
+      .requestSubscription({
+        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
+      })
+      .then((pushSubscription) => {
+        // Save to
+        //console.log(pushSubscription.toJSON());
+        const follow = Object.assign(pushSubscription.toJSON());
+
+      })
+      .catch((error) => {
+        // Do Nothing
+      });
   }
 
   ngOnDestroy() {
