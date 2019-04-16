@@ -34,6 +34,7 @@ import { WishlistFactory } from './wishlist.factory';
 import { WishlistItemService } from './wishlist-item.service';
 import { WishlistFollowService } from './wishlist-follow.service';
 import { WishlistItemCategoryService } from './wishlist-item-category.service';
+import { UserNotificationService } from './user-notification.service';
 
 export const services = [
   StorageService,
@@ -55,7 +56,8 @@ export const services = [
   WishlistFollowStateService,
   WishlistItemCategoriesStateService,
   WishlistItemCategoryService,
-  WishlistFactory
+  WishlistFactory,
+  UserNotificationService
 ];
 
 export * from './storage.service';
@@ -67,6 +69,7 @@ export * from './json-api.service';
 export * from './notification.service';
 export * from './body.service';
 export * from './layout.service';
+export * from './user-notification.service'
 
 export * from './menu.service';
 export * from './menuItem.service';

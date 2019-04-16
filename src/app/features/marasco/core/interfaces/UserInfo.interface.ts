@@ -1,3 +1,4 @@
+import { UserNotification } from './User-Notification.interface';
 
 // export interface UserInfo {
 //     displayName: string | null;
@@ -16,7 +17,7 @@ export interface User {
     _id: string;
     applicationId?: string;
     avatar?: string;
-    devices?: DeviceInfo[];
+    devices?: UserNotification[];
     email: string;
     firstName: string;
     homePhone?: string;

@@ -1,7 +1,5 @@
-export interface NotificationKey {
-  auth?: string;
-  p256dh?: string;
-}
+import { NotificationKey } from './Notification-Key.interface';
+
 
 export interface WishlistFollow {
   _id?: string;
