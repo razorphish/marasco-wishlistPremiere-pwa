@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { User } from './../../../core/interfaces/UserInfo.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import * as actions from '@app/features/marasco/core/store/auth';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { Plugins, DeviceInfo } from '@capacitor/core';
 import {
@@ -103,6 +104,7 @@ export class LandingComponent implements OnInit {
 
                 //TODO: Add update to user store HERE
                 this.user.devices.push(item);
+                this._store.dispatch(new actions.AuthUserChange(this.user));
 
                 this._activityLogService.addUpdate(
                   `Inserted wishlist follow ${item._id}`
