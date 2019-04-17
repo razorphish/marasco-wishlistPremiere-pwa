@@ -39,7 +39,7 @@ import {
 } from '@app/features/marasco/core/services';
 
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
-import { MenuService, MenuFactory } from './services/menu.service';
+import { MenuService, MenuFactory } from './services/menu.state.service';
 import { AppGuard } from './guards/app.guard';
 
 @NgModule({

@@ -8,7 +8,7 @@ import * as actions from '@app/features/marasco/core/store/auth';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { Plugins, DeviceInfo } from '@capacitor/core';
 import {
-  UserNotificationService,
+  UserService,
   NotificationService
 } from '@app/features/marasco/core/services';
 import { environment } from '@env/environment';
@@ -34,7 +34,7 @@ export class LandingComponent implements OnInit {
     private _swPush: SwPush,
     private _activityLogService: ActivityLogSubjectService,
     private _notificationService: NotificationService,
-    private _userNotificationService: UserNotificationService
+    private _userService: UserService
   ) {}
 
   ngOnInit() {
@@ -95,15 +95,15 @@ export class LandingComponent implements OnInit {
         //console.log(pushSubscription.toJSON());
         const notification = Object.assign(pushSubscription.toJSON());
 
-        this._userNotificationService
-          .insert(notification)
+        this._userService
+          .addNotification(notification)
           .pipe(takeUntil(this.unsubscribe$))
           .subscribe(
             (item) => {
               if (item) {
 
                 //TODO: Add update to user store HERE
-                this.user.devices.push(item);
+                this.user.devices.push(notification);
                 this._store.dispatch(new actions.AuthUserChange(this.user));
 
                 this._activityLogService.addUpdate(

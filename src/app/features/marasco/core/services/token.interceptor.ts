@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -18,7 +18,6 @@ import { catchError } from 'rxjs/operators';
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
   constructor(
-    private injector: Injector,
     public authToken: AuthTokenService,
     public store: Store<fromAuth.AuthState>
   ) { }

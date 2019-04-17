@@ -8,10 +8,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError, BehaviorSubject, Subject } from 'rxjs';
 
-import {
-  HttpClient,
-  HttpErrorResponse
-} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { map, catchError } from 'rxjs/operators';
 
@@ -23,8 +20,8 @@ import { UserInfo } from '../models/userInfo.model';
 import { TokenResult } from '../models/tokenResult.model';
 import { Response } from '@angular/http';
 import { AuthTokenService } from './auth-token.service';
-import { WishlistService } from './wishlists.service';
 import { User } from '../interfaces/UserInfo.interface';
+import { MarascoService } from './MarascoService';
 
 const USER_TOKEN = 'token';
 const USER_LOGGED_ONCE = 'logged_once';
@@ -37,7 +34,7 @@ defaultUser.lastName = '';
 defaultUser.email = '@';
 
 @Injectable()
-export class AuthService {
+export class AuthService extends MarascoService {
   private _userSource: UserInfo;
 
   private _authUrl: string = environment.apiUrlAuth;
@@ -57,18 +54,18 @@ export class AuthService {
   constructor(
     public authToken: AuthTokenService,
     private _http: HttpClient,
-    private _storage: StorageService) {
-
+    private _storage: StorageService
+  ) {
+    super();
     this.lastUrl = '/';
 
     this.tokenIsBeingRefreshed = new Subject<boolean>();
     this.tokenIsBeingRefreshed.next(false);
-    
-    this.hasToken()
-      .then(token => {
-        let isToken = token ? true : false;
-        this.onLoginSuccess.next(isToken);
-      })
+
+    this.hasToken().then(token => {
+      let isToken = token ? true : false;
+      this.onLoginSuccess.next(isToken);
+    });
   }
 
   //createUserAndRetrieveDataWithEmailAndPassword(
@@ -76,39 +73,31 @@ export class AuthService {
   //  password: string
   //): Promise<UserCredential>;
 
-  createUserWithEmailAndPassword(
-    user: UserInfo
-  ): Observable<any> {
-
+  createUserWithEmailAndPassword(user: UserInfo): Observable<any> {
     const url = this._apiUrl + 'auth/register-with-email-password';
 
-    return this._http
-      .post<any>(url, user)
-      .pipe(map((user: UserInfo) => {
+    return this._http.post<any>(url, user).pipe(
+      map((user: UserInfo) => {
         // login successful if there's a jwt token in the response
         return user;
       }),
-        catchError(this.handleError)
-      );
-  };
+      catchError(this.handleError)
+    );
+  }
 
-  createUserWithEmail(
-    user: UserInfo
-  ): Observable<any> {
-
+  createUserWithEmail(user: UserInfo): Observable<any> {
     const url = this._apiUrl + 'auth/register-with-email';
     //Set status to pending
-    user.colo = 'mobile'
+    user.colo = 'mobile';
 
-    return this._http
-      .post<any>(url, user)
-      .pipe(map((user: UserInfo) => {
+    return this._http.post<any>(url, user).pipe(
+      map((user: UserInfo) => {
         // login successful if there's a jwt token in the response
         return user;
       }),
-        catchError(this.handleError)
-      );
-  };
+      catchError(this.handleError)
+    );
+  }
 
   //confirmPasswordReset(code: string, newPassword: string): Promise<void>;
 
@@ -120,7 +109,11 @@ export class AuthService {
     return this.tokenNotExpired();
   }
 
-  login(username: string, password: string, forceRefresh: boolean = false): Observable<TokenResult> {
+  login(
+    username: string,
+    password: string,
+    forceRefresh: boolean = false
+  ): Observable<TokenResult> {
     const params: any = {
       username: username,
       password: password,
@@ -131,9 +124,8 @@ export class AuthService {
       grant_type: 'password'
     };
 
-    return this._http
-      .post<TokenResult>(this._authUrl + 'token', params)
-      .pipe(map((credential: TokenResult) => {
+    return this._http.post<TokenResult>(this._authUrl + 'token', params).pipe(
+      map((credential: TokenResult) => {
         // login successful if there's a jwt token in the response
 
         if (credential && credential.access_token) {
@@ -151,8 +143,8 @@ export class AuthService {
           return credential;
         }
       }),
-        catchError(this.handleError)
-      );
+      catchError(this.handleError)
+    );
   }
 
   loginSocial(socialUser: any): Observable<TokenResult> {
@@ -167,9 +159,8 @@ export class AuthService {
       socialUser: socialUser
     };
 
-    return this._http
-      .post<TokenResult>(this._authUrl + 'token', params)
-      .pipe(map((credential: TokenResult) => {
+    return this._http.post<TokenResult>(this._authUrl + 'token', params).pipe(
+      map((credential: TokenResult) => {
         // login successful if there's a jwt token in the response
 
         if (credential && credential.access_token) {
@@ -186,12 +177,11 @@ export class AuthService {
           return credential;
         }
       }),
-        catchError(this.handleError)
-      );
+      catchError(this.handleError)
+    );
   }
 
   refreshToken() {
-
     const params: any = {
       client_id: this._clientId,
       client_secret: this._clientSecret,
@@ -199,9 +189,8 @@ export class AuthService {
       refresh_token: this.authToken.token.refresh_token
     };
 
-    return this._http
-      .post(this._authUrl + 'token', params)
-      .pipe(map((credential: TokenResult) => {
+    return this._http.post(this._authUrl + 'token', params).pipe(
+      map((credential: TokenResult) => {
         // Business as usual
         // login successful if there's a jwt token in the response
         if (credential && credential.access_token) {
@@ -219,7 +208,8 @@ export class AuthService {
           return credential;
         }
       }),
-        catchError(this.handleError));
+      catchError(this.handleError)
+    );
   }
 
   refreshTokenErrorHandler(error) {
@@ -238,16 +228,12 @@ export class AuthService {
   }
 
   forgotPassword(userInfo: any): Observable<any> {
-
     const url = this._apiUrl + 'auth/forgot-password';
 
-    return this._http
-      .post<any>(url, userInfo)
-      .pipe(map((credential: any) => {
-
-      }),
-        catchError(this.handleError)
-      );
+    return this._http.post<any>(url, userInfo).pipe(
+      map((credential: any) => {}),
+      catchError(this.handleError)
+    );
   }
 
   addTokens(accessToken: string, refreshToken: string) {
@@ -267,14 +253,13 @@ export class AuthService {
     password: string
   ): Observable<UserCredential> {
     return new Observable<UserCredential>(null);
-  };
+  }
 
   signOut(): Observable<any> {
     const url = this._apiUrl + 'auth/logout';
     const body: any = {};
-    return this._http
-      .post(url, body)
-      .pipe(map((response: Response) => {
+    return this._http.post(url, body).pipe(
+      map((response: Response) => {
         // logout response
 
         //Notify listeners
@@ -283,41 +268,42 @@ export class AuthService {
         this.onAuthStateChanged.next(null);
         this.onIdTokenChanged.next(null);
       }),
-        catchError(error => {
-          return throwError(error);
-        })
-      );
-  };
-
-  resetPasswordRequest(token: string): Observable<any> {
-
-    const url = `${this._apiUrl}auth/reset-password/${token}`;
-
-    return this._http
-      .get<any>(url)
-      .pipe(map((result: any) => {
-        return result;
-      }),
-        catchError(this.handleError)
-      );
+      catchError(error => {
+        return throwError(error);
+      })
+    );
   }
 
-  resetPassword(token: string, password: string, confirmPassword: string): Observable<any> {
+  resetPasswordRequest(token: string): Observable<any> {
+    const url = `${this._apiUrl}auth/reset-password/${token}`;
 
+    return this._http.get<any>(url).pipe(
+      map((result: any) => {
+        return result;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  resetPassword(
+    token: string,
+    password: string,
+    confirmPassword: string
+  ): Observable<any> {
     const url = `${this._apiUrl}auth/reset-password/${token}`;
 
     return this._http
       .post<any>(url, { password: password, confirmPassword: confirmPassword })
-      .pipe(map((result: any) => {
-        return result;
-      }),
+      .pipe(
+        map((result: any) => {
+          return result;
+        }),
         catchError(this.handleError)
       );
   }
 
   tokenRequiresRefresh(): boolean {
     if (!this.loggedIn()) {
-
     }
 
     return !this.loggedIn();
@@ -326,47 +312,6 @@ export class AuthService {
   ///////////////////////////////////////
   //Private Methods
   ///////////////////////////////////////
-
-  /**
-   * handles the errors from api calls
-   * @param errorResponse 
-   */
-  private handleError(errorResponse: HttpErrorResponse) {
-    let errorInfo = {
-      code: '',
-      errmsg: ''
-    };
-
-    if (errorResponse.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accor
-      console.error('An error occurred:', errorResponse.error.message);
-    } else if (errorResponse instanceof Response) {
-      let errMessage = '';
-      try {
-        errMessage = errorResponse.message;
-      } catch (err) {
-        errMessage = errorResponse.statusText;
-      }
-
-      return throwError(errMessage);
-    }
-
-    else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      //console.error(
-      //  `Backend returned code ${errorResponse.status}, ` +
-      // `body was:`, errorResponse.error);
-      if (errorResponse.error) {
-        errorInfo.code = errorResponse.error.code || errorResponse.error.error.code || errorResponse.error.error;
-        errorInfo.errmsg = errorResponse.error.errmsg || errorResponse.error.error_description || errorResponse.error.error.message;
-        //console.log(errorResponse.error.error)
-      }
-    }
-
-    // return an observable with a user-facing error message
-    return throwError(errorInfo);
-  };
 
   /**
    * True if token exists, otherwise false;
@@ -379,7 +324,6 @@ export class AuthService {
    * Determine if token has expired
    */
   private tokenNotExpired(): boolean {
-
     let token: TokenResult = this.authToken.token;
 
     const d1 = new Date();

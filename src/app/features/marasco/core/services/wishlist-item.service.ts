@@ -1,17 +1,17 @@
 import { WishlistItemSort } from './../interfaces/Wishlist-item-sort.interface';
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../../../../environments/environment';
 import { AuthHttpService } from './auth-http.service';
 
 import { WishlistItem } from '../interfaces/Wishlist-item.interface';
+import { MarascoService } from './MarascoService';
 
 @Injectable()
-export class WishlistItemService {
+export class WishlistItemService extends MarascoService {
   private _url: string = `${environment.apiUrl}wishlist`;
 
   private _wishlistItemSource: WishlistItem;
@@ -33,8 +33,17 @@ export class WishlistItemService {
     this._wishlistItemsSource
   );
 
-  constructor(private _authHttp: AuthHttpService) {}
-
+  constructor(private _authHttp: AuthHttpService) {
+    super();
+  }
+  /**
+   * @description Deletes an item from the wishlist
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {WishlistItem} wishlistItem
+   * @returns {Observable<any>}
+   * @memberof WishlistItemService
+   */
   delete(wishlistItem: WishlistItem): Observable<any> {
     return this._authHttp
       .delete(
@@ -50,6 +59,14 @@ export class WishlistItemService {
       );
   }
 
+  /**
+   * @description Creates and inserts and item into the wishlist item array
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {WishlistItem} wishlistItem
+   * @returns {Observable<WishlistItem>}
+   * @memberof WishlistItemService
+   */
   insert(wishlistItem: WishlistItem): Observable<WishlistItem> {
     return this._authHttp
       .post(
@@ -65,6 +82,14 @@ export class WishlistItemService {
       );
   }
 
+  /**
+   * @description Sorts wishlist items
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {WishlistItemSort} wishlistItemSort
+   * @returns {Observable<WishlistItem[]>}
+   * @memberof WishlistItemService
+   */
   sort(wishlistItemSort: WishlistItemSort): Observable<WishlistItem[]> {
     return this._authHttp
       .post(
@@ -82,6 +107,14 @@ export class WishlistItemService {
       );
   }
 
+  /**
+   * @description Updates an item from the wishlist
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {WishlistItem} wishlistItem
+   * @returns {Observable<WishlistItem>}
+   * @memberof WishlistItemService
+   */
   update(wishlistItem: WishlistItem): Observable<WishlistItem> {
     return this._authHttp
       .put(
@@ -100,22 +133,4 @@ export class WishlistItemService {
   /*///////////////////////////////////////////////
   /* Private Methods
   //////////////////////////////////////////////*/
-
-  /**
-   * Handles the error
-   * @param error : Error
-   */
-  private handleError(error: any) {
-    console.error('server error:', error);
-    if (error instanceof Response) {
-      let errMessage = '';
-      try {
-        errMessage = error.json().error;
-      } catch (err) {
-        errMessage = error.statusText;
-      }
-      return throwError(errMessage);
-    }
-    return throwError(error || 'Node.js server error');
-  }
 }

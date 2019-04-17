@@ -1,4 +1,4 @@
-import { MenuService } from './../../services/menu.service';
+import { MenuService } from '../../services/menu.state.service';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 

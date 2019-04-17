@@ -6,10 +6,11 @@ import { JsonApiService } from './json-api.service';
 import { NotificationService } from './notification.service';
 import { BodyService } from './body.service';
 import { LayoutService } from './layout.service';
+import { UserService } from './user.service';
 
 import { AuthTokenService } from './auth-token.service';
 
-import { MenuService } from './menu.service';
+import { MenuService } from './menu.state.service';
 import { MenuItemService } from './menuItem.service';
 
 import { PwaService } from './pwa.service';
@@ -34,7 +35,6 @@ import { WishlistFactory } from './wishlist.factory';
 import { WishlistItemService } from './wishlist-item.service';
 import { WishlistFollowService } from './wishlist-follow.service';
 import { WishlistItemCategoryService } from './wishlist-item-category.service';
-import { UserNotificationService } from './user-notification.service';
 
 export const services = [
   StorageService,
@@ -49,6 +49,7 @@ export const services = [
   BodyService,
   LayoutService,
   PwaService,
+  UserService,
   WishlistService,
   WishlistStateService,
   WishlistItemService,
@@ -56,8 +57,7 @@ export const services = [
   WishlistFollowStateService,
   WishlistItemCategoriesStateService,
   WishlistItemCategoryService,
-  WishlistFactory,
-  UserNotificationService
+  WishlistFactory
 ];
 
 export * from './storage.service';
@@ -69,12 +69,13 @@ export * from './json-api.service';
 export * from './notification.service';
 export * from './body.service';
 export * from './layout.service';
-export * from './user-notification.service'
 
-export * from './menu.service';
+export * from './menu.state.service';
 export * from './menuItem.service';
 
 export * from './pwa.service';
+
+export * from './user.service';
 
 export * from './wishlists.state.service';
 

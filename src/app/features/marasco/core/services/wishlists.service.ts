@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { environment } from '../../../../../environments/environment';
 import { AuthHttpService } from './auth-http.service';
 
 import { Wishlist } from '../interfaces/Wishlist.interface';
+import { MarascoService } from './MarascoService';
 
 @Injectable()
-export class WishlistService {
+export class WishlistService extends MarascoService {
   private _url: string = `${environment.apiUrl}wishlist/`;
   private _wishlistSource: Wishlist;
 
@@ -22,15 +22,17 @@ export class WishlistService {
     this._wishlistSource
   );
 
-  constructor(private _authHttp: AuthHttpService) {}
-
-  // all(): Observable<Wishlist[]> {
-  //   return this._authHttp.get(this._url).pipe(
-  //     map((wishlists: any) => wishlists),
-  //     catchError(this.handleError)
-  //   );
-  // }
-
+  constructor(private _authHttp: AuthHttpService) {
+    super();
+  }
+  
+  /**
+   * @description Gets all wishlists of a particular user
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @returns {Observable<Wishlist[]>}
+   * @memberof WishlistService
+   */
   allDetails(): Observable<Wishlist[]> {
     return this._authHttp.get(`${this._url}details`).pipe(
       map((wishlists: any) => wishlists),
@@ -38,6 +40,14 @@ export class WishlistService {
     );
   }
 
+  /**
+   * @description Removes a user wishlist
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {string} id
+   * @returns {Observable<any>}
+   * @memberof WishlistService
+   */
   delete(id: string): Observable<any> {
     return this._authHttp.delete(`${this._url}${id}`).pipe(
       map((result: any) => result),
@@ -45,20 +55,28 @@ export class WishlistService {
     );
   }
 
+  /**
+   * @description Gets a wishlist by wishlist id
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {string} id
+   * @returns {Observable<Wishlist>}
+   * @memberof WishlistService
+   */
   get(id: string): Observable<Wishlist> {
     return this._authHttp.get(`${this._url}${id}`).pipe(
       map((wishlist: any) => wishlist),
       catchError(this.handleError)
     );
   }
-
-  // getDetails(id: string): Observable<Wishlist> {
-  //   return this._authHttp.get(`${this._url}${id}/details`).pipe(
-  //     map((wishlist: any) => wishlist),
-  //     catchError(this.handleError)
-  //   );
-  // }
-
+  /**
+   * @description Inserts a user wishlist
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {Wishlist} wishlist
+   * @returns {Observable<Wishlist>}
+   * @memberof WishlistService
+   */
   insert(wishlist: Wishlist): Observable<Wishlist> {
     return this._authHttp.post(this._url, JSON.stringify(wishlist)).pipe(
       map((wishlist: Wishlist) => {
@@ -68,7 +86,14 @@ export class WishlistService {
       catchError(this.handleError)
     );
   }
-
+  /**
+   * @description Updates a user wishlist
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {Wishlist} wishlist
+   * @returns {Observable<Wishlist>}
+   * @memberof WishlistService
+   */
   update(wishlist: Wishlist): Observable<Wishlist> {
     return this._authHttp
       .put(`${this._url}${wishlist._id}`, JSON.stringify(wishlist))
@@ -84,22 +109,4 @@ export class WishlistService {
   /*///////////////////////////////////////////////
   /* Private Methods
   //////////////////////////////////////////////*/
-
-  /**
-   * Handles the error
-   * @param error : Error
-   */
-  private handleError(error: any) {
-    console.error('server error:', error);
-    if (error instanceof Response) {
-      let errMessage = '';
-      try {
-        errMessage = error.json().error;
-      } catch (err) {
-        errMessage = error.statusText;
-      }
-      return throwError(errMessage);
-    }
-    return throwError(error || 'Node.js server error');
-  }
 }

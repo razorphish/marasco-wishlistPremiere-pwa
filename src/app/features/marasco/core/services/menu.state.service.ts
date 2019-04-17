@@ -1,4 +1,4 @@
-import { MenuFirstListCreated } from './../store/menu/menu.actions';
+import { MenuFirstListCreated } from '../store/menu/menu.actions';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '@env/environment';
@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { MenuRestore, MenuInit } from '../store/menu/menu.actions';
 import { AuthState } from '../store/auth/auth.reducer';
 
-import { MenuModel } from './../models/menu.model';
+import { MenuModel } from '../models/menu.model';
 
 const MENU_ = 'menu';
 const MENU_FIRST_LIST_CREATED = 'menu_first_list_created';
