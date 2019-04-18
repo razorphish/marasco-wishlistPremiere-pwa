@@ -7,13 +7,12 @@ import { takeUntil } from 'rxjs/operators';
 import * as actions from '@app/features/marasco/core/store/auth';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { Plugins, DeviceInfo } from '@capacitor/core';
-import {
-  UserService,
-  NotificationService
-} from '@app/features/marasco/core/services';
+import { UserService } from '@app/features/marasco/core/services';
 import { environment } from '@env/environment';
 import { SwPush } from '@angular/service-worker';
 import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
+import { UserNotification } from '@app/features/marasco/core/interfaces/User-Notification.interface';
+import { UserInfo } from '@app/features/marasco/core/models/userInfo.model';
 const { Device } = Plugins;
 
 @Component({
@@ -33,20 +32,48 @@ export class LandingComponent implements OnInit {
     private _router: Router,
     private _swPush: SwPush,
     private _activityLogService: ActivityLogSubjectService,
-    private _notificationService: NotificationService,
     private _userService: UserService
   ) {}
 
-  ngOnInit() {
-    const currentState = this._store.pipe(select(fromAuth.getUser));
+  addNotification(uuid: string) {
+    this._swPush
+      .requestSubscription({
+        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
+      })
+      .then((pushSubscription) => {
+        // Save to
+        //console.log(pushSubscription.toJSON());
+        const notification: UserNotification = Object.assign(
+          pushSubscription.toJSON()
+        );
 
-    currentState.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
-      this.isLoggedIn = !!data;
-      if (!!data) {
-        this.user = data.user;
-        this.initDevice();
-      }
-    });
+        notification.uuid = uuid;
+        notification.userId = this.user._id;
+        this.user.notifications.push(notification);
+
+        this._userService
+          .addNotification(this.user._id, this.user.notifications)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (item) => {
+              if (item) {
+                //TODO: Add update to user store HERE
+                //this._store.dispatch(new actions.AuthUserChange(this.user));
+              } else {
+                //Do Nothing
+              }
+            },
+            (err) => {
+              this._activityLogService.addError(err);
+            },
+            () => {
+              // Clean up
+            }
+          );
+      })
+      .catch((error) => {
+        // Do Nothing
+      });
   }
 
   createEvent($event) {
@@ -69,7 +96,8 @@ export class LandingComponent implements OnInit {
           mode: result.model,
           appVersion: result.appVersion
         };
-        this.initNotification(device);
+        this.addDevice(device);
+        this.addNotification(device.uuid);
       })
       .catch((error) => {
         //For now do not disrupt user experience
@@ -77,7 +105,7 @@ export class LandingComponent implements OnInit {
     //localStorage.setItem('device', JSON.stringify(device));
   }
 
-  initNotification(deviceInfo: DeviceInfo) {
+  addDevice(deviceInfo: DeviceInfo) {
     let device = this.user.devices.find((result) => {
       return result.uuid === deviceInfo.uuid;
     });
@@ -86,74 +114,39 @@ export class LandingComponent implements OnInit {
       return;
     }
 
-    this._swPush
-      .requestSubscription({
-        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
-      })
-      .then((pushSubscription) => {
-        // Save to
-        //console.log(pushSubscription.toJSON());
-        const notification = Object.assign(pushSubscription.toJSON());
+    this.user.devices.push(deviceInfo);
 
-        this._userService
-          .addNotification(notification)
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(
-            (item) => {
-              if (item) {
+    this._userService
+      .addDevice(this.user._id, this.user.devices)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (item: UserInfo) => {
+          if (item) {
+            let userSource = new UserInfo(item);
+            this._store.dispatch(new actions.AuthUserChange(userSource));
+          } else {
+            //Do Nothing
+          }
+        },
+        (err) => {
+          this._activityLogService.addError(err);
+        },
+        () => {
+          // Clean up
+        }
+      );
+  }
 
-                //TODO: Add update to user store HERE
-                this.user.devices.push(notification);
-                this._store.dispatch(new actions.AuthUserChange(this.user));
+  ngOnInit() {
+    const currentState = this._store.pipe(select(fromAuth.getUser));
 
-                this._activityLogService.addUpdate(
-                  `Inserted wishlist follow ${item._id}`
-                );
-                this._notificationService.smallBox({
-                  title: 'Notification Success!',
-                  content:
-                    'This device will now be able to receive notifications',
-                  color: '#739E73',
-                  timeout: 2000,
-                  icon: 'fa fa-check',
-                  number: '4',
-                  sound: false
-                });
-              } else {
-                this._activityLogService.addError(
-                  'No wishlist present: Insert Failed'
-                );
-                this._notificationService.bigBox({
-                  title: 'Oops! the database has returned an error',
-                  content: 'This system will not support notifications',
-                  color: '#C46A69',
-                  icon: 'fa fa-warning shake animated',
-                  number: '1',
-                  timeout: 3000, // 3 seconds
-                  sound: false
-                });
-              }
-            },
-            (err) => {
-              this._activityLogService.addError(err);
-              this._notificationService.bigBox({
-                title: 'Oops!  there is an issue with the call to insert',
-                content: err,
-                color: '#C46A69',
-                icon: 'fa fa-warning shake animated',
-                number: '1',
-                timeout: 3000, // 3 seconds
-                sound: false
-              });
-            },
-            () => {
-              // Clean up
-            }
-          );
-      })
-      .catch((error) => {
-        // Do Nothing
-      });
+    currentState.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
+      this.isLoggedIn = !!data;
+      if (!!data) {
+        this.user = data.user;
+        this.initDevice();
+      }
+    });
   }
 
   ngOnDestroy() {

@@ -17,7 +17,8 @@ export interface User {
     _id: string;
     applicationId?: string;
     avatar?: string;
-    devices?: UserNotification[];
+    devices?: DeviceInfo[];
+    notifications?: UserNotification[];
     email: string;
     firstName: string;
     homePhone?: string;

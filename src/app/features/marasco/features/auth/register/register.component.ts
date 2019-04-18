@@ -46,8 +46,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
       .subscribe((prompt) => {
         this.showAddToHomeScreenButton = !!prompt;
       });
-      
-      this.initDevice();
   }
 
   addToHome($event) {
@@ -55,6 +53,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.initDevice();
+
     this.validationOptionsDesktop  = {
       //Custom method
       store: this._store,
@@ -169,6 +169,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
     };
 
     this._device = device;
+    this.validationOptionsMobile.device = device;
+    this.validationOptionsDesktop.device = device;
     this.validationOptions.device = device;
   }
 

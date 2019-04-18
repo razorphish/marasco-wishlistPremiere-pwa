@@ -8,6 +8,8 @@ import { AuthHttpService } from './auth-http.service';
 
 import { User } from '../interfaces/UserInfo.interface';
 import { MarascoService } from './MarascoService';
+import { UserNotification } from '../interfaces/User-Notification.interface';
+import { DeviceInfo } from '@capacitor/core';
 
 @Injectable()
 export class UserService extends MarascoService {
@@ -42,6 +44,25 @@ export class UserService extends MarascoService {
   }
 
   /**
+   * @description Adds a device to the user object
+   * @author Antonio Marasco
+   * @date 2019-04-17
+   * @param {User} user
+   * @returns {Observable<User>}
+   * @memberof UserService
+   */
+  addDevice(userId: string, user: DeviceInfo[]): Observable<any> {
+    return this._authHttp
+      .post(`${this._url}/${userId}/devices`, JSON.stringify(user))
+      .pipe(
+        map((device: any) => {
+          return device;
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
    * @description Adds a notification to the user object
    * @author Antonio Marasco
    * @date 2019-04-17
@@ -49,13 +70,12 @@ export class UserService extends MarascoService {
    * @returns {Observable<User>}
    * @memberof UserService
    */
-  addNotification(user: User): Observable<User> {
+  addNotification(userId: string, user: UserNotification[]): Observable<any> {
     return this._authHttp
-      .post(`${this._url}/${user._id}/notifications`, JSON.stringify(user))
+      .post(`${this._url}/${userId}/notifications`, JSON.stringify(user))
       .pipe(
-        map((user: User) => {
-          this.onUserChanged.next(user);
-          return user;
+        map((notification: any) => {
+          return notification;
         }),
         catchError(this.handleError)
       );

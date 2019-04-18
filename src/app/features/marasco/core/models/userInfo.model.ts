@@ -5,6 +5,8 @@ import { User } from '../interfaces/UserInfo.interface';
 import { Address } from './address.model';
 import { Role } from './role.model';
 import { TokenModel } from './token.model';
+import { UserNotification } from '../interfaces/User-Notification.interface';
+import { DeviceInfo } from '@capacitor/core';
 
 // https://stackoverflow.com/questions/14142071/typescript-and-field-initializers
 export class UserInfo implements User {
@@ -29,6 +31,8 @@ export class UserInfo implements User {
   wishlists?: Wishlist[];
   wishlistItemCategories?: WishlistItemCategory[];
   wishlistFollows?: WishlistFollow[];
+  notifications?: UserNotification[];
+  devices?: DeviceInfo[];
   //updatedExisting?: boolean;
   // constructor(init? : {
   //     _id: string; avatar?: string,
