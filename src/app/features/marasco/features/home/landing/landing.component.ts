@@ -123,7 +123,7 @@ export class LandingComponent implements OnInit {
         (item: UserInfo) => {
           if (item) {
             let userSource = new UserInfo(item);
-            this._store.dispatch(new actions.AuthUserChange(userSource));
+            //this._store.dispatch(new actions.AuthUserChange(userSource));
           } else {
             //Do Nothing
           }

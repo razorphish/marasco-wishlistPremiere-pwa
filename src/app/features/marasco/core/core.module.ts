@@ -1,3 +1,4 @@
+import { UserProfileStateService } from './services/user-profile.state.service';
 
 import {
   NgModule,
@@ -35,7 +36,8 @@ import {
   WishlistFollowStateServiceFactory,
   WishlistFollowStateService,
   PwaFactory,
-  PwaService
+  PwaService,
+  UserProfileStateServiceFactory
 } from '@app/features/marasco/core/services';
 
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
@@ -106,6 +108,13 @@ import { AppGuard } from './guards/app.guard';
       provide: APP_INITIALIZER,
       useFactory: PwaFactory,
       deps: [PwaService],
+      multi: true
+    },
+
+    {
+      provide: APP_INITIALIZER,
+      useFactory: UserProfileStateServiceFactory,
+      deps: [UserProfileStateService],
       multi: true
     },
 

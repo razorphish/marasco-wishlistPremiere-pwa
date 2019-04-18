@@ -30,6 +30,11 @@ import {
   WishlistFollowStateServiceFactory
 } from './wishlist-follow.state.service';
 
+import {
+  UserProfileStateService,
+  UserProfileStateServiceFactory
+} from './user-profile.state.service';
+
 import { WishlistService } from './wishlists.service';
 import { WishlistFactory } from './wishlist.factory';
 import { WishlistItemService } from './wishlist-item.service';
@@ -50,6 +55,7 @@ export const services = [
   LayoutService,
   PwaService,
   UserService,
+  UserProfileStateService,
   WishlistService,
   WishlistStateService,
   WishlistItemService,
@@ -76,6 +82,7 @@ export * from './menuItem.service';
 export * from './pwa.service';
 
 export * from './user.service';
+export * from './user-profile.state.service';
 
 export * from './wishlists.state.service';
 
