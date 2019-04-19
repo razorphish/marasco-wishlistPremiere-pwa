@@ -29,6 +29,13 @@ const routes: Routes = [
         loadChildren: "./features/wishlistPremiere/wishlistPremiere.module#WishlistPremiereModule",
         data: { pageTitle: "Wishlist" },
         canActivate: [AuthGuard]
+      },
+
+      {
+        path: "profile",
+        loadChildren: "./features/profile/profile.module#ProfileModule",
+        data: { pageTitle: "User Profile" },
+        canActivate: [AuthGuard]
       }
     ]
   },

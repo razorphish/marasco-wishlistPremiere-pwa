@@ -1,0 +1,162 @@
+<div id="content">
+  <div class="row">
+    <sa-big-breadcrumbs
+      [items]="['Home', 'Profile']"
+      icon="group"
+      class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
+    ></sa-big-breadcrumbs>
+  </div>
+  <!-- end row -->
+  <!-- row -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="well well-sm">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="well well-light well-sm no-margin no-padding">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="row">
+                    <div class="col-sm-3 profile-pic">
+                      <img
+                        src="assets/img/avatars/sunny-big.png"
+                        alt="demo user"
+                      />
+
+                      <div class="padding-10">
+                        <h4 class="font-md">
+                          <strong>{{ wishlists.length }}</strong>
+                          <br />
+                          <small>Wishlists</small>
+                        </h4>
+                        <br />
+                      </div>
+                    </div>
+                    <div class="col-sm-9">
+                      <h1>
+                        {{ user.firstName }}
+                        <span class="semi-bold">{{ user.lastName }}</span>
+                        <br />
+                        <small> User</small>
+                        <small><a href="#" (click)="edit()"> [edit]</a></small>
+                      </h1>
+                      <ul class="list-unstyled">
+                        <li>
+                          <p class="text-muted">
+                            <i class="fa fa-phone"></i>&#xA0;&#xA0;<span
+                              class="txt-color-darken"
+                              >{{ user.homePhone }}</span
+                            >
+                          </p>
+                        </li>
+                        <li>
+                          <p class="text-muted">
+                            <i class="fa fa-envelope"></i>&#xA0;&#xA0;<a
+                              href="mailto:{{ user.email }}"
+                              >{{ user.email }}</a
+                            >
+                          </p>
+                        </li>
+                        <li>
+                          <p class="text-muted">
+                            <i class="fa fa-calendar"></i>&#xA0;&#xA0;<span
+                              class="txt-color-darken"
+                              >Joined
+                              {{ user.dateCreated | moment: 'LLL' }}</span
+                            >
+                          </p>
+                        </li>
+                      </ul>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <hr />
+                  <div class="padding-10">
+                    <ul class="nav nav-tabs tabs-pull-right">
+                      <li class="active">
+                        <a href="#a1" data-toggle="tab">Wishlists</a>
+                      </li>
+                      <li>
+                        <a href="#a2" data-toggle="tab">Followers</a>
+                      </li>
+                      <li class="pull-left">
+                        <span class="margin-top-10 display-inline"
+                          ><i class="fa fa-rss text-success"></i> Activity</span
+                        >
+                      </li>
+                    </ul>
+                    <div class="tab-content padding-top-10">
+                      <div class="tab-pane fade in active" id="a1">
+                        <div class="row">
+                          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div *ngIf="wishlists.length === 0">
+                              <button
+                                class="btn btn-primary btn-block btn-lg"
+                                (click)="createEvent($event)"
+                              >
+                                Create your First Wishlist!
+                              </button>
+                            </div>
+                          </div>
+
+                          <div
+                            *ngFor="let wishlist of wishlists; let i = index"
+                          >
+                            <div class="col-xs-2 col-sm-1">
+                              <time datetime="2014-09-20" class="icon">
+                                <strong>{{
+                                  wishlist.dateCreated | moment: 'MMM'
+                                }}</strong>
+                                <span>{{
+                                  wishlist.dateCreated | moment: 'DD'
+                                }}</span>
+                              </time>
+                            </div>
+                            <div class="col-xs-10 col-sm-11">
+                              <h6 class="no-margin">
+                                <a
+                                  routerLink="/wishlistPremiere/wishlists/details/{{
+                                    wishlist._id
+                                  }}"
+                                  >{{ wishlist.name }}</a
+                                >
+                              </h6>
+
+                              <p>
+                                Status: {{ wishlist.statusId }}<br />
+                                Privacy: {{ wishlist.privacy }}
+                              </p>
+                            </div>
+                            <div class="col-sm-12">
+                              <hr />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="a2">
+                        <div class="alert alert-info fade in">
+                          <button class="close" data-dismiss="alert">
+                            &#xD7;
+                          </button>
+                          <i class="fa-fw fa fa-info"></i>
+                          <strong>Coming Soon! </strong>
+                        </div>
+                      </div>
+                      <!-- end tab -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- end row -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end row -->
+</div>

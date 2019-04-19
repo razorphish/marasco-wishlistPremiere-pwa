@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { User } from './../../../core/interfaces/UserInfo.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import * as actions from '@app/features/marasco/core/store/auth';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { Plugins, DeviceInfo } from '@capacitor/core';
 import { UserService } from '@app/features/marasco/core/services';
@@ -122,8 +121,8 @@ export class LandingComponent implements OnInit {
       .subscribe(
         (item: UserInfo) => {
           if (item) {
-            let userSource = new UserInfo(item);
-            //this._store.dispatch(new actions.AuthUserChange(userSource));
+            // let userSource = new UserInfo(item);
+            // this._store.dispatch(new actions.AuthUserChange(userSource));
           } else {
             //Do Nothing
           }
