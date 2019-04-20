@@ -30,6 +30,7 @@ export class WishlistFollowService extends MarascoService {
   constructor(private _authHttp: AuthHttpService) {
     super();
   }
+  
   /**
    * @description Get follows by wishlist Id
    * @author Antonio Marasco
@@ -67,6 +68,7 @@ export class WishlistFollowService extends MarascoService {
         catchError(this.handleError)
       );
   }
+
   /**
    * @description Inserts a follow into the wishlist
    * @author Antonio Marasco
@@ -95,6 +97,7 @@ export class WishlistFollowService extends MarascoService {
         catchError(this.handleError)
       );
   }
+
   /**
    * @description Updates follow (mainly settings) of a wishlist
    * @author Antonio Marasco

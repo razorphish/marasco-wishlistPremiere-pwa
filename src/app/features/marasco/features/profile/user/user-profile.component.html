@@ -38,7 +38,8 @@
                         <span class="semi-bold">{{ user.lastName }}</span>
                         <br />
                         <small> User</small>
-                        <small><a href="#" (click)="edit()"> [edit]</a></small>
+                        <small><a href="#" (click)="
+                          openModal($event, userProfileEditModal, user)"> [edit]</a></small>
                       </h1>
                       <ul class="list-unstyled">
                         <li>
@@ -160,3 +161,12 @@
   </div>
   <!-- end row -->
 </div>
+
+<ng-template #userProfileEditModal>
+  <user-profile-edit-modal
+    (user)="user"
+    (save)="closeModal()"
+    (close)="onModalClose()"
+  ></user-profile-edit-modal>
+</ng-template>
+

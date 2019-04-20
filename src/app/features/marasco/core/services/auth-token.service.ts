@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { TokenRestore, AuthInit, LoggedOnce } from '../store/auth/auth.actions';
 import { AuthState } from '../store/auth/auth.reducer';
 import { TokenResult } from '../models/tokenResult.model';
+import { UserInfo } from '../models/userInfo.model';
 
 const ROLE_ADMIN = 1;
 
@@ -37,6 +38,18 @@ export class AuthTokenService {
     private _storage: StorageService,
     private _store: Store<AuthState>
   ) {}
+
+  updateUser(userInfo: UserInfo) {
+    //Only 2 fields of importance need to get changed
+    //DO NOT replace entire object!!! 
+    //i.e. token.user = userInfo
+    this.token.user.firstName = userInfo.firstName;
+    this.token.user.lastName = userInfo.lastName;
+
+    return new Promise((resolve) => {
+      resolve(this.token);
+    });
+  }
 
   load(): Promise<any> {
     return new Promise((resolve, reject) => {

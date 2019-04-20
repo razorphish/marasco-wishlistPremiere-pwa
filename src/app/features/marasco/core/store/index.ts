@@ -57,6 +57,7 @@ export const metaReducers: MetaReducer<AppState>[] = !environment.production
 
 export const effects = [
   auth.AuthEffects,
+  auth.AuthProfileEffects,
   notify.NotifyEffects,
   profile.ProfileEffects,
   layout.LayoutEffects,

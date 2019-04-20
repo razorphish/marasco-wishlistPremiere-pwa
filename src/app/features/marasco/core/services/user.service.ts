@@ -10,6 +10,7 @@ import { User } from '../interfaces/UserInfo.interface';
 import { MarascoService } from './MarascoService';
 import { UserNotification } from '../interfaces/User-Notification.interface';
 import { DeviceInfo } from '@capacitor/core';
+import { UserInfo } from '../models/userInfo.model';
 
 @Injectable()
 export class UserService extends MarascoService {
@@ -33,9 +34,10 @@ export class UserService extends MarascoService {
    */
   update(user: User): Observable<User> {
     return this._authHttp
-      .put(`${this._url}/${user._id}`, JSON.stringify(user))
+      .put(`${this._url}/${user._id}/profile`, JSON.stringify(user))
       .pipe(
-        map((user: User) => {
+        map((userInfo: UserInfo) => {
+          let user = new UserInfo(userInfo);
           this.onUserChanged.next(user);
           return user;
         }),

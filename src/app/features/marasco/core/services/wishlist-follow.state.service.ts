@@ -33,6 +33,14 @@ export class WishlistFollowStateService {
     private _store: Store<WishlistState>
   ) {}
 
+  /**
+   * @description Adds a follow to the wishlist
+   * @author Antonio Marasco
+   * @date 2019-04-20
+   * @param {WishlistFollow} wishlistFollow
+   * @returns
+   * @memberof WishlistFollowStateService
+   */
   add(wishlistFollow: WishlistFollow) {
     this.wishlistFollows.push(wishlistFollow);
 
@@ -75,6 +83,11 @@ export class WishlistFollowStateService {
     });
   }
 
+  /**
+   *
+   *
+   * @memberof WishlistFollowStateService
+   */
   set wishlistFollows(value: WishlistFollow[]) {
     this._wishlistFollowSubject.next(value);
   }
@@ -84,9 +97,14 @@ export class WishlistFollowStateService {
   }
 
   /*///////////////////////////////////////////////
-  /* Private Methods
+  /* Private Methods/Members
   //////////////////////////////////////////////*/
 
+  /**
+   *Dump wishlist property
+   *
+   * @memberof WishlistFollowStateService
+   */
   dumpWishlistFollows = (wishlistFollows) => {
     environment.log.wishlist &&
       console.log(

@@ -3,6 +3,10 @@ import { Action } from '@ngrx/store';
 export enum AuthActionTypes {
   AppInit = '[App] Init',
   AppUserInitRedirect = '[App] User Init Redirect',
+
+  AuthUserProfileEditAction = '[Auth] User Profile Edit',
+  AuthUserProfileEditSuccess = '[Auth] User Profile Edit Success',
+
   AuthInit = '[Auth] Init',
   LoggedOnce = '[Auth] Logged Once',
   LoginAction = '[Auth] Login Action',
@@ -37,6 +41,16 @@ export class AppUserInitRedirect implements Action {
 
 export class AuthInit implements Action {
   readonly type = AuthActionTypes.AuthInit;
+}
+
+export class AuthUserProfileEditAction implements Action {
+  readonly type = AuthActionTypes.AuthUserProfileEditAction;
+  constructor(readonly payload: any) {}
+}
+
+export class AuthUserProfileEditSuccess implements Action {
+  readonly type = AuthActionTypes.AuthUserProfileEditSuccess;
+  constructor(readonly payload: any) {}
 }
 
 export class LoggedOnce implements Action {
@@ -145,6 +159,8 @@ export type AuthActions =
   | AppInit
   | AppUserInitRedirect
   | AuthInit
+  | AuthUserProfileEditAction
+  | AuthUserProfileEditSuccess
   | LoggedOnce
   | LoginAction
   | LogoutAction

@@ -37,7 +37,7 @@ import {
   WishlistFollowStateService,
   PwaFactory,
   PwaService,
-  UserProfileStateServiceFactory
+  //UserProfileStateServiceFactory
 } from '@app/features/marasco/core/services';
 
 import { throwIfAlreadyLoaded } from './guards/module-import.guard';
@@ -111,12 +111,12 @@ import { AppGuard } from './guards/app.guard';
       multi: true
     },
 
-    {
-      provide: APP_INITIALIZER,
-      useFactory: UserProfileStateServiceFactory,
-      deps: [UserProfileStateService],
-      multi: true
-    },
+    // {
+    //   provide: APP_INITIALIZER,
+    //   useFactory: UserProfileStateServiceFactory,
+    //   deps: [UserProfileStateService],
+    //   multi: true
+    // },
 
     {
       provide: HTTP_INTERCEPTORS,
