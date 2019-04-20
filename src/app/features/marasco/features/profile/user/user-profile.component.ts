@@ -2,7 +2,6 @@ import { UserInfo } from '@app/features/marasco/core/models/userInfo.model';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { User } from './../../../core/interfaces/UserInfo.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
@@ -22,7 +21,7 @@ export class UserProfileComponent implements OnInit {
   private unsubscribeWishlist$ = new Subject<void>();
 
   public isLoggedIn: boolean;
-  public user: User;
+  public user: UserInfo;
   public wishlists: Wishlist[];
 
   bsModalRef: BsModalRef;
