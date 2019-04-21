@@ -99,17 +99,18 @@
                         Preview
                       </button>
 
-                      &nbsp;
-                      <button
-                        type="button"
-                        (click)="shareDesktop()"
-                        class="btn btn-info btn-lg"
-                        *ngIf="isUpdate"
-                      >
-                        <i class="fa fa-share fa-lg"></i>
-                        Share
-                      </button>
-
+                      <div *ngIf="hasSharing">
+                        &nbsp;
+                        <button
+                          type="button"
+                          (click)="shareDesktop()"
+                          class="btn btn-info btn-lg"
+                          *ngIf="isUpdate"
+                        >
+                          <i class="fa fa-share fa-lg"></i>
+                          Share
+                        </button>
+                      </div>
                       &nbsp;
                       <button type="submit" class="btn btn-success btn-lg">
                         <i class="fa fa-save fa-lg"></i>

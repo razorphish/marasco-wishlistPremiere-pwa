@@ -69,6 +69,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
   public isMobile = true;
   public isUpdate = true;
+  public hasSharing = false;
 
   public itemSortOptions = {
     handle: '.handle', // handle's class
@@ -242,7 +243,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
   async shareDesktop(){
     if (nav.share) {
-      console.log('hi')
       nav.share({
           title: 'Web Fundamentals',
           text: 'Check out Web Fundamentals — it rocks!',
@@ -255,13 +255,11 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
   async shareMobile(){
     let shareRet = await Share.share({
-      title: 'See cool stuff',
-      text: 'Really awesome thing you need to see right meow',
-      url: 'http://ionicframework.com/',
-      dialogTitle: 'Share with buddies'
+      title: 'Check out my new wishlist!',
+      text: 'Click on the link to follow my new wishlist!',
+      url: `https://wishlist.maras.co/wishlists/${this.wishlist._id}`,
+      dialogTitle: 'Share with friends and family'
     });
-
-    this._notificationService.smallBox(shareRet);
   }
 
   /////////////////////////////////////
@@ -276,6 +274,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
     //Set User info
     this.wishlist.userId = this.user._id;
+
+    this.hasSharing = nav.share ? true : false;
 
     this.dropdownSettingsStatus = {
       singleSelection: true,
