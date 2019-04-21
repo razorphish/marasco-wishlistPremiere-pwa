@@ -42,10 +42,10 @@
               novalidate="novalidate"
               (ngSubmit)="save(wishlistDetailsForm.value)"
             >
-              <div class="smart-form">
+              <div>
                 <!-- widget content -->
                 <div class="widget-body">
-                  <fieldset>
+                  <fieldset class="smart-form">
                     <div class="row">
                       <section class="col col-4">
                         Name
@@ -98,6 +98,18 @@
                         <i class="fa fa-eye fa-lg"></i>
                         Preview
                       </button>
+
+                      &nbsp;
+                      <button
+                        type="button"
+                        (click)="shareDesktop()"
+                        class="btn btn-info btn-lg"
+                        *ngIf="isUpdate"
+                      >
+                        <i class="fa fa-share fa-lg"></i>
+                        Share
+                      </button>
+
                       &nbsp;
                       <button type="submit" class="btn btn-success btn-lg">
                         <i class="fa fa-save fa-lg"></i>
@@ -114,7 +126,7 @@
                             wishlist
                           )
                         "
-                        class="btn btn-default btn-lg"
+                        class="btn btn-default"
                         *ngIf="isUpdate"
                       >
                         <i class="fa fa-cog fa-lg"></i>
@@ -123,7 +135,7 @@
                       <button
                         type="button"
                         (click)="openModal($event, wishlistItemModal)"
-                        class="btn btn-primary btn-lg"
+                        class="btn btn-primary"
                         *ngIf="isUpdate"
                       >
                         <i class="fa fa-plus fa-lg"></i>
@@ -132,13 +144,24 @@
                       <button
                         type="button"
                         (click)="previewWishlist($event, wishlist)"
-                        class="btn btn-warning btn-lg"
+                        class="btn btn-warning"
                         *ngIf="isUpdate"
                       >
                         <i class="fa fa-eye fa-lg"></i>
                       </button>
+
                       &nbsp;
-                      <button type="submit" class="btn btn-success btn-lg">
+                      <button
+                        type="button"
+                        (click)="previewWishlist($event, wishlist)"
+                        class="btn btn-info"
+                        *ngIf="isUpdate"
+                      >
+                        <i class="fa fa-share fa-lg"></i>
+                      </button>
+
+                      &nbsp;
+                      <button type="submit" class="btn btn-success">
                         <i class="fa fa-save fa-lg"></i>
                       </button>
                     </div>
@@ -359,7 +382,10 @@
                             <i class="fa fa-thumbs-up"></i>
                           </button>
                           &nbsp; -->
-                          <span class="label bg-color-red" *ngIf="item.purchased">
+                            <span
+                              class="label bg-color-red"
+                              *ngIf="item.purchased"
+                            >
                               Purchased
                             </span>
                             &nbsp;

@@ -28,6 +28,9 @@ import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
 import { LayoutService } from '@app/features/marasco/core/services';
 
+import { Plugins } from '@capacitor/core';
+const { Share } = Plugins;
+let nav: any = navigator;
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
  * http://sortablejs.github.io/Sortable/
@@ -235,6 +238,30 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         this.insert();
       }
     }
+  }
+
+  async shareDesktop(){
+    if (nav.share) {
+      console.log('hi')
+      nav.share({
+          title: 'Web Fundamentals',
+          text: 'Check out Web Fundamentals — it rocks!',
+          url: 'https://developers.google.com/web',
+      })
+        .then(() => console.log('Successful share'))
+        .catch((error) => console.log('Error sharing', error));
+    }
+  }
+
+  async shareMobile(){
+    let shareRet = await Share.share({
+      title: 'See cool stuff',
+      text: 'Really awesome thing you need to see right meow',
+      url: 'http://ionicframework.com/',
+      dialogTitle: 'Share with buddies'
+    });
+
+    this._notificationService.smallBox(shareRet);
   }
 
   /////////////////////////////////////
