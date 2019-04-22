@@ -25,7 +25,7 @@ export class WishlistService extends MarascoService {
   constructor(private _authHttp: AuthHttpService) {
     super();
   }
-  
+
   /**
    * @description Gets all wishlists of a particular user
    * @author Antonio Marasco
@@ -36,6 +36,21 @@ export class WishlistService extends MarascoService {
   allDetails(): Observable<Wishlist[]> {
     return this._authHttp.get(`${this._url}details`).pipe(
       map((wishlists: any) => wishlists),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * @description Gets all wishlists by name 'like'
+   * @author Antonio Marasco
+   * @date 2019-04-22
+   * @param {string} name
+   * @returns {Observable<Wishlist>}
+   * @memberof WishlistService
+   */
+  byName(name: string): Observable<Wishlist[]> {
+    return this._authHttp.get(`${this._url}search/${name}`).pipe(
+      map((wishlist: any) => wishlist),
       catchError(this.handleError)
     );
   }
@@ -69,6 +84,7 @@ export class WishlistService extends MarascoService {
       catchError(this.handleError)
     );
   }
+
   /**
    * @description Inserts a user wishlist
    * @author Antonio Marasco
@@ -86,6 +102,7 @@ export class WishlistService extends MarascoService {
       catchError(this.handleError)
     );
   }
+
   /**
    * @description Updates a user wishlist
    * @author Antonio Marasco
