@@ -11,7 +11,8 @@ import {
   TabsModule,
   AccordionModule,
   CarouselModule,
-  PopoverModule
+  PopoverModule,
+  TypeaheadModule 
 } from "ngx-bootstrap";
 
 
@@ -28,8 +29,8 @@ import {
     TabsModule.forRoot(),
     AccordionModule.forRoot(),
     CarouselModule.forRoot(),
-
-    PopoverModule.forRoot()
+    PopoverModule.forRoot(),
+    TypeaheadModule.forRoot()
   ],
   exports: [
     ModalModule,
@@ -41,6 +42,7 @@ import {
     TabsModule,
     AccordionModule,
     CarouselModule,
+    TypeaheadModule
   ],
   declarations: []
 })

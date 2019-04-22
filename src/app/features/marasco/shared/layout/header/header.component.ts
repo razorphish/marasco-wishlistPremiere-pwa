@@ -4,8 +4,10 @@ import { Router } from '@angular/router';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { NotificationService } from '@app/features/marasco/core/services/notification.service';
 import { Store, select } from '@ngrx/store';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, Observable, of } from 'rxjs';
+import { takeUntil, mergeMap } from 'rxjs/operators';
+import { LayoutService } from '@app/features/marasco/core/services';
+import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 
 declare var $: any;
 
@@ -15,11 +17,19 @@ declare var $: any;
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
-  
+
+  public dataSource: Observable<any>;
+  public asyncSelected: string;
   public isLoggedIn: boolean;
+  public isMobile: boolean;
+  public typeaheadNoResults: boolean;
+  public typeaheadLoading: boolean;
+  public typeAheadUrl: string = '';
+  public typeAheadResult: string;
   public user: User;
 
   constructor(
+    private _layoutService: LayoutService,
     private _router: Router,
     private _notificationService: NotificationService,
     private _store: Store<fromAuth.AuthState>
@@ -31,11 +41,25 @@ export class HeaderComponent implements OnInit, OnDestroy {
     //   this.isLoggedIn = loggedIn;
     // });
 
+    this.dataSource = Observable.create((observer: any) => {
+      // Runs on every search
+      observer.next(this.typeAheadResult);
+    });
+
+    this.dataSource.pipe(
+      mergeMap((token: string) => {
+        // return this.httpClient
+        //   .get<string[]>(`${this.typeAheadUrl}?q=${token}`)
+        //   .map((r) => r);
+        return of(token);
+      })
+    );
+
     const currentState = this._store.pipe(select(fromAuth.getUser));
 
-    currentState
-    .pipe(takeUntil(this.unsubscribe$))
-    .subscribe((data) => {
+    this.isMobile = this._layoutService.store.isMobile;
+
+    currentState.pipe(takeUntil(this.unsubscribe$)).subscribe((data) => {
       this.isLoggedIn = !!data;
       if (!!data) {
         this.user = data.user;
@@ -84,7 +108,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this._router.navigate(['/miscellaneous/search']);
   }
 
-  ngOnDestroy(){
+  changeTypeaheadLoading(e: boolean): void {
+    this.typeaheadLoading = e;
+  }
+
+  changeTypeaheadNoResults(e: boolean): void {
+    this.typeaheadNoResults = e;
+  }
+
+  typeaheadOnSelect(e: TypeaheadMatch): void {
+    console.log('Selected value: ', e.value);
+  }
+
+  ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
   }

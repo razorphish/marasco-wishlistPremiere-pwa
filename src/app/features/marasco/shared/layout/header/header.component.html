@@ -57,8 +57,8 @@
             <a (click)="(null)" class="padding-10 padding-top-0 padding-bottom-0" data-action="toggleShortcut">
               <i class="fa fa-arrow-down"></i> <u>S</u>hortcut</a>
           </li> -->
-          <li class="divider"></li>
-          <li>
+          <li class="divider" *ngIf="!isMobile"></li>
+          <li *ngIf="!isMobile">
             <a
               (click)="(null)"
               class="padding-10 padding-top-0 padding-bottom-0"
@@ -147,6 +147,14 @@
         name="param"
         required
         placeholder="Find Wishlists"
+        [(ngModel)]="asyncSelected"
+        [typeaheadAsync]="true"
+        [typeahead]="dataSource"
+        (typeaheadLoading)="changeTypeaheadLoading($event)"
+        (typeaheadNoResults)="changeTypeaheadNoResults($event)"
+        (typeaheadOnSelect)="typeaheadOnSelect($event)"
+        [typeaheadOptionsLimit]="7"
+        typeaheadOptionField="name"
       />
       <button type="submit">
         <i class="fa fa-search"></i>
