@@ -7,8 +7,8 @@
   </span>
 
   <ul *dropdownMenu class="dropdown-menu">
-    <li *ngFor="let wishlist of wishlists">
-      <a href="{{wishlist.href}}">{{wishlist.title}}</a>
+    <li *ngFor="let activity of activities | slice:0:5; let i = index;">
+      <a>{{activity}}</a>
     </li>
     <li class="divider"></li>
     <li>

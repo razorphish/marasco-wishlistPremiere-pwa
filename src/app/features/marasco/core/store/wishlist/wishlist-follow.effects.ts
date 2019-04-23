@@ -46,7 +46,7 @@ export class WishlistFollowEffects {
     ofType(actions.WishlistActionTypes.CreateWishlistFollowAction),
     map((data: any) => data.payload),
     tap((wishlistFollow: any) => {
-      this._wishlistFollowService.insert(wishlistFollow, false).subscribe(
+      this._wishlistFollowService.insert(wishlistFollow).subscribe(
         (result: any) => {
           if (!!result.error) {
             this.dispatchErrorNotification(result.error);
@@ -136,10 +136,10 @@ export class WishlistFollowEffects {
   wishlistFollowCreateSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistFollowSuccess),
     switchMap((data: any) =>
-      this._wishlistStateService.addFollow(data.payload)
+      this._wishlistFollowStateService.add(data.payload)
     ),
-    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-    map((_) => new actions.WishlistsPayload(_))
+    tap<WishlistFollow[]>((_) => (this._wishlistFollowStateService.wishlistFollows = _)),
+    map((_) => new actions.WishlistFollowPayload(_))
   );
 
   @Effect()

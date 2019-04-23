@@ -20,7 +20,7 @@ export abstract class MarascoService {
    * @returns
    * @memberof MarascoService
    */
-  protected handleError(errorResponse: HttpErrorResponse) {
+  protected handleError(errorResponse: any) {
     let errorInfo = {
       code: '',
       message: ''
@@ -29,15 +29,21 @@ export abstract class MarascoService {
     if (errorResponse.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accor
       console.error('An error occurred:', errorResponse.error.message);
-    } else if (errorResponse instanceof Response) {
-      let errMessage = '';
+    } else if (errorResponse instanceof HttpErrorResponse) {
       try {
-        errMessage = errorResponse.message;
+        errorInfo.code = errorResponse.status.toString();
+        if (errorResponse.statusText === 'Unknown Error') {
+          errorInfo.message =
+            'Wishlist Premiere is not available.  ' +
+            'Please check internet your connection.';
+        } else {
+          errorInfo.message = errorResponse.message;
+        }
       } catch (err) {
-        errMessage = errorResponse.statusText;
+        errorInfo.message = errorResponse.statusText;
       }
 
-      return throwError(errMessage);
+      return throwError(errorInfo);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,

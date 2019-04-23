@@ -42,6 +42,13 @@ export class WishlistFollowStateService {
    * @memberof WishlistFollowStateService
    */
   add(wishlistFollow: WishlistFollow) {
+    if (!!wishlistFollow.wishlist) {
+      wishlistFollow.wishlistId = {
+        _id : wishlistFollow.wishlist._id,
+        name: wishlistFollow.wishlist.name
+      }
+    }
+
     this.wishlistFollows.push(wishlistFollow);
 
     return new Promise((resolve) => {

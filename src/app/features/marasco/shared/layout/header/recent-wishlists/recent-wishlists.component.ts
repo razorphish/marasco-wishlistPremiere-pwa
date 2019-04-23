@@ -1,26 +1,31 @@
+import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
 import { Component, OnInit } from '@angular/core';
-import { RecentWishlistsService } from "./recent-wishlists.service";
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'sa-recent-wishlists',
   templateUrl: './recent-wishlists.component.html',
-  providers: [RecentWishlistsService]
+  providers: [ActivityLogSubjectService]
 })
 export class RecentWishlistsComponent implements OnInit {
 
-  wishlists: Array<any>;
+  public activities: Array<any>;
 
-  constructor(private wishlistService: RecentWishlistsService) {
-
+  constructor(
+    private _activityLogService: ActivityLogSubjectService) {
   }
 
   ngOnInit() {
-    this.wishlists = this.wishlistService.getWishlists();
+    this.activities = this._activityLogService.store.updates;
+
+    this._activityLogService.subscribe((activities) => {
+      this.activities = activities.updates;
+    })
   }
 
   clearWishlists() {
-    this.wishlistService.clearWishlists();
-    this.wishlists = this.wishlistService.getWishlists();
+    this._activityLogService.refresh();
+    this.activities = this._activityLogService.store.updates;
   }
 
 }

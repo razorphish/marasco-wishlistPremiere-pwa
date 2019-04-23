@@ -350,7 +350,7 @@ export class AuthEffects {
       color: color,
       icon: icon,
       number: number || '1',
-      timeout: 2000,
+      timeout: 4000,
       sound: false
     });
   }

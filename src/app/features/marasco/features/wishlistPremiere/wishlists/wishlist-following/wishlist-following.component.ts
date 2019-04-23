@@ -4,9 +4,6 @@ import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-
 import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
@@ -58,14 +55,11 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
 
   public wishlists: Wishlist[] = this.defaultWishlists;
 
-  bsModalRef: BsModalRef;
-
   //////////////////END Publicly exposed variables///////////
 
   constructor(
     private _route: ActivatedRoute,
     private _store: Store<fromWishlist.WishlistState>,
-    private _modalService: BsModalService,
     private _layoutService: LayoutService,
     private _router: Router
   ) {}
@@ -87,30 +81,6 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
   // Public Methods
   /////////////////////////////////////
-
-  public close(): void {
-    // close lightbox programmatically
-  }
-
-  public closeModal() {
-    this.bsModalRef.hide();
-  }
-
-  public openModal(event, template: TemplateRef<any>, wishlist: Wishlist) {
-    const initialState = {
-      wishlist: wishlist || {
-        name: '',
-        purchased: false
-      }
-    };
-
-    event.preventDefault();
-    this.bsModalRef = this._modalService.show(template, { initialState });
-  }
-
-  public onModalClose() {
-    this.bsModalRef.hide();
-  }
 
   public previewWishlist(row: any, wishlist: any) {
     this._router.navigateByUrl(`wishlistPremiere/wishlists/${wishlist.wishlistId._id}`);

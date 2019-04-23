@@ -13,18 +13,18 @@ import { MarascoService } from './MarascoService';
 export class WishlistFollowService extends MarascoService {
   private _url: string = `${environment.apiUrl}wishlist`;
 
-  private _WishlistFollowSource: WishlistFollow;
+  private _wishlistFollowSource: WishlistFollow;
 
   public onWishlistFollowChanged = new BehaviorSubject<WishlistFollow>(
-    this._WishlistFollowSource
+    this._wishlistFollowSource
   );
 
   public onWishlistFollowCreated = new BehaviorSubject<WishlistFollow>(
-    this._WishlistFollowSource
+    this._wishlistFollowSource
   );
 
   public onWishlistFollowDeleted = new BehaviorSubject<WishlistFollow>(
-    this._WishlistFollowSource
+    this._wishlistFollowSource
   );
 
   constructor(private _authHttp: AuthHttpService) {
@@ -50,19 +50,19 @@ export class WishlistFollowService extends MarascoService {
    * @description Removes follow from wishlist
    * @author Antonio Marasco
    * @date 2019-04-17
-   * @param {WishlistFollow} WishlistFollow
+   * @param {WishlistFollow} wishlistFollow
    * @returns {Observable<any>}
    * @memberof WishlistFollowService
    */
-  delete(WishlistFollow: WishlistFollow): Observable<any> {
+  delete(wishlistFollow: WishlistFollow): Observable<any> {
     return this._authHttp
       .delete(
-        `${this._url}/${WishlistFollow.wishlistId}/item/${WishlistFollow._id}`,
-        JSON.stringify(WishlistFollow)
+        `${this._url}/${wishlistFollow.wishlistId}/item/${wishlistFollow._id}`,
+        JSON.stringify(wishlistFollow)
       )
       .pipe(
         map((result: any) => {
-          this.onWishlistFollowDeleted.next(WishlistFollow);
+          this.onWishlistFollowDeleted.next(wishlistFollow);
           return result;
         }),
         catchError(this.handleError)
@@ -73,26 +73,24 @@ export class WishlistFollowService extends MarascoService {
    * @description Inserts a follow into the wishlist
    * @author Antonio Marasco
    * @date 2019-04-17
-   * @param {WishlistFollow} WishlistFollow
+   * @param {WishlistFollow} wishlistFollow
    * @param {boolean} isCurrentUser
    * @returns {Observable<WishlistFollow>}
    * @memberof WishlistFollowService
    */
   insert(
-    WishlistFollow: WishlistFollow,
-    isCurrentUser: boolean
+    wishlistFollow: WishlistFollow
   ): Observable<WishlistFollow> {
     return this._authHttp
       .post(
-        `${this._url}/${WishlistFollow.wishlistId}/follow`,
-        JSON.stringify(WishlistFollow)
+        `${this._url}/${wishlistFollow.wishlistId}/follow`,
+        JSON.stringify(wishlistFollow)
       )
       .pipe(
-        map((WishlistFollow: WishlistFollow) => {
-          if (isCurrentUser) {
-            this.onWishlistFollowCreated.next(WishlistFollow);
-          }
-          return WishlistFollow;
+        map((result: WishlistFollow) => {
+            result.wishlist = wishlistFollow.wishlist;
+            this.onWishlistFollowCreated.next(result);
+          return result;
         }),
         catchError(this.handleError)
       );
@@ -102,15 +100,15 @@ export class WishlistFollowService extends MarascoService {
    * @description Updates follow (mainly settings) of a wishlist
    * @author Antonio Marasco
    * @date 2019-04-17
-   * @param {WishlistFollow} WishlistFollow
+   * @param {WishlistFollow} wishlistFollow
    * @returns {Observable<WishlistFollow>}
    * @memberof WishlistFollowService
    */
-  update(WishlistFollow: WishlistFollow): Observable<WishlistFollow> {
+  update(wishlistFollow: WishlistFollow): Observable<WishlistFollow> {
     return this._authHttp
       .put(
-        `${this._url}/${WishlistFollow.wishlistId}/item/${WishlistFollow._id}`,
-        JSON.stringify(WishlistFollow)
+        `${this._url}/${wishlistFollow.wishlistId}/item/${wishlistFollow._id}`,
+        JSON.stringify(wishlistFollow)
       )
       .pipe(
         map((WishlistFollow: WishlistFollow) => {
