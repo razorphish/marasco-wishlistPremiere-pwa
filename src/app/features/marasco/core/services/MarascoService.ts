@@ -46,6 +46,9 @@ export abstract class MarascoService {
                 'You do not have sufficient privileges to access this resource.';
               break;
           }
+        } else if (errorResponse.status === 401) {
+          errorInfo.message =
+            'You do not have sufficient privileges to access this resource.';
         } else {
           errorInfo.message = errorResponse.message;
         }

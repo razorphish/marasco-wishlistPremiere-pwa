@@ -72,6 +72,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
+                                      <entry key="backgroundAssetType" value="COLOR" />
+                                      <entry key="backgroundColor" value="ffffff" />
                                       <entry key="foregroundImage" value="C:\TFS\Marasco1\Marasco\marasco-wishlistPremiere-pwa\src\assets\icons\icon-512x512.png" />
                                     </map>
                                   </option>
