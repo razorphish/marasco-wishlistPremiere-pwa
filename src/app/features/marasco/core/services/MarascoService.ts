@@ -36,6 +36,16 @@ export abstract class MarascoService {
           errorInfo.message =
             'Wishlist Premiere is not available.  ' +
             'Please check internet your connection.';
+        } else if (errorResponse.status === 403) {
+          switch (errorResponse.error.error) {
+            case 'invalid_grant':
+              errorInfo.code = 'invalid_grant';
+              break;
+            default:
+              errorInfo.message =
+                'You do not have sufficient privileges to access this resource.';
+              break;
+          }
         } else {
           errorInfo.message = errorResponse.message;
         }

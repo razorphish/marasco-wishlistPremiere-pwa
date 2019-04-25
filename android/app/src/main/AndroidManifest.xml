@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data 
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
             android:name="com.wishlistPremiere.marasco.MainActivity"
@@ -39,6 +43,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"></meta-data>
         </provider>
+
+
     </application>
 
     <!-- Permissions -->
