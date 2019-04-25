@@ -5,6 +5,7 @@ import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { LayoutService } from '@app/features/marasco/core/services';
 
 @Component({
   selector: 'app-forgot',
@@ -13,6 +14,8 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ForgotComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
+
+  public isMobile: boolean = false;
   public showAddToHomeScreenButton: boolean = true;
 
   public validationOptions: any = {
@@ -46,7 +49,10 @@ export class ForgotComponent implements OnInit, OnDestroy {
     submitHandler: this.forgotPasswordSubmit
   };
 
-  constructor(private _store: Store<any>, private _pwaService: PwaService) {
+  constructor(
+    private _store: Store<any>, 
+    private _pwaService: PwaService,
+    private _layoutService: LayoutService) {
     this._pwaService.onBeforeInstallPrompt
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((prompt) => {
@@ -58,7 +64,9 @@ export class ForgotComponent implements OnInit, OnDestroy {
     this._pwaService.prompt();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isMobile = this._layoutService.store.isMobile;
+  }
 
   forgotPasswordSubmit($event) {
     let model = {

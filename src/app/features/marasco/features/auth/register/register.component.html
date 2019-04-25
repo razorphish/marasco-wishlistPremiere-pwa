@@ -12,7 +12,6 @@
   </span>
 </header>
 <div id="main" role="main" class="animated fadeInDown">
-
   <!-- MAIN CONTENT -->
   <div id="content" class="container">
     <div class="row">
@@ -21,7 +20,8 @@
         <div class="hero">
           <div class="pull-left login-desc-box-l">
             <h4 class="paragraph-header">
-              Register and get access to all the features of our wishlist platform!
+              Register and get access to all the features of our wishlist
+              platform!
             </h4>
             <div class="login-app-icons">
               <a href="https://www.maras.co" class="btn btn-primary btn-sm"
@@ -47,9 +47,11 @@
             </p>
           </div>
           <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <h5 class="about-heading">Create wishlists and share with friends!</h5>
+            <h5 class="about-heading">
+              Create wishlists and share with friends!
+            </h5>
             <p>
-              Create wishlists and share your friends.  Get notified about
+              Create wishlists and share your friends. Get notified about
               friends who have purchased items for your wishlist!!
             </p>
           </div>
@@ -78,13 +80,14 @@
 
               <section>
                 <label class="input">
-                  <i class="icon-append fa fa-envelope-o"></i>
+                  <!-- <i class="icon-append fa fa-envelope-o"></i> -->
                   <input
                     type="email"
                     id="email"
                     name="email"
                     placeholder="Email address"
                     autocomplete="email"
+                    class="input-lg"
                   />
                   <b class="tooltip tooltip-bottom-right"
                     >Needed to verify your account</b
@@ -97,13 +100,14 @@
 
               <section *ngIf="!isMobile">
                 <label class="input">
-                  <i class="icon-append fa fa-lock"></i>
+                  <!-- <i class="icon-append fa fa-lock"></i> -->
                   <input
                     type="password"
                     id="password"
                     name="password"
                     placeholder="Password"
                     autocomplete="new-password"
+                    class="input-lg"
                   />
                   <b class="tooltip tooltip-bottom-right"
                     >Don't forget your password!</b
@@ -113,13 +117,14 @@
 
               <section *ngIf="!isMobile">
                 <label class="input">
-                  <i class="icon-append fa fa-lock"></i>
+                  <!-- <i class="icon-append fa fa-lock"></i> -->
                   <input
                     type="password"
                     id="passwordConfirm"
                     name="passwordConfirm"
                     placeholder="Confirm password"
                     autocomplete="new-password"
+                    class="input-lg"
                   />
                   <b class="tooltip tooltip-bottom-right"
                     >Don't forget your password</b
@@ -137,6 +142,7 @@
                       id="firstName"
                       name="firstName"
                       placeholder="First name"
+                      class="input-lg"
                     />
                   </label>
                 </section>
@@ -147,6 +153,7 @@
                       id="lastName"
                       name="lastName"
                       placeholder="Last name"
+                      class="input-lg"
                     />
                   </label>
                 </section>
@@ -160,6 +167,7 @@
                     name="termsAgreed"
                     id="termsAgreed"
                     value="true"
+                    class="input-lg"
                   />
                   <i></i>I agree with the
                   <a href="#" (click)="openModal($event, termsModal)">
@@ -169,31 +177,40 @@
               </section>
             </fieldset>
             <footer>
-              <button type="submit" name="submit" class="btn btn-primary">
+              <button
+                type="submit"
+                name="submit"
+                class="btn btn-primary btn-block"
+              >
                 Register
               </button>
             </footer>
           </form>
         </div>
         <!-- <p class="note text-center">*You will be given 'GUEST' access until approved for 'User' and/or 'Admin'.</p> -->
-        <h5 class="text-center">- Or sign in using -</h5>
-        <ul class="list-inline text-center">
-          <li>
-            <a (click)="signInWithFB()" class="btn btn-primary btn-circle"
-              ><i class="fa fa-facebook"></i
-            ></a>
-          </li>
-          <li>
-            <a (click)="signInWithGoogle()" class="btn btn-info btn-circle"
-              ><i class="fa fa-google"></i
-            ></a>
-          </li>
-          <li>
-            <a (click)="signInWithLinkedIn()" class="btn btn-warning btn-circle"
-              ><i class="fa fa-linkedin"></i
-            ></a>
-          </li>
-        </ul>
+        <div *ngIf="!isMobile">
+          <h5 class="text-center">- Or sign in using -</h5>
+          <ul class="list-inline text-center">
+            <li>
+              <a (click)="signInWithFB()" class="btn btn-primary btn-circle"
+                ><i class="fa fa-facebook"></i
+              ></a>
+            </li>
+            <li>
+              <a (click)="signInWithGoogle()" class="btn btn-info btn-circle"
+                ><i class="fa fa-google"></i
+              ></a>
+            </li>
+            <li>
+              <a
+                (click)="signInWithLinkedIn()"
+                class="btn btn-warning btn-circle"
+                ><i class="fa fa-linkedin"></i
+              ></a>
+            </li>
+          </ul>
+        </div>
+
         <button
           *ngIf="showAddToHomeScreenButton"
           type="button"

@@ -74,16 +74,17 @@
               <section>
                 <label class="label">Username/Email</label>
                 <label class="input">
-                  <i class="icon-append fa fa-user"></i>
+                  <!-- <i class="icon-append fa fa-user"></i> -->
                   <input
                     type="text"
                     name="username"
                     id="username"
                     autocomplete="username"
+                    class="input-lg"
                   />
                   <b class="tooltip tooltip-top-right"
-                    ><i class="fa fa-user txt-color-teal"></i> Please enter
-                    email/username</b
+                    ><i class="fa fa-user fa-2x txt-color-teal"></i> Please
+                    enter email/username</b
                   ></label
                 >
               </section>
@@ -91,12 +92,13 @@
               <section>
                 <label class="label">Password</label>
                 <label class="input">
-                  <i class="icon-append fa fa-lock"></i>
+                  <!-- <i class="icon-append fa fa-lg fa-lock"></i> -->
                   <input
                     type="password"
                     name="password"
                     id="password"
                     autocomplete="current-password"
+                    class="input-lg"
                   />
                   <b class="tooltip tooltip-top-right">
                     <i class="fa fa-lock txt-color-teal"></i>
@@ -128,24 +130,30 @@
             </footer>
           </form>
         </div>
-        <h5 class="text-center">- Or sign in using -</h5>
-        <ul class="list-inline text-center">
-          <li>
-            <a (click)="signInWithFB()" class="btn btn-primary btn-circle"
-              ><i class="fa fa-facebook"></i
-            ></a>
-          </li>
-          <li>
-            <a (click)="signInWithGoogle()" class="btn btn-info btn-circle"
-              ><i class="fa fa-google"></i
-            ></a>
-          </li>
-          <li>
-            <a (click)="signInWithLinkedIn()" class="btn btn-warning btn-circle"
-              ><i class="fa fa-linkedin"></i
-            ></a>
-          </li>
-        </ul>
+
+        <div *ngIf="!isMobile">
+          <h5 class="text-center">- Or sign in using -</h5>
+          <ul class="list-inline text-center">
+            <li>
+              <a (click)="signInWithFB()" class="btn btn-primary btn-circle"
+                ><i class="fa fa-facebook"></i
+              ></a>
+            </li>
+            <li>
+              <a (click)="signInWithGoogle()" class="btn btn-info btn-circle"
+                ><i class="fa fa-google"></i
+              ></a>
+            </li>
+            <li>
+              <a
+                (click)="signInWithLinkedIn()"
+                class="btn btn-warning btn-circle"
+                ><i class="fa fa-linkedin"></i
+              ></a>
+            </li>
+          </ul>
+        </div>
+
         <button
           *ngIf="showAddToHomeScreenButton"
           type="button"

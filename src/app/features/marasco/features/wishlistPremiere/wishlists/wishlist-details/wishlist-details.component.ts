@@ -257,7 +257,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     let shareRet = await Share.share({
       title: 'Check out my new wishlist!',
       text: 'Click on the link to follow my new wishlist!',
-      url: `https://wishlist.maras.co/wishlists/${this.wishlist._id}`,
+      url: `https://wishlist.maras.co/wishlistPremiere/wishlists/${this.wishlist._id}`,
       dialogTitle: 'Share with friends and family'
     });
   }

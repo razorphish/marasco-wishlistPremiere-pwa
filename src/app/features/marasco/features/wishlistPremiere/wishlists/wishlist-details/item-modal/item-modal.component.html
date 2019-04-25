@@ -14,6 +14,7 @@
   <dropzone2-upload [dbName]="dbName" [configOptions]="configOptions" (imageUpload)="onImageUploaded($event)" [imageUrl]="wishlistItem.image"></dropzone2-upload>
   <form
     id="form-add-wishlist-item"
+    name="form-add-wishlist-item"
     class="smart-form"
     [saUiValidate]="validationOptions"
     novalidate="novalidate"

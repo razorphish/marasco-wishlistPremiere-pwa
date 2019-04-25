@@ -1,3 +1,4 @@
+import { LayoutService } from '@app/features/marasco/core/services/layout.service';
 //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
 // import { Subject } from 'rxjs';
 // import { takeUntil, tap } from 'rxjs/operators';
@@ -24,6 +25,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
   //destroyed$ = new Subject<boolean>();
   //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
+  public isMobile: boolean = false;
+  
   public showAddToHomeScreenButton: boolean = true;
 
   public validationOptions: any = {
@@ -59,7 +62,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   //   private authService: SocialAuthService
   //   ) {
 
-  constructor(private _store: Store<any>, private _pwaService: PwaService) {
+  constructor(
+    private _store: Store<any>, 
+    private _pwaService: PwaService,
+    private _layoutService: LayoutService) {
     //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
     // updates$
     //   .ofType(actions.AuthActionTypes.AuthFailure)
@@ -81,7 +87,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this._pwaService.prompt();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isMobile = this._layoutService.store.isMobile;
+  }
   //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
   // dispatchError(error: any) {
   //   switch (error.payload.code) {

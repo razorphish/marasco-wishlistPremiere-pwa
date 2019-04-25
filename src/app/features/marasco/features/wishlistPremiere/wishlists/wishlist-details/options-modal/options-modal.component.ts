@@ -108,9 +108,10 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
               title: 'Wishlist Updated',
               content: 'Wishlist has been updated successfully. ',
               color: '#739E73',
-              timeout: 4000,
+              timeout: 2000,  // 2 seconds
               icon: 'fa fa-check',
-              number: '4'
+              number: '4', 
+              sound: false
             });
             this['settings'].close.emit(true);
           } else {
@@ -124,7 +125,8 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
               color: '#C46A69',
               icon: 'fa fa-warning shake animated',
               number: '1',
-              timeout: 6000 // 6 seconds
+              timeout: 4000, // 4 seconds
+              sound: false
             });
           }
         },
@@ -136,7 +138,8 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
             color: '#C46A69',
             icon: 'fa fa-warning shake animated',
             number: '1',
-            timeout: 6000 // 6 seconds
+            timeout: 4000, // 4 seconds
+            sound: false
           });
         },
         () => {
