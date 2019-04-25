@@ -6,6 +6,7 @@ import { PwaService } from '@app/features/marasco/core/services/pwa.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LayoutService } from '@app/features/marasco/core/services';
+import { environment } from '@env/environment.prod';
 
 @Component({
   selector: 'app-forgot',
@@ -71,7 +72,8 @@ export class ForgotComponent implements OnInit, OnDestroy {
   forgotPasswordSubmit($event) {
     let model = {
       email: $event.elements.email.value,
-      username: $event.elements.username.value
+      username: $event.elements.username.value,
+      applicationId: environment.application
     };
 
     this['settings'].store.dispatch(new fromAuth.ForgotPasswordAction(model));

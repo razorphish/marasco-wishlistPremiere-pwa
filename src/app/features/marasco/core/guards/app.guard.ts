@@ -17,12 +17,13 @@ export class AppGuard implements CanActivate {
         return this._store.pipe(
             select(fromAuth.getLoggedOnce),
             map(loggedOnce => {
-                if (!loggedOnce) {
-                    this._store.dispatch(new fromAuth.AppUserInitRedirect('/auth/register'));
-                    return false;
-                }
+                // if (!loggedOnce) {
+                //     this._store.dispatch(new fromAuth.AppUserInitRedirect('/auth/register'));
+                //     return false;
+                // }
 
                 return true;
+                //return !!loggedOnce;
             }),
             take(1)
         );
