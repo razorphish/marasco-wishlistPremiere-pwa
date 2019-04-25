@@ -49,6 +49,16 @@ export abstract class MarascoService {
         } else if (errorResponse.status === 401) {
           errorInfo.message =
             'You do not have sufficient privileges to access this resource.';
+        } else if (errorResponse.status === 500) {
+          //Check for mongo errors
+          if (!!errorResponse.error.code) {
+            errorInfo.code = errorResponse.error.code;
+            errorInfo.message =
+              'There was problem with your request.  Please try again!';
+          } else {
+            errorInfo.message =
+              'There was problem with your request.  Please try again!';
+          }
         } else {
           errorInfo.message = errorResponse.message;
         }

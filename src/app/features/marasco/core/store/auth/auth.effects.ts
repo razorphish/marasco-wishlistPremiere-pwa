@@ -264,7 +264,7 @@ export class AuthEffects {
   appUserInitRedirect$ = this._actions$.pipe(
     ofType(actions.AuthActionTypes.AppUserInitRedirect),
     tap((data: any) => {
-      this._router.navigate([data.payload]);
+      this._router.navigateByUrl(data.payload);
     })
   );
 
@@ -327,7 +327,8 @@ export class AuthEffects {
         this.notify(
           'We found you!',
           "If you do not know your password click the 'Reset Password' link",
-          'Found!'
+          'Found!',
+          true
         );
         break;
       default:
