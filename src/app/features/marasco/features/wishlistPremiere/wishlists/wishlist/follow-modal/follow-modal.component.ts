@@ -126,7 +126,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       notifiedOnAddItem: $event.elements.notifiedOnAddItem.checked,
       notifiedOnRemoveItem: $event.elements.notifiedOnRemoveItem.checked,
       notifyOnCompletion: $event.elements.notifyOnCompletion.checked,
-      wishlist
+      wishlist: wishlist
     };
 
     let swPush = this['settings'].swPush;
@@ -136,10 +136,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       })
       .then((pushSubscription) => {
         // Save to
-        //console.log(pushSubscription.toJSON());
         const follow = Object.assign(model, pushSubscription.toJSON());
-
-        //let isCurrentUser = this['settings'].user._id === wishlist.userId;
 
         this['settings'].wishlistFollowService
           .insert(follow)

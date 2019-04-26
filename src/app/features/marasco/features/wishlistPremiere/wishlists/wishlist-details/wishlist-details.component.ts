@@ -1,3 +1,4 @@
+import { UserService } from './../../../../core/services/user.service';
 import { WishlistItemSort } from '../../../../core/interfaces/Wishlist-item-sort.interface';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -15,8 +16,6 @@ import { Store, select } from '@ngrx/store';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
-import * as moment from 'moment';
-
 import { NotificationService } from '../../../../core/services/notification.service';
 import { ActivityLogSubjectService } from '../../../../shared/activitylog.subject-service';
 import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
@@ -27,10 +26,16 @@ import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
 import { LayoutService } from '@app/features/marasco/core/services';
+import { environment } from '@env/environment';
 
-import { Plugins } from '@capacitor/core';
+import { Plugins, DeviceInfo } from '@capacitor/core';
+import { UserInfo } from '@app/features/marasco/core/models/userInfo.model';
+import { SwPush } from '@angular/service-worker';
+import { UserNotification } from '@app/features/marasco/core/interfaces/User-Notification.interface';
 const { Share } = Plugins;
+const { Device } = Plugins;
 let nav: any = navigator;
+
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
  * http://sortablejs.github.io/Sortable/
@@ -91,7 +96,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
   public pageIdSubscription: any;
   public options = [];
-  public optionsNotificationTable: any = {};
   public optionsTokenTable: any = {};
 
   public selectedStatus = [];
@@ -152,7 +156,9 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     private _activityLogService: ActivityLogSubjectService,
     private _store: Store<fromWishlist.WishlistState>,
     private _modalService: BsModalService,
-    private _layoutService: LayoutService
+    private _layoutService: LayoutService,
+    private _userService: UserService,
+    private _swPush: SwPush
   ) {}
 
   /////////////////////////////////////
@@ -241,23 +247,26 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  async shareDesktop(){
+  async shareDesktop() {
     if (nav.share) {
-      nav.share({
+      nav
+        .share({
           title: 'Web Fundamentals',
           text: 'Check out Web Fundamentals — it rocks!',
-          url: 'https://developers.google.com/web',
-      })
+          url: 'https://developers.google.com/web'
+        })
         .then(() => console.log('Successful share'))
         .catch((error) => console.log('Error sharing', error));
     }
   }
 
-  async shareMobile(){
+  async shareMobile() {
     let shareRet = await Share.share({
       title: 'Check out my new wishlist!',
       text: 'Click on the link to follow my new wishlist!',
-      url: `https://wishlist.maras.co/wishlistPremiere/wishlists/${this.wishlist._id}`,
+      url: `https://wishlist.maras.co/wishlistPremiere/wishlists/${
+        this.wishlist._id
+      }`,
       dialogTitle: 'Share with friends and family'
     });
   }
@@ -282,44 +291,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
       idField: '_id',
       textField: 'name'
     };
-
-    this.optionsNotificationTable = {
-      dom: 'Bfrtip',
-      data: this.wishlist.notifications,
-      columns: [
-        { data: '_id', title: 'Id' },
-        { data: 'endpoint', title: 'Endpoint' },
-        {
-          data: 'expirationTime',
-          title: 'Expiration Time',
-          defaultContent: '<i>Not Set</i>'
-        },
-        {
-          data: 'keys',
-          title: 'Keys',
-          render: (data, type, row, meta) => {
-            return `auth:${data.auth} p256dh:${data.p256dh}`;
-          }
-        },
-        {
-          data: 'dateCreated',
-          render: (data, type, row, meta) => {
-            return moment(data).format('LLL');
-          }
-        }
-      ],
-      buttons: ['copy', 'pdf', 'print'],
-      rowCallback: (row: Node, data: any[] | Object, index: number) => {
-        // const self = this;
-        // // Unbind first in order to avoid any duplicate handler
-        // // (see https://github.com/l-lin/angular-datatables/issues/87)
-        // jQuery('td', row).unbind('click');
-        // jQuery('td', row).bind('click', () => {
-        //   self.toDetails(data);
-        // });
-        return row;
-      }
-    };
   }
 
   private activateState() {
@@ -331,6 +302,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     currentState.subscribe((data) => {
       if (!!data) {
         this.user = data.user;
+        this.initDevice();
       }
     });
 
@@ -344,6 +316,87 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * @description Adds device to user
+   * @author Antonio Marasco
+   * @date 2019-04-26
+   * @param {DeviceInfo} deviceInfo
+   * @returns
+   * @memberof WishlistDetailsComponent
+   */
+  addDevice(deviceInfo: DeviceInfo) {
+    let device = this.user.devices.find((result) => {
+      return result.uuid === deviceInfo.uuid;
+    });
+
+    if (!!device) {
+      return;
+    }
+
+    this.user.devices.push(deviceInfo);
+
+    this._userService
+      .addDevice(this.user._id, this.user.devices)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe(
+        (item: UserInfo) => {
+          if (item) {
+            // let userSource = new UserInfo(item);
+            // this._store.dispatch(new actions.AuthUserChange(userSource));
+          } else {
+            //Do Nothing
+          }
+        },
+        (err) => {
+          this._activityLogService.addError(err);
+        },
+        () => {
+          // Clean up
+        }
+      );
+  }
+
+  addNotification(uuid: string) {
+    this._swPush
+      .requestSubscription({
+        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
+      })
+      .then((pushSubscription) => {
+        // Save to
+        //console.log(pushSubscription.toJSON());
+        const notification: UserNotification = Object.assign(
+          pushSubscription.toJSON()
+        );
+
+        notification.uuid = uuid;
+        notification.userId = this.user._id;
+        this.user.notifications.push(notification);
+
+        this._userService
+          .addNotification(this.user._id, this.user.notifications)
+          .pipe(takeUntil(this.unsubscribe$))
+          .subscribe(
+            (item) => {
+              if (item) {
+                //TODO: Add update to user store HERE
+                //this._store.dispatch(new actions.AuthUserChange(this.user));
+              } else {
+                //Do Nothing
+              }
+            },
+            (err) => {
+              this._activityLogService.addError(err);
+            },
+            () => {
+              // Clean up
+            }
+          );
+      })
+      .catch((error) => {
+        // Do Nothing
+      });
+  }
+
   private displayErrors(errors: string[]): void {
     // event.errors.join('<br>').toString()
     const notificationService = new NotificationService();
@@ -355,6 +408,31 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
       number: '1',
       timeout: 6000 // 6 seconds
     });
+  }
+
+  async initDevice() {
+    Device.getInfo()
+      .then((result) => {
+        let device = {
+          uuid: result.uuid,
+          diskFree: result.diskFree,
+          osVersion: result.osVersion,
+          memUsed: result.memUsed,
+          batteryLevel: result.batteryLevel,
+          model: result.model,
+          platform: result.platform,
+          manufacturer: result.manufacturer,
+          isVirtual: result.isVirtual,
+          mode: result.model,
+          appVersion: result.appVersion
+        };
+        this.addDevice(device);
+        this.addNotification(device.uuid);
+      })
+      .catch((error) => {
+        //For now do not disrupt user experience
+      });
+    //localStorage.setItem('device', JSON.stringify(device));
   }
 
   /**

@@ -55,7 +55,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initDevice();
 
-    this.validationOptionsDesktop  = {
+    this.validationOptionsDesktop = {
       //Custom method
       store: this._store,
       device: this._device,
@@ -88,7 +88,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           required: true
         }
       },
-  
+
       // Messages for form validation
       messages: {
         // username: {
@@ -133,7 +133,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           email: true
         }
       },
-  
+
       // Messages for form validation
       messages: {
         // username: {
@@ -178,9 +178,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (this['settings'].isMobile) {
       let model: UserRegistration = {
         email: $event.elements.email.value,
-        applicationId: environment.application,
-        devices: [this['settings'].device]
+        applicationId: environment.application
       };
+
+      if (!!this['settings'].device) {
+        model.devices = [this['settings'].device];
+      }
+
       this['settings'].store.dispatch(new fromAuth.SignupMobileAction(model));
     } else {
       let model: UserRegistration = {
@@ -191,9 +195,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
         password: $event.elements.password.value,
         passwordConfirm: $event.elements.passwordConfirm.value,
         termsAgreed: $event.elements.termsAgreed.value,
-        applicationId: environment.application,
-        devices: [this['settings'].device]
+        applicationId: environment.application
       };
+
+      if (!!this['settings'].device) {
+        model.devices = [this['settings'].device];
+      }
+      
       this['settings'].store.dispatch(new fromAuth.SignupAction(model));
     }
   }

@@ -8,5 +8,5 @@ export interface UserRegistration {
     termsAgreed?: boolean;
     applicationId?: string;
     wishlistItemCategories?: any;
-    devices: any;
+    devices?: any;
 }
