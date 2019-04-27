@@ -11,8 +11,6 @@ import { environment } from '@env/environment';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Plugins } from '@capacitor/core';
-const { Device } = Plugins;
 
 @Component({
   selector: 'app-register',
@@ -154,19 +152,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   async initDevice() {
-    const info = await Device.getInfo();
-    let device = {
-      uuid: info.uuid,
-      diskFree: info.diskFree,
-      osVersion: info.osVersion,
-      memUsed: info.memUsed,
-      batteryLevel: info.batteryLevel,
-      model: info.model,
-      platform: info.platform,
-      manufacturer: info.manufacturer,
-      isVirtual: info.isVirtual,
-      appVersion: info.appVersion
-    };
+    const localStorageItem = await localStorage.getItem(environment.devicekey);
+    const device = JSON.parse(localStorageItem);
 
     this._device = device;
     this.validationOptionsMobile.device = device;

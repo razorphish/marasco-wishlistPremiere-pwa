@@ -5,6 +5,9 @@ import { SocialLoginModule, AuthServiceConfig, LoginOpt } from 'angularx-social-
 import { GoogleLoginProvider, FacebookLoginProvider, LinkedInLoginProvider} from 'angularx-social-login';
 import { LightboxModule } from 'ngx-lightbox';
 
+import { Plugins } from '@capacitor/core';
+const { Device } = Plugins;
+
 //https://developers.facebook.com/apps/872380819606437/dashboard/
 const fbLoginOptions: LoginOpt = {
   //scope: 'pages_messaging,pages_messaging_subscriptions,email,pages_show_list,manage_pages',
@@ -104,5 +107,26 @@ export class AppModule {
     //       console.log(pushSubscription.toJSON());
     //     });
     // });
+
+    this.initDevice();
+  }
+
+  async initDevice(){
+    const info = await Device.getInfo();
+    let device = {
+      uuid: info.uuid,
+      diskFree: info.diskFree,
+      osVersion: info.osVersion,
+      memUsed: info.memUsed,
+      batteryLevel: info.batteryLevel,
+      model: info.model,
+      platform: info.platform,
+      manufacturer: info.manufacturer,
+      isVirtual: info.isVirtual,
+      mode: info.model,
+      appVersion: info.appVersion
+    };
+
+    localStorage.setItem(environment.devicekey, JSON.stringify(device));
   }
 }

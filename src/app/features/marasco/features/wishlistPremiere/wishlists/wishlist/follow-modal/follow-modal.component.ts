@@ -44,7 +44,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
   public wishlistFollow: WishlistFollow;
 
   /**============Privately exposed properties ========= */
-  private _device: DeviceInfo;
+  private _device: any;
   private unsubscribe$ = new Subject<void>();
 
   /**============Publicly exposed properties ========== */
@@ -68,11 +68,11 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.validationOptions = {
       // Rules for form validation
       wishlist: this.wishlist,
       user: this.user,
-      device: this._device,
       rules: {
         name: {
           required: true
@@ -94,24 +94,13 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       //submitHandler: this.saveThis,
       submitHandler: this.followWishlist
     };
-    
+
     this.initDevice();
   }
 
   async initDevice() {
-    const info = await Device.getInfo();
-    let device = {
-      uuid: info.uuid,
-      diskFree: info.diskFree,
-      osVersion: info.osVersion,
-      memUsed: info.memUsed,
-      batteryLevel: info.batteryLevel,
-      model: info.model,
-      platform: info.platform,
-      manufacturer: info.manufacturer,
-      isVirtual: info.isVirtual,
-      appVersion: info.appVersion
-    };
+    const localStorageItem = localStorage.getItem(environment.devicekey);
+    const device = JSON.parse(localStorageItem);
 
     this._device = device;
     this.validationOptions.device = device;
@@ -130,127 +119,122 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
     };
 
     let swPush = this['settings'].swPush;
-    swPush
-      .requestSubscription({
-        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
-      })
-      .then((pushSubscription) => {
-        // Save to
-        const follow = Object.assign(model, pushSubscription.toJSON());
 
-        this['settings'].wishlistFollowService
-          .insert(follow)
-          .pipe(takeUntil(this['settings'].unsub))
-          .subscribe(
-            (item) => {
-              if (item) {
-                this['settings'].activityLogService.addUpdate(
-                  `Inserted wishlist follow ${item._id}`
-                );
-                this['settings'].notificationService.smallBox({
-                  title: 'Wishlist Follow Success!',
-                  content: 'You are now following this wishlist ',
-                  color: '#739E73',
-                  timeout: 2000,
-                  icon: 'fa fa-check',
-                  number: '4',
-                  sound: false
-                });
-                this['settings'].close.emit(true);
-              } else {
-                this['settings'].activityLogService.addError(
-                  'No wishlist present: Insert Failed'
-                );
-                this['settings'].notificationService.bigBox({
-                  title: 'Oops! the database has returned an error',
-                  content:
-                    'No follow returned which means that the follow was not created',
-                  color: '#C46A69',
-                  icon: 'fa fa-warning shake animated',
-                  number: '1',
-                  timeout: 3000, // 3 seconds
-                  sound: false
-                });
-              }
-            },
-            (err) => {
-              this['settings'].activityLogService.addError(err);
+    if (swPush.isEnabled) {
+
+      this['settings'].wishlistFollowService
+        .insert(model)
+        .pipe(takeUntil(this['settings'].unsub))
+        .subscribe(
+          (item) => {
+            if (item) {
+              this['settings'].activityLogService.addUpdate(
+                `Inserted wishlist follow ${item._id}`
+              );
+              this['settings'].notificationService.smallBox({
+                title: 'Wishlist Follow Success!',
+                content: 'You are now following this wishlist ',
+                color: '#739E73',
+                timeout: 2000,
+                icon: 'fa fa-check',
+                number: '4',
+                sound: false
+              });
+              this['settings'].close.emit(true);
+            } else {
+              this['settings'].activityLogService.addError(
+                'No wishlist present: Insert Failed'
+              );
               this['settings'].notificationService.bigBox({
-                title: 'Oops!  there is an issue with the call to insert',
-                content: err,
+                title: 'Oops! the database has returned an error',
+                content:
+                  'No follow returned which means that the follow was not created',
                 color: '#C46A69',
                 icon: 'fa fa-warning shake animated',
                 number: '1',
                 timeout: 3000, // 3 seconds
                 sound: false
               });
-            },
-            () => {
-              // Clean up
             }
-          );
-      })
-      .catch((error) => {
-        //An error typically means that the device is not supported
-        // so let's change some item properties to manage this
-        model.notifiedOnAddItem = false;
-        model.notifiedOnRemoveItem = false;
-        model.notifyOnCompletion = false;
+          },
+          (err) => {
+            this['settings'].activityLogService.addError(err);
+            this['settings'].notificationService.bigBox({
+              title: 'Oops!  there is an issue with the call to insert',
+              content: err,
+              color: '#C46A69',
+              icon: 'fa fa-warning shake animated',
+              number: '1',
+              timeout: 3000, // 3 seconds
+              sound: false
+            });
+          },
+          () => {
+            // Clean up
+          }
+        );
+    } else {
+      //An error typically means that the device is not supported
+      // so let's change some item properties to manage this
+      model.notifiedOnAddItem = false;
+      model.notifiedOnRemoveItem = false;
+      model.notifyOnCompletion = false;
 
-        let isCurrentUser = this['settings'].user._id === wishlist.userId;
+      let isCurrentUser = this['settings'].user._id === wishlist.userId;
 
-        this['settings'].wishlistFollowService
-          .insert(model, isCurrentUser)
-          .pipe(takeUntil(this['settings'].unsub))
-          .subscribe(
-            (item) => {
-              if (item) {
-                this['settings'].activityLogService.addUpdate(
-                  `Inserted wishlist follow ${item._id}`
-                );
-                this['settings'].notificationService.smallBox({
-                  title: 'Wishlist Follow Success!',
-                  content: 'You are now following this wishlist!  Notifications are not supported on this device ',
-                  color: '#C79121',
-                  timeout: 6000, // 6 seconds
-                  icon: 'fa fa-shield fadeInLeft animated',
-                  number: '4',
-                  sound: false
-                });
-                this['settings'].close.emit(true);
-              } else {
-                this['settings'].activityLogService.addError(
-                  'No wishlist present: Insert Failed'
-                );
-                this['settings'].notificationService.bigBox({
-                  title: 'Oops! the database has returned an error',
-                  content:
-                    'No follow returned which means that the follow was not created',
-                  color: '#C46A69',
-                  icon: 'fa fa-warning shake animated',
-                  number: '1',
-                  timeout: 3000, // 3 seconds
-                  sound: false
-                });
-              }
-            },
-            (err) => {
-              this['settings'].activityLogService.addError(err);
+      this['settings'].wishlistFollowService
+        .insert(model, isCurrentUser)
+        .pipe(takeUntil(this['settings'].unsub))
+        .subscribe(
+          (item) => {
+            if (item) {
+              this['settings'].activityLogService.addUpdate(
+                `Inserted wishlist follow ${item._id}`
+              );
+              this['settings'].notificationService.smallBox({
+                title: 'Wishlist Follow Success!',
+                content:
+                  'You are now following this wishlist!  Notifications are not supported on this device ',
+                color: '#C79121',
+                timeout: 6000, // 6 seconds
+                icon: 'fa fa-shield fadeInLeft animated',
+                number: '4',
+                sound: false
+              });
+              this['settings'].close.emit(true);
+            } else {
+              this['settings'].activityLogService.addError(
+                'No wishlist present: Insert Failed'
+              );
               this['settings'].notificationService.bigBox({
-                title: 'Oops!  there is an issue with the call to insert',
-                content: err,
+                title: 'Oops! the database has returned an error',
+                content:
+                  'No follow returned which means that the follow was not created',
                 color: '#C46A69',
                 icon: 'fa fa-warning shake animated',
                 number: '1',
                 timeout: 3000, // 3 seconds
                 sound: false
               });
-            },
-            () => {
-              // Clean up
             }
-          );
-      });
+          },
+          (err) => {
+            this['settings'].activityLogService.addError(err);
+            this['settings'].notificationService.bigBox({
+              title: 'Oops!  there is an issue with the call to insert',
+              content: err,
+              color: '#C46A69',
+              icon: 'fa fa-warning shake animated',
+              number: '1',
+              timeout: 3000, // 3 seconds
+              sound: false
+            });
+          },
+          () => {
+            // Clean up
+          }
+        );
+    }
   }
 
   public saveThis($event) {
@@ -279,7 +263,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
               timeout: 2000, // 2 seconds
               icon: 'fa fa-check',
               number: '4',
-              sound:false
+              sound: false
             });
             this['settings'].close.emit(true);
           } else {

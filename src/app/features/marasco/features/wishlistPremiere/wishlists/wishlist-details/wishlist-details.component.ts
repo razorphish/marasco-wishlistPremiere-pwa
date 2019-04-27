@@ -302,7 +302,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     currentState.subscribe((data) => {
       if (!!data) {
         this.user = data.user;
-        this.initDevice();
       }
     });
 
@@ -408,31 +407,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
       number: '1',
       timeout: 6000 // 6 seconds
     });
-  }
-
-  async initDevice() {
-    Device.getInfo()
-      .then((result) => {
-        let device = {
-          uuid: result.uuid,
-          diskFree: result.diskFree,
-          osVersion: result.osVersion,
-          memUsed: result.memUsed,
-          batteryLevel: result.batteryLevel,
-          model: result.model,
-          platform: result.platform,
-          manufacturer: result.manufacturer,
-          isVirtual: result.isVirtual,
-          mode: result.model,
-          appVersion: result.appVersion
-        };
-        this.addDevice(device);
-        this.addNotification(device.uuid);
-      })
-      .catch((error) => {
-        //For now do not disrupt user experience
-      });
-    //localStorage.setItem('device', JSON.stringify(device));
   }
 
   /**
