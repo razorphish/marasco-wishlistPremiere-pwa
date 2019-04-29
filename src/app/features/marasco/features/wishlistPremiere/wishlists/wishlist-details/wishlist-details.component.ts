@@ -251,9 +251,11 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     if (nav.share) {
       nav
         .share({
-          title: 'Web Fundamentals',
-          text: 'Check out Web Fundamentals — it rocks!',
-          url: 'https://developers.google.com/web'
+          title: 'Check out my new wishlist!',
+          text: 'Click on the link to follow my new wishlist!',
+          url: `https://wishlist.maras.co/wishlistPremiere/wishlists/${
+            this.wishlist._id
+          }`
         })
         .then(() => console.log('Successful share'))
         .catch((error) => console.log('Error sharing', error));

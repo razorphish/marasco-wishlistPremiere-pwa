@@ -1,23 +1,12 @@
-// import { Component, OnInit } from '@angular/core';
-// import { Http } from '@angular/http';
-
-// @Component({
-//   selector: 'app-root',
-//   templateUrl: './marasco.component.html',
-//   styleUrls: ['./marasco.component.css']
-// })
-// export class MarascoComponent implements OnInit {
-//   constructor() {}
-
-//   ngOnInit() {}
-// }
-
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  template: '<router-outlet></router-outlet>',
+  template: '<router-outlet></router-outlet>'
 })
-export class MarascoComponent {
+export class MarascoComponent implements OnInit {
+  ngOnInit(): void {
+    //throw new Error('Method not implemented.');
+  }
   title = 'sa';
 }

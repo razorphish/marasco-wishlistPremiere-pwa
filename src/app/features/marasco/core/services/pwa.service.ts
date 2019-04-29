@@ -1,4 +1,4 @@
-import { environment } from './../../../../../environments/environment';
+import { environment } from '@env/environment';
 import { Injectable } from '@angular/core';
 import { SwUpdate, SwPush } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material';
@@ -8,6 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 export class PwaService {
   installable: boolean = false;
   deferredPrompt: any;
+  pushSubscription: any;
 
   public onBeforeInstallPrompt = new BehaviorSubject<any>(this.deferredPrompt);
 
@@ -15,11 +16,12 @@ export class PwaService {
     private _swUpdate: SwUpdate,
     private _swPush: SwPush,
     private _snackbar: MatSnackBar
-  ) { }
+  ) {}
 
   load() {
     this.initServiceWorkerUpdate();
     this.initInstallPrompt();
+    //this.initPushNotification();
   }
 
   initInstallPrompt() {
@@ -47,7 +49,45 @@ export class PwaService {
       console.log('display-mode is standalone');
     }
   }
+  /**
+   * @description Initializes whether this device can and will accept push notifications
+   * @author Antonio Marasco
+   * @date 2019-04-28
+   * @memberof PwaService
+   */
+  initPushNotification() {
+    this._swPush
+      .requestSubscription({
+        serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
+      })
+      .then((pushSubscription) => {
+        // Save to
+        const subscription = pushSubscription.toJSON();
+        environment.log.wishlist &&
+          console.log(
+            (!!subscription
+              ? 'Push Subscription exists exist'
+              : 'Push Subscription does not exist') + ' at boot'
+          );
 
+        localStorage.setItem(
+          environment.pushNotificationkey,
+          JSON.stringify(subscription)
+        );
+
+        this.pushSubscription = subscription;
+      })
+      .catch((error) => {
+        //Usually indicates that the user's device does not support push notifications
+      });
+  }
+
+  /**
+   * @description Called when there is a web update
+   * @author Antonio Marasco
+   * @date 2019-04-28
+   * @memberof PwaService
+   */
   initServiceWorkerUpdate() {
     this._swUpdate.available.subscribe((update) => {
       environment.log.auth && console.log('update available', update);
@@ -68,15 +108,6 @@ export class PwaService {
           'public key',
           environment.serviceWorkerOptions.vap.publicKey
         );
-
-      // this._swPush
-      //   .requestSubscription({
-      //     serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
-      //   })
-      //   .then((pushSubscription) => {
-      //     // Save to
-      //     console.log(pushSubscription.toJSON());
-      //   });
     });
   }
 
@@ -91,8 +122,7 @@ export class PwaService {
         environment.log &&
           console.log('User accepted the prompt', choiceResult);
       } else {
-        environment.log &&
-          console.log('User refused the prompt', choiceResult);
+        environment.log && console.log('User refused the prompt', choiceResult);
       }
       this.deferredPrompt = null;
       this.onBeforeInstallPrompt.next(null);
