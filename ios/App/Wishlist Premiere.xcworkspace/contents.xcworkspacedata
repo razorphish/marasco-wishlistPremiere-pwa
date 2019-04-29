@@ -2,12 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/amarasco/Documents/GitHub/marasco-wishlistPremiere-pwa/ios/App/App.xcodeproj">
+      location = "group:Wishlist Premiere.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:App.xcodeproj">
    </FileRef>
 </Workspace>
