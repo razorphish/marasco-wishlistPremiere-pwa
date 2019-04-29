@@ -372,9 +372,6 @@ If the Work includes a "NOTICE" text file as part of its distribution, then any 
 END OF TERMS AND CONDITIONS
 
 
-@angular/common
-MIT
-
 moment
 MIT
 Copyright (c) JS Foundation and other contributors
@@ -464,6 +461,9 @@ externally maintained libraries used by this software which have their
 own licenses; we recommend you read them, as their terms may differ from
 the terms above.
 
+
+@angular/common
+MIT
 
 ngx-bootstrap/dropdown
 
