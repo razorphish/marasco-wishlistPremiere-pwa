@@ -119,7 +119,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
 
     let swPush = this['settings'].swPush;
 
-    this._swPush
+    swPush
       .requestSubscription({
         serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
       })
