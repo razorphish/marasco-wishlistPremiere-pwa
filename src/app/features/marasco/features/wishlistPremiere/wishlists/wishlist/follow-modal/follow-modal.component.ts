@@ -126,59 +126,75 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       .then(
         (pushSubscription) => {
           // Save to
-          const follow = Object.assign(model, pushSubscription.toJSON());
+          if (!!pushSubscription) {
+            const follow = Object.assign(model, pushSubscription.toJSON());
 
-          this['settings'].wishlistFollowService
-            .insert(follow)
-            .pipe(takeUntil(this['settings'].unsub))
-            .subscribe(
-              (item) => {
-                if (item) {
-                  this['settings'].activityLogService.addUpdate(
-                    `Inserted wishlist follow ${item._id}`
-                  );
-                  this['settings'].notificationService.smallBox({
-                    title: 'Wishlist Follow Success!',
-                    content: 'You are now following this wishlist ',
-                    color: '#739E73',
-                    timeout: 2000,
-                    icon: 'fa fa-check',
-                    number: '4',
-                    sound: false
-                  });
-                  this['settings'].close.emit(true);
-                } else {
-                  this['settings'].activityLogService.addError(
-                    'No wishlist present: Insert Failed'
-                  );
+            this['settings'].wishlistFollowService
+              .insert(follow)
+              .pipe(takeUntil(this['settings'].unsub))
+              .subscribe(
+                (item) => {
+                  if (item) {
+                    this['settings'].activityLogService.addUpdate(
+                      `Inserted wishlist follow ${item._id}`
+                    );
+                    this['settings'].notificationService.smallBox({
+                      title: 'Wishlist Follow Success!',
+                      content: 'You are now following this wishlist ',
+                      color: '#739E73',
+                      timeout: 2000,
+                      icon: 'fa fa-check',
+                      number: '4',
+                      sound: false
+                    });
+                    this['settings'].close.emit(true);
+                  } else {
+                    this['settings'].activityLogService.addError(
+                      'No wishlist present: Insert Failed'
+                    );
+                    this['settings'].notificationService.bigBox({
+                      title: 'Oops! the database has returned an error',
+                      content:
+                        'No follow returned which means that the follow was not created',
+                      color: '#C46A69',
+                      icon: 'fa fa-warning shake animated',
+                      number: '1',
+                      timeout: 3000, // 3 seconds
+                      sound: false
+                    });
+                  }
+                },
+                (err) => {
+                  this['settings'].activityLogService.addError(err);
                   this['settings'].notificationService.bigBox({
-                    title: 'Oops! the database has returned an error',
-                    content:
-                      'No follow returned which means that the follow was not created',
+                    title: 'Oops!  there is an issue with the call to insert',
+                    content: err,
                     color: '#C46A69',
                     icon: 'fa fa-warning shake animated',
                     number: '1',
                     timeout: 3000, // 3 seconds
                     sound: false
                   });
+                },
+                () => {
+                  // Clean up
                 }
-              },
-              (err) => {
-                this['settings'].activityLogService.addError(err);
-                this['settings'].notificationService.bigBox({
-                  title: 'Oops!  there is an issue with the call to insert',
-                  content: err,
-                  color: '#C46A69',
-                  icon: 'fa fa-warning shake animated',
-                  number: '1',
-                  timeout: 3000, // 3 seconds
-                  sound: false
-                });
-              },
-              () => {
-                // Clean up
-              }
+              );
+          } else {
+            this['settings'].activityLogService.addError(
+              'No wishlist follow: Insert Failed'
             );
+            this['settings'].notificationService.bigBox({
+              title: 'Oops! There is no subscription',
+              content:
+                'No follow returned which means that the follow was not created',
+              color: '#C46A69',
+              icon: 'fa fa-warning shake animated',
+              number: '1',
+              timeout: 3000, // 3 seconds
+              sound: false
+            });
+          }
         },
         (reason) => {
           this['settings'].notificationService.smallBox({
