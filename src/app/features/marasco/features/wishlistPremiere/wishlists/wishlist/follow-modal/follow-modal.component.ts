@@ -90,8 +90,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       swPush: this._swPush,
       close: this.close,
       unsub: this.unsubscribe$,
-      //submitHandler: this.saveThis,
-      submitHandler: this.followWishlist
+      submitHandler: this.saveThis
+      //submitHandler: this.followWishlist
     };
 
     this.initDevice();
@@ -277,6 +277,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
     let model: WishlistFollow = {
       wishlistId: wishlist._id,
       userId: this['settings'].user._id,
+      device: this['settings'].device,
       notifiedOnAddItem: $event.elements.notifiedOnAddItem.checked,
       notifiedOnRemoveItem: $event.elements.notifiedOnRemoveItem.checked,
       notifyOnCompletion: $event.elements.notifyOnCompletion.checked
