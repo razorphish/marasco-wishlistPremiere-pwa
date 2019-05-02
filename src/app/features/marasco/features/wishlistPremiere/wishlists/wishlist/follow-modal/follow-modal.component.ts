@@ -70,7 +70,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       wishlistId: this.wishlist._id,
       notifiedOnAddItem: true,
       notifiedOnRemoveItem: true,
-      notifyOnCompletion: true
+      notifiedOnCompletion: true
     };
   }
 
@@ -147,7 +147,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       device: that.device,
       notifiedOnAddItem: $event.elements.notifiedOnAddItem.checked,
       notifiedOnRemoveItem: $event.elements.notifiedOnRemoveItem.checked,
-      notifyOnCompletion: $event.elements.notifyOnCompletion.checked,
+      notifiedOnCompletion: $event.elements.notifiedOnCompletion.checked,
       pushToken: that.pushToken,
       schemaType: environment.notificationSchema.mobile
     };
@@ -214,7 +214,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       device: that.device,
       notifiedOnAddItem: $event.elements.notifiedOnAddItem.checked,
       notifiedOnRemoveItem: $event.elements.notifiedOnRemoveItem.checked,
-      notifyOnCompletion: $event.elements.notifyOnCompletion.checked,
+      notifiedOnCompletion: $event.elements.notifiedOnCompletion.checked,
       wishlist: that.wishlist,
       schemaType: environment.notificationSchema.web
     };
@@ -311,9 +311,9 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       .catch((error) => {
         //An error typically means that the device is not supported
         // so let's change some item properties to manage this
-        model.notifiedOnAddItem = false;
-        model.notifiedOnRemoveItem = false;
-        model.notifyOnCompletion = false;
+        // model.notifiedOnAddItem = false;
+        // model.notifiedOnRemoveItem = false;
+        // model.notifiedOnCompletion = false;
 
         let isCurrentUser = that.user._id === that.wishlist.userId;
 
