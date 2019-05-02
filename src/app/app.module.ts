@@ -13,7 +13,12 @@ import {
 } from 'angularx-social-login';
 import { LightboxModule } from 'ngx-lightbox';
 
-import { Plugins } from '@capacitor/core';
+import {
+  Plugins,
+  PushNotification,
+  PushNotificationActionPerformed,
+  PushNotificationToken
+} from '@capacitor/core';
 const { Device } = Plugins;
 
 //https://developers.facebook.com/apps/872380819606437/dashboard/
@@ -61,6 +66,9 @@ import { SharedModule } from './features/marasco/shared/shared.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { MatSnackBarModule } from '@angular/material';
 import { environment } from '../environments/environment';
+import { LayoutService } from './features/marasco/core/services';
+
+const { PushNotifications } = Plugins;
 
 @NgModule({
   declarations: [MarascoComponent],
@@ -86,8 +94,11 @@ import { environment } from '../environments/environment';
   bootstrap: [MarascoComponent]
 })
 export class AppModule {
-  constructor() {
+  notifications: any = [];
+
+  constructor(private _layoutService: LayoutService) {
     this.initDevice();
+    this.initPushNotifications();
   }
 
   async initDevice() {
@@ -107,6 +118,40 @@ export class AppModule {
     };
 
     localStorage.setItem(environment.devicekey, JSON.stringify(device));
+  }
+
+  initPushNotifications() {
+    if (this._layoutService.store.isMobile) {
+      PushNotifications.register();
+
+      PushNotifications.addListener(
+        'registration',
+        (token: PushNotificationToken) => {
+          localStorage.setItem(environment.pushNotificationkey, token.value);
+          console.log('token ' + token.value);
+        }
+      );
+
+      PushNotifications.addListener('registrationError', (error: any) => {
+        console.log('error on register ' + JSON.stringify(error));
+      });
+
+      PushNotifications.addListener(
+        'pushNotificationReceived',
+        (notification: PushNotification) => {
+          console.log('notification ' + JSON.stringify(notification));
+          this.notifications.push(notification);
+        }
+      );
+
+      PushNotifications.addListener(
+        'pushNotificationActionPerformed',
+        (notification: PushNotificationActionPerformed) => {
+          console.log('notification ' + JSON.stringify(notification));
+          this.notifications.push(notification);
+        }
+      );
+    }
   }
 }
 

@@ -15,5 +15,7 @@ export interface WishlistFollow {
   device?: any;
   dateCreated?: Date;
   dateModified?: Date;
-  wishlist?: Wishlist
+  wishlist?: Wishlist;
+  pushToken?: any;
+  schemaType?: string;
 }
