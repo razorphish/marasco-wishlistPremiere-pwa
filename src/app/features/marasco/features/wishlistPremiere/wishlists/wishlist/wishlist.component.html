@@ -32,8 +32,8 @@
           <div>
             <!-- widget content -->
             <div>
-              <div class="row">
-                <div class="col-md-12 hidden-xs hidden-mobile">
+              <div class="row hidden-xs hidden-mobile">
+                <div class="col-md-12">
                   <button
                     type="button"
                     (click)="openModal($event, wishlistFollowModal, wishlist)"
@@ -42,7 +42,7 @@
                     <i class="fa fa-gift fa-lg"></i>
                     Follow Wishlist
                   </button>
-                  &nbsp;
+                  <!-- &nbsp;
                   <button
                     *ngIf="false"
                     type="button"
@@ -53,10 +53,12 @@
                   >
                     <i class="fa fa-user fa-lg"></i>
                     Follow Me!
-                  </button>
+                  </button> -->
                   <br />&nbsp;
                 </div>
-                <div class="col-md-12 visible-xs visible-mobile">
+              </div>
+              <div class="row visible-xs visible-mobile">
+                <div class="col-md-12">
                   <button
                     type="button"
                     (click)="openModal($event, wishlistFollowModal, wishlist)"
@@ -65,7 +67,7 @@
                     <i class="fa fa-gift fa-lg"></i>
                     Follow Wishlist
                   </button>
-                  &nbsp;
+                  <!-- &nbsp;
                   <button
                     *ngIf="false"
                     type="button"
@@ -75,7 +77,7 @@
                     class="btn btn-primary btn-lg"
                   >
                     <i class="fa fa-user fa-lg"></i>
-                  </button>
+                  </button> -->
                   <br />&nbsp;
                 </div>
               </div>
