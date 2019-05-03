@@ -44,12 +44,24 @@ export class WishlistFollowStateService {
   add(wishlistFollow: WishlistFollow) {
     if (!!wishlistFollow.wishlist) {
       wishlistFollow.wishlistId = {
-        _id : wishlistFollow.wishlist._id,
+        _id: wishlistFollow.wishlist._id,
         name: wishlistFollow.wishlist.name
-      }
+      };
     }
 
-    this.wishlistFollows.push(wishlistFollow);
+    let foundWishlistFollow;
+
+    if (wishlistFollow._id) {
+      foundWishlistFollow = this.wishlistFollows.find((found) => {
+        return found._id === wishlistFollow._id;
+      });
+    } else {
+      foundWishlistFollow = {};
+    }
+
+    if (!foundWishlistFollow) {
+      this.wishlistFollows.push(wishlistFollow);
+    }
 
     return new Promise((resolve) => {
       resolve(this.wishlistFollows);
