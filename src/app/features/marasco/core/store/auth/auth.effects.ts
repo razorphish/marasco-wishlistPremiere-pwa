@@ -117,7 +117,9 @@ export class AuthEffects {
               null,
               true
             );
-            this._router.navigate([this.loginUrl, _]);
+            // Below code places parameters in url
+            //this._router.navigate([this.loginUrl, _]);
+            this._router.navigate([this.loginUrl]);
           },
           (error) => {
             this.dispatchErrorNotification(error);
