@@ -21,7 +21,7 @@ export class PwaService {
   load() {
     this.initServiceWorkerUpdate();
     this.initInstallPrompt();
-    //this.initPushNotification();
+    this.initPushNotification();
   }
 
   initInstallPrompt() {
@@ -57,6 +57,11 @@ export class PwaService {
    * @memberof PwaService
    */
   initPushNotification() {
+    if (!this._swPush.isEnabled) {
+      //not supported
+      return;
+    }
+
     this._swPush
       .requestSubscription({
         serverPublicKey: environment.serviceWorkerOptions.vap.publicKey

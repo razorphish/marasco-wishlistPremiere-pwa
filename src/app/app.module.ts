@@ -128,18 +128,17 @@ export class AppModule {
         'registration',
         (token: PushNotificationToken) => {
           localStorage.setItem(environment.pushNotificationkey, token.value);
-          console.log('token ' + token.value);
         }
       );
 
       PushNotifications.addListener('registrationError', (error: any) => {
-        console.log('error on register ' + JSON.stringify(error));
+        //console.log('error on register ' + JSON.stringify(error));
       });
 
       PushNotifications.addListener(
         'pushNotificationReceived',
         (notification: PushNotification) => {
-          console.log('notification ' + JSON.stringify(notification));
+          //console.log('notification ' + JSON.stringify(notification));
           this.notifications.push(notification);
         }
       );
@@ -147,7 +146,7 @@ export class AppModule {
       PushNotifications.addListener(
         'pushNotificationActionPerformed',
         (notification: PushNotificationActionPerformed) => {
-          console.log('notification ' + JSON.stringify(notification));
+          //console.log('notification ' + JSON.stringify(notification));
           this.notifications.push(notification);
         }
       );

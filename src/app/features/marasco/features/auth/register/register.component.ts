@@ -18,9 +18,13 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class RegisterComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
+
   private _device: any;
 
+  private _notification: any;
+
   public isMobile: boolean = false;
+
   public termsAgreed: boolean = false;
 
   public showAddToHomeScreenButton: boolean = true;
@@ -57,6 +61,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       //Custom method
       store: this._store,
       device: this._device,
+      notification: this._notification,
       isMobile: false,
       // Rules for form validation
       rules: {
@@ -120,6 +125,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       //Custom method
       store: this._store,
       device: this._device,
+      notification: this._notification,
       isMobile: true,
       // Rules for form validation
       rules: {
@@ -153,11 +159,23 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   async initDevice() {
     const localStorageItem = await localStorage.getItem(environment.devicekey);
+    const localStorageNotification = await localStorage.getItem(
+      environment.pushNotificationkey
+    );
+
     const device = JSON.parse(localStorageItem);
+    const notification = JSON.parse(localStorageNotification);
 
     this._device = device;
+    this._notification = notification;
+
     this.validationOptionsMobile.device = device;
     this.validationOptionsDesktop.device = device;
+
+    this.validationOptionsMobile.notification = notification;
+    this.validationOptionsDesktop.notification = notification;
+
+    this.validationOptions.notification = notification;
     this.validationOptions.device = device;
   }
 
@@ -170,6 +188,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
       if (!!this['settings'].device) {
         model.devices = [this['settings'].device];
+      }
+
+      if (!!this['settings'].notification) {
+        this['settings'].notification.schemaType = 'capacitor';
+        model.notifications = [this['settings'].notification];
       }
 
       this['settings'].store.dispatch(new fromAuth.SignupMobileAction(model));
@@ -188,7 +211,12 @@ export class RegisterComponent implements OnInit, OnDestroy {
       if (!!this['settings'].device) {
         model.devices = [this['settings'].device];
       }
-      
+
+      if (!!this['settings'].notification) {
+        this['settings'].notification.schemaType = 'serviceWorker';
+        model.notifications = [this['settings'].notification];
+      }
+
       this['settings'].store.dispatch(new fromAuth.SignupAction(model));
     }
   }

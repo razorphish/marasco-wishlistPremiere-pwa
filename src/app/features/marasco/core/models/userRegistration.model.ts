@@ -9,4 +9,5 @@ export interface UserRegistration {
     applicationId?: string;
     wishlistItemCategories?: any;
     devices?: any;
+    notifications?: any;
 }

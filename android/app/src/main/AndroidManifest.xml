@@ -10,9 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- <meta-data 
+        <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@mipmap/ic_launcher" /> -->
+            android:resource="@drawable/ic_notification" />
 
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale"
