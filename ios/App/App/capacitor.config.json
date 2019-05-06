@@ -3,5 +3,10 @@
   "appName": "Wishlist Premiere",
   "bundledWebRuntime": false,
   "webDir": "www",
-  "windowsAndroidStudioPath": "C:\\Program Files\\Android\\Android Studio1\\bin\\studio64.exe"
+  "windowsAndroidStudioPath": "C:\\Program Files\\Android\\Android Studio1\\bin\\studio64.exe",
+  "plugins": {
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
 }
