@@ -165,10 +165,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
     //Set wishlist items
     this.wishlist.items.forEach((item, index) => {
+      let price = !!item.price ? ` : $${item.price}`: ''
       const album = {
         thumb: item.image || 'assets/icons/icon-72x72_grey_out.png',
         src: item.image || 'assets/icons/icon-384x384.png',
-        caption: `${item.name} : $${item.price}`
+        caption: `${item.name}${price}`
       };
 
       this._albums.push(album);
