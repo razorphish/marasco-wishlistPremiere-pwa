@@ -1,7 +1,10 @@
+import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
+import { WishlistItemCategoryService } from './../../../../../../core/services/wishlist-item-category.service';
 import { WishlistItemCategory } from './../../../../../../core/interfaces/Wishlist-item-category.interface';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as fromWishlistItemCategory from '@app/features/marasco/core/store/wishlist';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { NotificationService } from '@app/features/marasco/core/services';
 
 @Component({
   selector: 'wishlist-item-category-modal',
@@ -9,42 +12,106 @@ import * as fromWishlistItemCategory from '@app/features/marasco/core/store/wish
 })
 export class WishlistItemCategoryModalComponent implements OnInit {
   @Input() userId: string;
+
   @Output() save = new EventEmitter();
   @Output() close = new EventEmitter();
   @Output() wishlistItemCategory = new EventEmitter();
 
+  /**============Privately exposed properties ========= */
+  private unsubscribe$ = new Subject<void>();
+
+  /**============Publicly exposed properties ========== */
   public validationOptions: any;
 
-  constructor(private _store: Store<any>) {}
+  constructor(
+    private _activityLogService: ActivityLogSubjectService,
+    private _notificationService: NotificationService,
+    private _wishlistItemCategoryService: WishlistItemCategoryService
+  ) {}
 
   addCategory($event) {
     let model: WishlistItemCategory = {
       name: $event.elements.name.value,
       userId: this['settings'].userId
     };
-    this['settings'].store.dispatch(
-      new fromWishlistItemCategory.CreateWishlistItemCategoryAction(model)
-    );
+
+    // this['settings'].store.dispatch(
+    //   new fromWishlistItemCategory.CreateWishlistItemCategoryAction(model)
+    // );
+    this['settings'].wishlistItemCategoryService
+      .insert(model)
+      .pipe(takeUntil(this['settings'].unsub))
+      .subscribe(
+        item => {
+          if (!!item) {
+            this['settings'].activityService.addUpdate(
+              `Category added ${item.name}`
+            );
+            this['settings'].notificationService.smallBox({
+              title: 'Item Category Created',
+              content: `Item category '${item.name}' has been created successfully. `,
+              color: '#739E73',
+              timeout: 2000, // 2 seconds
+              icon: 'fa fa-check',
+              number: '4',
+              sound: false
+            });
+            this['settings'].close.emit(true);
+          } else {
+            this['settings'].activityLogService.addError(
+              'No item category present: Creation Failed'
+            );
+            this['settings'].notificationService.bigBox({
+              title: 'Oops! the database has returned an error',
+              content:
+                'No category returned which means that cateogry was not created',
+              color: '#C46A69',
+              icon: 'fa fa-warning shake animated',
+              number: '1',
+              timeout: 4000, // 4 seconds
+              sound: false
+            });
+          }
+        },
+        err => {
+          this['settings'].activityLogService.addError(err);
+          this['settings'].notificationService.bigBox({
+            title: 'Oops!  there is an issue with the call to create category',
+            content: err,
+            color: '#C46A69',
+            icon: 'fa fa-warning shake animated',
+            number: '1',
+            timeout: 4000, // 4 seconds
+            sound: false
+          });
+        },
+        () => {
+          // Clean up
+        }
+      );
   }
 
   ngOnInit() {
     this.validationOptions = {
       // Rules for form validation
-      store: this._store,
-      userId: this.userId,
-      rules: {
-        name: {
-          required: true
-        }
-      },
-  
+      activityService: this._activityLogService,
+      close: this.close,
       // Messages for form validation
       messages: {
         name: {
           required: 'Please select a category name'
         }
       },
-      submitHandler: this.addCategory
+      notificationService: this._notificationService,
+      rules: {
+        name: {
+          required: true
+        }
+      },
+      submitHandler: this.addCategory,
+      userId: this.userId,
+      unsub: this.unsubscribe$,
+      wishlistItemCategoryService: this._wishlistItemCategoryService
     };
   }
 }
