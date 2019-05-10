@@ -4,13 +4,15 @@ import { Router } from '@angular/router';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { NotificationService } from '@app/features/marasco/core/services/notification.service';
 import { Store, select } from '@ngrx/store';
-import { Subject, Observable, of, from } from 'rxjs';
-import { takeUntil, mergeMap } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
 import {
   LayoutService,
   WishlistService
 } from '@app/features/marasco/core/services';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
+
+import { SubSink } from 'subsink';
+import { mergeMap } from 'rxjs/operators';
 
 declare var $: any;
 
@@ -19,7 +21,7 @@ declare var $: any;
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   public dataSource: Observable<any>;
   public asyncSelected: string;
@@ -50,12 +52,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.isMobile = this._layoutService.store.isMobile;
 
-    currentState.pipe(takeUntil(this.unsubscribe$)).subscribe(data => {
+    this.subs$.add(currentState.subscribe(data => {
       this.isLoggedIn = !!data;
       if (!!data) {
         this.user = data.user;
       }
-    });
+    }));
   }
 
   toggleSearchMobile() {
@@ -115,7 +117,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs$.unsubscribe();
   }
 }

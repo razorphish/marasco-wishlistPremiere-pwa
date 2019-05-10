@@ -10,15 +10,12 @@ import {
 
 import { BsModalService } from 'ngx-bootstrap/modal';
 
-import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
-import { Subject } from 'rxjs';
 import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
 import { UserService } from '@app/features/marasco/core/services';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { UserInfo } from '@app/features/marasco/core/models/userInfo.model';
-import { UserRegistration } from '@app/features/marasco/core/models/userRegistration.model';
 import { UserEdit } from '@app/features/marasco/core/models/userEdit.model';
-import { takeUntil } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'user-profile-edit-modal',
@@ -38,7 +35,7 @@ export class UserProfileEditModalComponent implements OnInit, OnDestroy {
   @Output() close = new EventEmitter();
 
   /**============Privately exposed properties ========= */
-  private unsubscribe$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   /**============Publicly exposed properties ========== */
   public validationOptions: any;
@@ -93,7 +90,7 @@ export class UserProfileEditModalComponent implements OnInit, OnDestroy {
       activityLogService: this._activityLogService,
       notificationService: this._notificationService,
       close: this.close,
-      unsub: this.unsubscribe$,
+      subs: this.subs$,
       submitHandler: this.saveUser
     };
   }
@@ -115,9 +112,8 @@ export class UserProfileEditModalComponent implements OnInit, OnDestroy {
       email: user.email
     };
 
-    this['settings'].userService
+    this['settings'].subs.add(this['settings'].userService
       .update(model)
-      .pipe(takeUntil(this['settings'].unsub))
       .subscribe(
         (item) => {
           if (item) {
@@ -166,11 +162,10 @@ export class UserProfileEditModalComponent implements OnInit, OnDestroy {
         () => {
           // Clean up
         }
-      );
+      ));
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs$.unsubscribe();
   }
 }

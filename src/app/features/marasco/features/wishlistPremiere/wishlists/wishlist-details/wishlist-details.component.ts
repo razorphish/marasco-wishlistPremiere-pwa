@@ -1,7 +1,6 @@
 import { UserService } from './../../../../core/services/user.service';
 import { WishlistItemSort } from '../../../../core/interfaces/Wishlist-item-sort.interface';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import {
   Component,
   OnInit,
@@ -32,6 +31,9 @@ import { Plugins, DeviceInfo } from '@capacitor/core';
 import { UserInfo } from '@app/features/marasco/core/models/userInfo.model';
 import { SwPush } from '@angular/service-worker';
 import { UserNotification } from '@app/features/marasco/core/interfaces/User-Notification.interface';
+
+import { SubSink } from 'subsink';
+
 const { Share } = Plugins;
 const { Device } = Plugins;
 let nav: any = navigator;
@@ -47,10 +49,7 @@ let nav: any = navigator;
 })
 export class WishlistDetailsComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
-  private pageIdUnsubscribe$ = new Subject<void>();
-  private unsubscribe$ = new Subject<void>();
-  private unsubscribe2$ = new Subject<void>();
-  private unsubscribe3$ = new Subject<void>();
+  private subs$ = new SubSink();
   //////////////END Private variables //////////
 
   //////////////////Publicly exposed variables///////////
@@ -94,7 +93,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     animation: 150
   };
 
-  public pageIdSubscription: any;
   public options = [];
   public optionsTokenTable: any = {};
 
@@ -166,9 +164,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   ngOnInit() {
-    this.pageIdSubscription = this._route.params
-      .pipe(takeUntil(this.pageIdUnsubscribe$))
-      .subscribe((params) => {
+    this.subs$.add(
+      this._route.params.subscribe((params) => {
         const id = params['id'];
         if (id !== '0') {
           this.wishlist = this._route.snapshot.data['wishlist'];
@@ -177,7 +174,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         } else {
           this.isUpdate = false;
         }
-      });
+      })
+    );
 
     this.activate();
   }
@@ -296,25 +294,26 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
   }
 
   private activateState() {
-    const currentState = this._store.pipe(
-      select(fromAuth.getUser),
-      takeUntil(this.unsubscribe2$)
-    );
+    const currentState = this._store.pipe(select(fromAuth.getUser));
 
-    currentState.subscribe((data) => {
-      if (!!data) {
-        this.user = data.user;
-      }
-    });
+    this.subs$.add(
+      currentState.subscribe((data) => {
+        if (!!data) {
+          this.user = data.user;
+        }
+      })
+    );
 
     //Sets mobile
     this.isMobile = this._layoutService.store.isMobile;
 
-    this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
-      if (!!wishlist && wishlist._id === this.wishlist._id) {
-        this.wishlist = wishlist;
-      }
-    });
+    this.subs$.add(
+      this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
+        if (!!wishlist && wishlist._id === this.wishlist._id) {
+          this.wishlist = wishlist;
+        }
+      })
+    );
   }
 
   /**
@@ -336,10 +335,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
     this.user.devices.push(deviceInfo);
 
-    this._userService
-      .addDevice(this.user._id, this.user.devices)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
+    this.subs$.add(
+      this._userService.addDevice(this.user._id, this.user.devices).subscribe(
         (item: UserInfo) => {
           if (item) {
             // let userSource = new UserInfo(item);
@@ -354,7 +351,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         () => {
           // Clean up
         }
-      );
+      )
+    );
   }
 
   addNotification(uuid: string) {
@@ -373,25 +371,26 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         notification.userId = this.user._id;
         this.user.notifications.push(notification);
 
-        this._userService
-          .addNotification(this.user._id, this.user.notifications)
-          .pipe(takeUntil(this.unsubscribe$))
-          .subscribe(
-            (item) => {
-              if (item) {
-                //TODO: Add update to user store HERE
-                //this._store.dispatch(new actions.AuthUserChange(this.user));
-              } else {
-                //Do Nothing
+        this.subs$.add(
+          this._userService
+            .addNotification(this.user._id, this.user.notifications)
+            .subscribe(
+              (item) => {
+                if (item) {
+                  //TODO: Add update to user store HERE
+                  //this._store.dispatch(new actions.AuthUserChange(this.user));
+                } else {
+                  //Do Nothing
+                }
+              },
+              (err) => {
+                this._activityLogService.addError(err);
+              },
+              () => {
+                // Clean up
               }
-            },
-            (err) => {
-              this._activityLogService.addError(err);
-            },
-            () => {
-              // Clean up
-            }
-          );
+            )
+        );
       })
       .catch((error) => {
         // Do Nothing
@@ -416,10 +415,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
    */
   private insert() {
     this.wishlist.statusId = this.selectedStatus[0];
-    this._wishlistService
-      .insert(this.wishlist)
-      .pipe(takeUntil(this.unsubscribe3$))
-      .subscribe(
+    this.subs$.add(
+      this._wishlistService.insert(this.wishlist).subscribe(
         (item) => {
           if (item) {
             this._activityLogService.addInserts(
@@ -466,7 +463,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         () => {
           // Clean up
         }
-      );
+      )
+    );
   }
 
   /**
@@ -474,10 +472,9 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
    */
   private update() {
     this.wishlist.statusId = this.selectedStatus[0];
-    this._wishlistService
-      .update(this.wishlist)
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe(
+
+    this.subs$.add(
+      this._wishlistService.update(this.wishlist).subscribe(
         (item) => {
           if (item) {
             this._activityLogService.addUpdate(`Updated wishlist ${item._id}`);
@@ -520,7 +517,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         () => {
           // Clean up
         }
-      );
+      )
+    );
   }
 
   /**
@@ -531,13 +529,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.pageIdUnsubscribe$.next();
-    this.pageIdUnsubscribe$.complete();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    this.unsubscribe2$.next();
-    this.unsubscribe2$.complete();
-    this.unsubscribe3$.next();
-    this.unsubscribe3$.complete();
+    this.subs$.unsubscribe();
   }
 }

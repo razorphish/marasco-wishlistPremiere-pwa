@@ -13,9 +13,9 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
+
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'wishlist-options-modal',
@@ -33,10 +33,10 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
   @Output() save = new EventEmitter();
   @Output() close = new EventEmitter();
 
-  public wishlist : Wishlist;
+  public wishlist: Wishlist;
 
   /**============Privately exposed properties ========= */
-  private unsubscribe$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   /**============Publicly exposed properties ========== */
   public validationOptions: any;
@@ -45,10 +45,11 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
     private _notificationService: NotificationService,
     private _activityLogService: ActivityLogSubjectService,
     private _wishlistService: WishlistService,
-    private _modalService: BsModalService) {
-      const initialState: any = this._modalService.config.initialState;
-      this.wishlist = initialState.wishlist;
-    }
+    private _modalService: BsModalService
+  ) {
+    const initialState: any = this._modalService.config.initialState;
+    this.wishlist = initialState.wishlist;
+  }
 
   ngOnInit() {
     this.validationOptions = {
@@ -71,7 +72,7 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
       activityService: this._activityLogService,
       notificationService: this._notificationService,
       close: this.close,
-      unsub: this.unsubscribe$,
+      subs: this.subs$,
       submitHandler: this.saveOptions
     };
 
@@ -97,20 +98,20 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
 
     Object.assign(wishlist, model);
 
-    this['settings'].wishlistService
-      .update(wishlist)
-      .pipe(takeUntil(this['settings'].unsub))
-      .subscribe(
+    this['settings'].subs.add(
+      this['settings'].wishlistService.update(wishlist).subscribe(
         (item) => {
           if (item) {
-            this['settings'].activityService.addUpdate(`Updated wishlist ${item._id}`);
+            this['settings'].activityService.addUpdate(
+              `Updated wishlist ${item._id}`
+            );
             this['settings'].notificationService.smallBox({
               title: 'Wishlist Updated',
               content: 'Wishlist has been updated successfully. ',
               color: '#739E73',
-              timeout: 2000,  // 2 seconds
+              timeout: 2000, // 2 seconds
               icon: 'fa fa-check',
-              number: '4', 
+              number: '4',
               sound: false
             });
             this['settings'].close.emit(true);
@@ -145,11 +146,11 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
         () => {
           // Clean up
         }
-      );
+      )
+    );
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs$.unsubscribe();
   }
 }

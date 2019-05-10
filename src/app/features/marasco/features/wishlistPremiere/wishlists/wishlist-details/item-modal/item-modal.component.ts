@@ -18,9 +18,8 @@ import { environment } from '@env/environment';
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { FirebaseStorageConfigOptions } from '@app/features/marasco/shared/forms/dropzone2/firebase-storage-config-options.interface';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'wishlist-item-modal',
@@ -40,7 +39,7 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   @Output() upload = new EventEmitter();
 
   /**============Privately exposed properties ========= */
-  private unsubscribe$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   /**============Publicly exposed properties ========== */
   public bsModalRef: BsModalRef;
@@ -79,15 +78,17 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       }
     };
 
-    currentWishlistItemCategoryState
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((wishlistItemCategories: WishlistItemCategory[]) => {
-        if (Array.isArray(wishlistItemCategories)) {
-          this.wishlistItemCategories = wishlistItemCategories;
+    this.subs$.add(
+      currentWishlistItemCategoryState.subscribe(
+        (wishlistItemCategories: WishlistItemCategory[]) => {
+          if (Array.isArray(wishlistItemCategories)) {
+            this.wishlistItemCategories = wishlistItemCategories;
 
-          this.dropdownList = this.wishlistItemCategories;
+            this.dropdownList = this.wishlistItemCategories;
+          }
         }
-      });
+      )
+    );
 
     this.selectedItems.push(this.dropdownList[0]);
 
@@ -170,7 +171,6 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs$.unsubscribe();
   }
 }

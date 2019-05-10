@@ -3,10 +3,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { LayoutService } from '@app/features/marasco/core/services';
 import { environment } from '@env/environment.prod';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-forgot',
@@ -14,7 +13,7 @@ import { environment } from '@env/environment.prod';
   styles: []
 })
 export class ForgotComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
 
   public isMobile: boolean = false;
   public showAddToHomeScreenButton: boolean = true;
@@ -51,14 +50,15 @@ export class ForgotComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private _store: Store<any>, 
+    private _store: Store<any>,
     private _pwaService: PwaService,
-    private _layoutService: LayoutService) {
-    this._pwaService.onBeforeInstallPrompt
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((prompt) => {
+    private _layoutService: LayoutService
+  ) {
+    this.subs.add(
+      this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
         this.showAddToHomeScreenButton = !!prompt;
-      });
+      })
+    );
   }
 
   addToHome($event) {
@@ -95,7 +95,6 @@ export class ForgotComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 }

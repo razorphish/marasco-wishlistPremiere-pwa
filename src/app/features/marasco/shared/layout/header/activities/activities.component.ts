@@ -6,8 +6,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { ActivitiesService } from './activities.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 declare var $: any;
 
@@ -18,7 +17,7 @@ declare var $: any;
 })
 export class ActivitiesComponent implements OnInit, OnDestroy {
   private documentSub: any;
-  private unsubscribe$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   count: number;
   lastUpdate: any;
@@ -40,15 +39,14 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activitiesService
+    this.subs$.add(this.activitiesService
       .getActivities()
-      .pipe(takeUntil(this.unsubscribe$))
       .subscribe((data) => {
         this.activities = data;
         // ******************UNCOMMENT
         //this.count = data.reduce((sum, it) => sum + it.data.length, 0);
         this.currentActivity = data[0];
-      });
+      }));
   }
 
   setActivity(activity) {
@@ -89,8 +87,7 @@ export class ActivitiesComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.documentUnsub();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs$.unsubscribe();
   }
 
   documentUnsub() {

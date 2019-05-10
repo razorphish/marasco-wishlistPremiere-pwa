@@ -9,15 +9,14 @@ import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { environment } from '@env/environment';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
 
   private _device: any;
 
@@ -43,11 +42,11 @@ export class RegisterComponent implements OnInit, OnDestroy {
     private _modalService: BsModalService,
     private _pwaService: PwaService
   ) {
-    this._pwaService.onBeforeInstallPrompt
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((prompt) => {
+    this.subs.add(
+      this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
         this.showAddToHomeScreenButton = !!prompt;
-      });
+      })
+    );
   }
 
   addToHome($event) {
@@ -251,7 +250,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 }

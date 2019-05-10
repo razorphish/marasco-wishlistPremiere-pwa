@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { mergeMap, take, takeUntil, map } from 'rxjs/operators';
-import { of, Subject } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 // Local
 import { ActivityLogSubjectService } from '../../../../shared/activitylog.subject-service';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 
+import { SubSink } from 'subsink';
+
 @Injectable()
 export class WishlistFollowingResolve implements Resolve<any> {
-  private unsubscribe$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   constructor(
     private _store: Store<any>,
@@ -31,7 +32,6 @@ export class WishlistFollowingResolve implements Resolve<any> {
   }
 
   ngOnDestroy(){
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs$.unsubscribe();
   }
 }

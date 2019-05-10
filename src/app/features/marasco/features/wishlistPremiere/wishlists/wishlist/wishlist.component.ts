@@ -1,5 +1,4 @@
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -15,6 +14,8 @@ import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-ite
 import { LayoutService } from '@app/features/marasco/core/services';
 import { Lightbox, IAlbum } from 'ngx-lightbox';
 
+import { SubSink } from 'subsink';
+
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
  */
@@ -26,9 +27,7 @@ import { Lightbox, IAlbum } from 'ngx-lightbox';
 export class WishlistComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
   private _albums: IAlbum[] = [];
-  private pageIdUnsubscribe$ = new Subject<void>();
-  private unsubscribe$ = new Subject<void>();
-  private unsubscribe2$ = new Subject<void>();
+  private subs$ = new SubSink();
   //////////////END Private variables //////////
 
   //////////////////Publicly exposed variables///////////
@@ -49,8 +48,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
   };
 
   public isMobile = true;
-
-  public pageIdSubscription: any;
 
   public state: any = {
     tabs: {
@@ -80,14 +77,14 @@ export class WishlistComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   ngOnInit() {
-    this.pageIdSubscription = this._route.params
-      .pipe(takeUntil(this.pageIdUnsubscribe$))
-      .subscribe((params) => {
+    this.subs$.add(
+      this._route.params.subscribe((params) => {
         this.wishlist = this._route.snapshot.data['wishlist'];
         if (!this.wishlist) {
           this._router.navigateByUrl('/wishlistPremiere/wishlists/following');
         }
-      });
+      })
+    );
 
     this.activate();
   }
@@ -148,24 +145,23 @@ export class WishlistComponent implements OnInit, OnDestroy {
   }
 
   private activateState() {
-    const currentState = this._store.pipe(
-      select(fromAuth.getUser),
-      takeUntil(this.unsubscribe2$)
-    );
+    const currentState = this._store.pipe(select(fromAuth.getUser));
 
     //Set current user, if applicable
-    currentState.subscribe((data) => {
-      if (!!data) {
-        this.user = data.user;
-      }
-    });
+    this.subs$.add(
+      currentState.subscribe((data) => {
+        if (!!data) {
+          this.user = data.user;
+        }
+      })
+    );
 
     //Sets mobile
     this.isMobile = this._layoutService.store.isMobile;
 
     //Set wishlist items
     this.wishlist.items.forEach((item, index) => {
-      let price = !!item.price ? ` : $${item.price}`: ''
+      let price = !!item.price ? ` : $${item.price}` : '';
       const album = {
         thumb: item.image || 'assets/icons/icon-72x72_grey_out.png',
         src: item.image || 'assets/icons/icon-384x384.png',
@@ -181,11 +177,6 @@ export class WishlistComponent implements OnInit, OnDestroy {
    */
 
   ngOnDestroy() {
-    this.pageIdUnsubscribe$.next();
-    this.pageIdUnsubscribe$.complete();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    this.unsubscribe2$.next();
-    this.unsubscribe2$.complete();
+    this.subs$.unsubscribe();
   }
 }

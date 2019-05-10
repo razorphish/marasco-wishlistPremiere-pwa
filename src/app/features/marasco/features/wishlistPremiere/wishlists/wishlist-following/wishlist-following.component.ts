@@ -1,5 +1,3 @@
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
@@ -10,6 +8,7 @@ import * as fromAuth from '@app/features/marasco/core/store/auth';
 import * as moment from 'moment';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { LayoutService } from '@app/features/marasco/core/services';
+import { SubSink } from 'subsink';
 
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
@@ -21,9 +20,7 @@ import { LayoutService } from '@app/features/marasco/core/services';
 })
 export class WishlistFollowingComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
-  private pageIdUnsubscribe$ = new Subject<void>();
-  private unsubscribe$ = new Subject<void>();
-  private unsubscribe2$ = new Subject<void>();
+  private subs = new SubSink();
   //////////////END Private variables //////////
 
   //////////////////Publicly exposed variables///////////
@@ -69,11 +66,11 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   ngOnInit() {
-    this.pageIdSubscription = this._route.params
-      .pipe(takeUntil(this.pageIdUnsubscribe$))
-      .subscribe((params) => {
+    this.subs.add(
+      (this.pageIdSubscription = this._route.params.subscribe((params) => {
         this.wishlists = this._route.snapshot.data['wishlists'];
-      });
+      }))
+    );
 
     this.activate();
   }
@@ -83,7 +80,9 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   public previewWishlist(row: any, wishlist: any) {
-    this._router.navigateByUrl(`wishlistPremiere/wishlists/${wishlist.wishlistId._id}`);
+    this._router.navigateByUrl(
+      `wishlistPremiere/wishlists/${wishlist.wishlistId._id}`
+    );
   }
 
   /////////////////////////////////////
@@ -133,16 +132,15 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
   }
 
   private activateState() {
-    const currentState = this._store.pipe(
-      select(fromAuth.getUser),
-      takeUntil(this.unsubscribe2$)
-    );
+    const currentState = this._store.pipe(select(fromAuth.getUser));
 
-    currentState.subscribe((data) => {
-      if (!!data) {
-        this.user = data.user;
-      }
-    });
+    this.subs.add(
+      currentState.subscribe((data) => {
+        if (!!data) {
+          this.user = data.user;
+        }
+      })
+    );
 
     //Sets mobile
     this.isMobile = this._layoutService.store.isMobile;
@@ -153,11 +151,6 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
    */
 
   ngOnDestroy() {
-    this.pageIdUnsubscribe$.next();
-    this.pageIdUnsubscribe$.complete();
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
-    this.unsubscribe2$.next();
-    this.unsubscribe2$.complete();
+    this.subs.unsubscribe();
   }
 }

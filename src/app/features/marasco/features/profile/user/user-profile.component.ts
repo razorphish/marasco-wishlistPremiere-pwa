@@ -2,8 +2,6 @@ import { UserInfo } from '@app/features/marasco/core/models/userInfo.model';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
@@ -12,13 +10,14 @@ import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interfa
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
+import { SubSink } from 'subsink';
+
 @Component({
   selector: 'sa-user-profile',
   templateUrl: './user-profile.component.html'
 })
 export class UserProfileComponent implements OnInit {
-  private unsubscribeUser$ = new Subject<void>();
-  private unsubscribeWishlist$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   public isLoggedIn: boolean;
   public user: UserInfo;
@@ -64,27 +63,25 @@ export class UserProfileComponent implements OnInit {
       select(fromWishlist.getUserWishlists)
     );
 
-    currentState.pipe(takeUntil(this.unsubscribeUser$)).subscribe((data) => {
-      this.isLoggedIn = !!data;
-      if (!!data) {
-        this.user = data.user;
-      }
-    });
+    this.subs$.add(
+      currentState.subscribe((data) => {
+        this.isLoggedIn = !!data;
+        if (!!data) {
+          this.user = data.user;
+        }
+      })
+    );
 
-    wishlistCurrentState
-      .pipe(takeUntil(this.unsubscribeWishlist$))
-      .subscribe((data) => {
+    this.subs$.add(
+      wishlistCurrentState.subscribe((data) => {
         if (!!data) {
           this.wishlists = data;
         }
-      });
+      })
+    );
   }
 
   ngOnDestroy() {
-    this.unsubscribeUser$.next();
-    this.unsubscribeWishlist$.next();
-
-    this.unsubscribeUser$.complete();
-    this.unsubscribeWishlist$.complete();
+    this.subs$.unsubscribe();
   }
 }

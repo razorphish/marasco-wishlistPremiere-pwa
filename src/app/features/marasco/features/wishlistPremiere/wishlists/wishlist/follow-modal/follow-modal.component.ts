@@ -12,7 +12,6 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
 import { WishlistFollow } from '@app/features/marasco/core/interfaces/Wishlist-Follow.interface';
 import {
@@ -22,6 +21,8 @@ import {
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { SwPush } from '@angular/service-worker';
 import { environment } from '@env/environment';
+
+import { SubSink } from 'subsink';
 
 import { Plugins, DeviceInfo } from '@capacitor/core';
 const { Device } = Plugins;
@@ -48,7 +49,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
 
   /**============Privately exposed properties ========= */
 
-  private unsubscribe$ = new Subject<void>();
+  private subs$ = new SubSink();
 
   /**============Publicly exposed properties ========== */
   public device: any;
@@ -100,7 +101,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       notificationService: this._notificationService,
       swPush: this._swPush,
       close: this.close,
-      unsub: this.unsubscribe$,
+      subs: this.subs$,
       submitHandler: this.saveFollow,
       saveMobile: this.saveMobile,
       saveWeb: this.saveWeb
@@ -152,10 +153,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       schemaType: environment.notificationSchema.mobile
     };
 
-    that.wishlistFollowService
-      .insert(follow)
-      .pipe(takeUntil(that.unsub))
-      .subscribe(
+    that.subs.add(
+      that.wishlistFollowService.insert(follow).subscribe(
         (item) => {
           if (item) {
             that.activityLogService.addUpdate(
@@ -202,7 +201,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
         () => {
           // Clean up
         }
-      );
+      )
+    );
   }
 
   public saveWeb($event) {
@@ -229,10 +229,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
           if (!!pushSubscription) {
             const follow = Object.assign(model, pushSubscription.toJSON());
 
-            that.wishlistFollowService
-              .insert(follow)
-              .pipe(takeUntil(that.unsub))
-              .subscribe(
+            that.subs.add(
+              that.wishlistFollowService.insert(follow).subscribe(
                 (item) => {
                   if (item) {
                     that.activityLogService.addUpdate(
@@ -279,7 +277,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
                 () => {
                   // Clean up
                 }
-              );
+              )
+            );
           } else {
             that.activityLogService.addError(
               'No wishlist follow: Insert Failed'
@@ -317,10 +316,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
 
         let isCurrentUser = that.user._id === that.wishlist.userId;
 
-        that.wishlistFollowService
-          .insert(model, isCurrentUser)
-          .pipe(takeUntil(that.unsub))
-          .subscribe(
+        that.subs.add(
+          that.wishlistFollowService.insert(model, isCurrentUser).subscribe(
             (item) => {
               if (item) {
                 that.activityLogService.addUpdate(
@@ -368,12 +365,12 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
             () => {
               // Clean up
             }
-          );
+          )
+        );
       });
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs$.unsubscribe();
   }
 }

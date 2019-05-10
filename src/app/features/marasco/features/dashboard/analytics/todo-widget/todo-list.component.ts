@@ -2,14 +2,14 @@ import { Subject } from 'rxjs';
 import { Component, OnInit, Input, ElementRef, OnDestroy } from '@angular/core';
 import { TodoService } from './todo.service';
 import { Todo } from './todo';
-import { takeUntil } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'todo-list',
   templateUrl: './todo-list.component.html'
 })
 export class TodoListComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
 
   public items: Array<Todo> = [];
 
@@ -18,11 +18,11 @@ export class TodoListComponent implements OnInit, OnDestroy {
   constructor(private el: ElementRef, private todoService: TodoService) {}
 
   ngOnInit() {
-    this.todoService.subject
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((todos: Array<Todo>) => {
+    this.subs.add(
+      this.todoService.subject.subscribe((todos: Array<Todo>) => {
         this.setItems(todos);
-      });
+      })
+    );
 
     this.setItems(this.todoService.todos);
   }
@@ -40,7 +40,6 @@ export class TodoListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 }

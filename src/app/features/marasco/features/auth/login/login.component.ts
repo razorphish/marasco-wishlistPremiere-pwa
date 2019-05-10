@@ -12,21 +12,20 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { PwaService } from '@app/features/marasco/core/services/pwa.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html'
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
+  private subs = new SubSink();
 
   //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
   //destroyed$ = new Subject<boolean>();
   //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
   public isMobile: boolean = false;
-  
+
   public showAddToHomeScreenButton: boolean = true;
 
   public validationOptions: any = {
@@ -63,9 +62,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   //   ) {
 
   constructor(
-    private _store: Store<any>, 
+    private _store: Store<any>,
     private _pwaService: PwaService,
-    private _layoutService: LayoutService) {
+    private _layoutService: LayoutService
+  ) {
     //**DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
     // updates$
     //   .ofType(actions.AuthActionTypes.AuthFailure)
@@ -76,11 +76,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     //   )
     //   .subscribe();
     //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
-    this._pwaService.onBeforeInstallPrompt
-      .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((prompt) => {
+    this.subs.add(
+      this._pwaService.onBeforeInstallPrompt.subscribe((prompt) => {
         this.showAddToHomeScreenButton = !!prompt;
-      });
+      })
+    );
   }
 
   addToHome($event) {
@@ -133,7 +133,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     //this.destroyed$.next(true);
     //this.destroyed$.complete();
     //\\DO NOT DELETE:  THIS IS SUBSCRIBE TO ACTION EXAMPLE */
-    this.unsubscribe$.next();
-    this.unsubscribe$.complete();
+    this.subs.unsubscribe();
   }
 }
