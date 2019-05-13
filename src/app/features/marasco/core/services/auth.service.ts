@@ -8,7 +8,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError, BehaviorSubject, Subject } from 'rxjs';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { map, catchError } from 'rxjs/operators';
 
@@ -256,9 +256,15 @@ export class AuthService extends MarascoService {
   }
 
   signOut(): Observable<any> {
+    const params: any = {
+      access_token: this.authToken.token.access_token
+    };
+
+    const headers = new HttpHeaders().set('Authorization', this.authToken.token.access_token);
+
     const url = this._apiUrl + 'auth/logout';
     const body: any = {};
-    return this._http.post(url, body).pipe(
+    return this._http.post(url, body, { headers: headers }).pipe(
       map((response: Response) => {
         // logout response
 

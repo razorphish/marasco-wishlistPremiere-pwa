@@ -36,11 +36,6 @@ export class WishlistItemCategoryModalComponent implements OnInit {
       close: this['settings'].close
     };
 
-<<<<<<< HEAD
-    this['settings'].store.dispatch(
-      new fromWishlistItemCategory.CreateWishlistItemCategoryAction(model, this['settings'].close)
-    );
-=======
     // this['settings'].store.dispatch(
     //   new fromWishlistItemCategory.CreateWishlistItemCategoryAction(model)
     // );
@@ -95,26 +90,13 @@ export class WishlistItemCategoryModalComponent implements OnInit {
           // Clean up
         }
       );
->>>>>>> 5f44dd16f9144f142b311cac8abcc898ac397c28
   }
 
   ngOnInit() {
     this.validationOptions = {
       // Rules for form validation
-<<<<<<< HEAD
-      store: this._store,
-      close: this.close,
-      userId: this.userId,
-      rules: {
-        name: {
-          required: true
-        }
-      },
-  
-=======
       activityService: this._activityLogService,
       close: this.close,
->>>>>>> 5f44dd16f9144f142b311cac8abcc898ac397c28
       // Messages for form validation
       messages: {
         name: {
