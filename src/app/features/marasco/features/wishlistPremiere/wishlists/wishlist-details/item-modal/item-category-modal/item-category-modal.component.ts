@@ -20,10 +20,12 @@ export class WishlistItemCategoryModalComponent implements OnInit {
   addCategory($event) {
     let model: WishlistItemCategory = {
       name: $event.elements.name.value,
-      userId: this['settings'].userId
+      userId: this['settings'].userId,
+      close: this['settings'].close
     };
+
     this['settings'].store.dispatch(
-      new fromWishlistItemCategory.CreateWishlistItemCategoryAction(model)
+      new fromWishlistItemCategory.CreateWishlistItemCategoryAction(model, this['settings'].close)
     );
   }
 
@@ -31,6 +33,7 @@ export class WishlistItemCategoryModalComponent implements OnInit {
     this.validationOptions = {
       // Rules for form validation
       store: this._store,
+      close: this.close,
       userId: this.userId,
       rules: {
         name: {

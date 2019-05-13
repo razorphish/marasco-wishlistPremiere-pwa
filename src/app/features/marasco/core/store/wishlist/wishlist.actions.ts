@@ -226,7 +226,7 @@ export class WishlistItemCategoriesNull implements Action {
 
 export class CreateWishlistItemCategoryAction implements Action {
   readonly type = WishlistActionTypes.CreateWishlistItemCategoryAction;
-  constructor(readonly payload: any) {}
+  constructor(readonly payload: any, done: any) {}
 }
 
 export class CreateWishlistItemCategorySuccess implements Action {

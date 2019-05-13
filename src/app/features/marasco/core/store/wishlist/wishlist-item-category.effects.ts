@@ -46,6 +46,8 @@ export class WishlistItemCategoryEffects {
     ofType(actions.WishlistActionTypes.CreateWishlistItemCategoryAction),
     map((data: any) => data.payload),
     tap((category: WishlistItemCategory) => {
+      let closefn = category.close;
+      category.close = null;
       this._wishlistItemCategoryService.insert(category).subscribe(
         (result: any) => {
           if (!!result.error) {
@@ -59,6 +61,7 @@ export class WishlistItemCategoryEffects {
             null,
             true
           );
+          closefn.emit(true);
         },
         (error: any) => {
           this.dispatchError(error);
