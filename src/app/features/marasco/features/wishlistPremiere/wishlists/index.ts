@@ -20,6 +20,8 @@ export * from './wishlist-following/wishlist-following.component';
 export * from './wishlist-following/wishlist-following.resolve';
 export * from './wishlist-following/wishlist-following.guard';
 
+export * from './wishlist-following/following-modal/following-modal.component';
+
 export * from './wishlist-details/options-modal/options-modal.component';
 
 export * from './wishlists-routing.module';

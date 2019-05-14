@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
@@ -9,6 +9,9 @@ import * as moment from 'moment';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { LayoutService } from '@app/features/marasco/core/services';
 import { SubSink } from 'subsink';
+
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 
 /**
  * https://jonathannicol.com/blog/2014/06/16/centre-crop-thumbnails-with-css/
@@ -52,13 +55,19 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
 
   public wishlists: Wishlist[] = this.defaultWishlists;
 
+  @ViewChild('wishlistFollowModal')
+  private wishlistFollowModal: TemplateRef<any>;
+
+  bsModalRef: BsModalRef;
+
   //////////////////END Publicly exposed variables///////////
 
   constructor(
     private _route: ActivatedRoute,
     private _store: Store<fromWishlist.WishlistState>,
     private _layoutService: LayoutService,
-    private _router: Router
+    private _router: Router,
+    private _modalService: BsModalService
   ) {}
 
   /////////////////////////////////////
@@ -67,7 +76,7 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs.add(
-      (this.pageIdSubscription = this._route.params.subscribe((params) => {
+      (this.pageIdSubscription = this._route.params.subscribe(params => {
         this.wishlists = this._route.snapshot.data['wishlists'];
       }))
     );
@@ -78,6 +87,25 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
   // Public Methods
   /////////////////////////////////////
+
+  public closeModal() {
+    this.bsModalRef.hide();
+  }
+
+  public onModalClose() {
+    this.bsModalRef.hide();
+  }
+
+  public openModal(wishlist: any) {
+    const initialState = {
+      wishlist: wishlist || {
+        name: '',
+        purchased: false
+      }
+    };
+
+    this.bsModalRef = this._modalService.show(this.wishlistFollowModal, { initialState });
+  }
 
   public previewWishlist(row: any, wishlist: any) {
     this._router.navigateByUrl(
@@ -98,6 +126,13 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
     this.activateDataTable();
   }
 
+  /**
+   * @description Activates the Data Table for followings
+   * @author Antonio Marasco
+   * @date 2019-05-14
+   * @private
+   * @memberof WishlistFollowingComponent
+   */
   private activateDataTable() {
     const that = this;
     this.options = {
@@ -123,19 +158,26 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
         // (see https://github.com/l-lin/angular-datatables/issues/87)
         jQuery('td', row).unbind('click');
         jQuery('td', row).bind('click', () => {
-          //self.openModal(data, {}, {});
-          self.previewWishlist(row, data);
+          self.openModal(data);
+          //self.previewWishlist(row, data);
         });
         return row;
       }
     };
   }
 
+  /**
+   * @description Activates the state for the current page
+   * @author Antonio Marasco
+   * @date 2019-05-14
+   * @private
+   * @memberof WishlistFollowingComponent
+   */
   private activateState() {
     const currentState = this._store.pipe(select(fromAuth.getUser));
 
     this.subs.add(
-      currentState.subscribe((data) => {
+      currentState.subscribe(data => {
         if (!!data) {
           this.user = data.user;
         }

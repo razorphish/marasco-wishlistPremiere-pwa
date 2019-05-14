@@ -53,3 +53,10 @@
     </div>
   </sa-widgets-grid>
 </div>
+
+<ng-template #wishlistFollowModal>
+  <wishlist-following-modal
+    (save)="closeModal()"
+    (close)="onModalClose()"
+  ></wishlist-following-modal>
+</ng-template>
