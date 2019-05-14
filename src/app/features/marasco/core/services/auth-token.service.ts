@@ -41,7 +41,7 @@ export class AuthTokenService {
 
   updateUser(userInfo: UserInfo) {
     //Only 2 fields of importance need to get changed
-    //DO NOT replace entire object!!! 
+    //DO NOT replace entire object!!!
     //i.e. token.user = userInfo
     this.token.user.firstName = userInfo.firstName;
     this.token.user.lastName = userInfo.lastName;
@@ -109,7 +109,22 @@ export class AuthTokenService {
   };
 
   set token(value: TokenResult) {
-    this.tokenSubject.next(value);
+    if (!!value && !!this.token) {
+      const token = this.token;
+
+      token.access_token = value.access_token;
+      token.expires_in = value.expires_in;
+      token.expirationTime = value.expirationTime;
+      token.issuedAtTime = value.issuedAtTime;
+      token.signInProvider = value.signInProvider;
+      token.token_type = value.token_type;
+      token['.issued'] = value['.issued'];
+      token['.expires'] = value['.expires'];
+
+      this.tokenSubject.next(token);
+    } else {
+      this.tokenSubject.next(value);
+    }
   }
 
   get token(): TokenResult {
@@ -142,9 +157,7 @@ export class AuthTokenService {
     );
   }
 
-  ngOnDestroy(){
-    
-  }
+  ngOnDestroy() {}
 }
 
 export function AuthTokenFactory(service: AuthTokenService): Function {

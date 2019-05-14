@@ -196,12 +196,12 @@ export class AuthService extends MarascoService {
         if (credential && credential.access_token) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
-          //Inform everyone
-          this.onLoginSuccess.next(true);
+          //Uncomment following lines if refreshtoken returns entire User object
+          //this.onLoginSuccess.next(true);
+          //this._userSource = new UserInfo(credential.user);
+          //this._userSource.token = credential;
+          //this.user$.next(this._userSource);
 
-          this._userSource = new UserInfo(credential.user);
-          this._userSource.token = credential;
-          this.user$.next(this._userSource);
           //this.onAuthStateChanged.next(this.userSource);
           this.onIdTokenChanged.next(this._userSource);
           this.authToken.token = credential;
