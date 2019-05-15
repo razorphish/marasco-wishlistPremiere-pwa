@@ -55,8 +55,11 @@
 </div>
 
 <ng-template #wishlistFollowModal>
-  <wishlist-following-modal
+  <wishlist-follow-modal
+    [showUnfollowButton]="true"
+    [showPreviewButton]="true"
+    [user]="user"
     (save)="closeModal()"
     (close)="onModalClose()"
-  ></wishlist-following-modal>
+  ></wishlist-follow-modal>
 </ng-template>

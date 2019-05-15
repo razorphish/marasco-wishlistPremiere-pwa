@@ -69,6 +69,24 @@
         <section class="col col-12" style="float: right">
           <button
             type="button"
+            class="btn btn-success btn-lg"
+            *ngIf="showUnfollowButton"
+            (click)="unfollow()"
+          >
+            <i class="fa fa-minus-square"></i> Unfollow
+          </button>
+          &nbsp;
+          <button
+            type="button"
+            class="btn btn-primary btn-lg"
+            *ngIf="showPreviewButton"
+            (click)="preview()"
+          >
+            <i class="fa fa-minus-square"></i> Unfollow
+          </button>
+          &nbsp;
+          <button
+            type="button"
             class="btn btn-default btn-lg"
             (click)="close.emit(true)"
           >

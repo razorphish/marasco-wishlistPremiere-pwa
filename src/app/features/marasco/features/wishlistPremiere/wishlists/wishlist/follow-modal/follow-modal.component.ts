@@ -34,7 +34,10 @@ const { Device } = Plugins;
 })
 export class WishlistFollowModalComponent implements OnInit, OnDestroy {
   //*=================I/O============================= */
+  @Input() showUnfollowButton: boolean = false;
+  @Input() showPreviewButton: boolean = false;
   @Input() wishlist: Wishlist;
+  @Input() wishlistFolow: WishlistFollow;
   @Input() user: User;
   @Input() public options = {
     mode: 'popup',
@@ -67,7 +70,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
   ) {
     const initialState: any = this._modalService.config.initialState;
     this.wishlist = initialState.wishlist;
-    this.wishlistFollow = {
+    this.wishlistFollow = initialState.wishlistFollow || {
       wishlistId: this.wishlist._id,
       notifiedOnAddItem: true,
       notifiedOnRemoveItem: true,
@@ -369,6 +372,10 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
         );
       });
   }
+
+  preview() {}
+  
+  unfollow() {}
 
   ngOnDestroy() {
     this.subs$.unsubscribe();
