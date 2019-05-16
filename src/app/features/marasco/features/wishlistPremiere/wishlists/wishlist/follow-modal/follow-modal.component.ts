@@ -11,7 +11,6 @@ import {
 import { BsModalService } from 'ngx-bootstrap/modal';
 
 import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interface';
-import { Subject } from 'rxjs';
 import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
 import { WishlistFollow } from '@app/features/marasco/core/interfaces/Wishlist-Follow.interface';
 import {
@@ -25,6 +24,7 @@ import { environment } from '@env/environment';
 import { SubSink } from 'subsink';
 
 import { Plugins, DeviceInfo } from '@capacitor/core';
+import { Router } from '@angular/router';
 const { Device } = Plugins;
 
 @Component({
@@ -53,6 +53,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
   /**============Privately exposed properties ========= */
 
   private subs$ = new SubSink();
+  private isUpdate: boolean = false;
 
   /**============Publicly exposed properties ========== */
   public device: any;
@@ -66,7 +67,8 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
     private _wishlistFollowService: WishlistFollowService,
     private _modalService: BsModalService,
     private _swPush: SwPush,
-    private _layoutService: LayoutService
+    private _layoutService: LayoutService,
+    private _router: Router
   ) {
     const initialState: any = this._modalService.config.initialState;
     this.wishlist = initialState.wishlist;
@@ -82,9 +84,12 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
     //Sets mobile
     this.isMobile = this._layoutService.store.isMobile;
 
+    this.isUpdate = !!this.wishlistFollow._id;
+
     this.validationOptions = {
       // Rules for form validation
       wishlist: this.wishlist,
+      wishlistFollow: this.wishlistFollow,
       user: this.user,
       isMobile: this.isMobile,
       rules: {
@@ -153,11 +158,16 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       notifiedOnRemoveItem: $event.elements.notifiedOnRemoveItem.checked,
       notifiedOnCompletion: $event.elements.notifiedOnCompletion.checked,
       pushToken: that.pushToken,
+      wishlist: that.wishlist,
       schemaType: environment.notificationSchema.mobile
     };
 
+    if (!!that.wishlistFollow._id) {
+      follow._id = that.wishlistFollow._id;
+    }
+
     that.subs.add(
-      that.wishlistFollowService.insert(follow).subscribe(
+      that.wishlistFollowService.save(follow).subscribe(
         (item) => {
           if (item) {
             that.activityLogService.addUpdate(
@@ -175,7 +185,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
             that.close.emit(true);
           } else {
             that.activityLogService.addError(
-              'No wishlist present: Insert Failed'
+              'No wishlist present: Operation Failed'
             );
             that.notificationService.bigBox({
               title: 'Oops! the database has returned an error',
@@ -222,6 +232,10 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       schemaType: environment.notificationSchema.web
     };
 
+    if (!!that.wishlistFollow._id) {
+      model._id = that.wishlistFollow._id;
+    }
+
     that.swPush
       .requestSubscription({
         serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
@@ -233,7 +247,7 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
             const follow = Object.assign(model, pushSubscription.toJSON());
 
             that.subs.add(
-              that.wishlistFollowService.insert(follow).subscribe(
+              that.wishlistFollowService.save(follow).subscribe(
                 (item) => {
                   if (item) {
                     that.activityLogService.addUpdate(
@@ -320,18 +334,18 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
         let isCurrentUser = that.user._id === that.wishlist.userId;
 
         that.subs.add(
-          that.wishlistFollowService.insert(model, isCurrentUser).subscribe(
+          that.wishlistFollowService.save(model, isCurrentUser).subscribe(
             (item) => {
               if (item) {
                 that.activityLogService.addUpdate(
-                  `Inserted wishlist follow ${item._id}`
+                  `Saved wishlist follow ${item._id}`
                 );
                 that.notificationService.smallBox({
                   title: 'Wishlist Follow Success!',
                   content:
                     'You are now following this wishlist!  Notifications are not supported on this device ',
                   color: '#C79121',
-                  timeout: 6000, // 6 seconds
+                  timeout: 3000, // 3 seconds
                   icon: 'fa fa-shield fadeInLeft animated',
                   number: '4',
                   sound: false
@@ -373,8 +387,20 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
       });
   }
 
-  preview() {}
-  
+  /**
+   * @description Preview the wishlist
+   * @author Antonio Marasco
+   * @date 2019-05-16
+   * @memberof WishlistFollowModalComponent
+   */
+  preview() {
+    this.close.emit(true);
+
+    this._router.navigateByUrl(
+      `wishlistPremiere/wishlists/${this.wishlistFollow.wishlistId._id}`
+    );
+  }
+
   unfollow() {}
 
   ngOnDestroy() {

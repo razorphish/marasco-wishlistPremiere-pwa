@@ -30,7 +30,7 @@ export class WishlistFollowService extends MarascoService {
   constructor(private _authHttp: AuthHttpService) {
     super();
   }
-  
+
   /**
    * @description Get follows by wishlist Id
    * @author Antonio Marasco
@@ -78,9 +78,7 @@ export class WishlistFollowService extends MarascoService {
    * @returns {Observable<WishlistFollow>}
    * @memberof WishlistFollowService
    */
-  insert(
-    wishlistFollow: WishlistFollow
-  ): Observable<WishlistFollow> {
+  insert(wishlistFollow: WishlistFollow): Observable<WishlistFollow> {
     return this._authHttp
       .post(
         `${this._url}/${wishlistFollow.wishlistId}/follow`,
@@ -88,12 +86,27 @@ export class WishlistFollowService extends MarascoService {
       )
       .pipe(
         map((result: WishlistFollow) => {
-            result.wishlist = wishlistFollow.wishlist;
-            this.onWishlistFollowCreated.next(result);
+          result.wishlist = wishlistFollow.wishlist;
+          this.onWishlistFollowCreated.next(result);
           return result;
         }),
         catchError(this.handleError)
       );
+  }
+
+  /**
+   * @description Inserts or Updates Wishlist follow
+   * @author Antonio Marasco
+   * @date 2019-05-16
+   * @param {WishlistFollow} wishlistFollow
+   * @memberof WishlistFollowService
+   */
+  save(wishlistFollow: WishlistFollow) {
+    if (!!wishlistFollow._id) {
+      return this.update(wishlistFollow);
+    }
+
+    return this.insert(wishlistFollow);
   }
 
   /**
@@ -107,13 +120,14 @@ export class WishlistFollowService extends MarascoService {
   update(wishlistFollow: WishlistFollow): Observable<WishlistFollow> {
     return this._authHttp
       .put(
-        `${this._url}/${wishlistFollow.wishlistId}/item/${wishlistFollow._id}`,
+        `${this._url}/${wishlistFollow.wishlistId}/follow/${wishlistFollow._id}`,
         JSON.stringify(wishlistFollow)
       )
       .pipe(
-        map((WishlistFollow: WishlistFollow) => {
-          this.onWishlistFollowChanged.next(WishlistFollow);
-          return WishlistFollow;
+        map((result: WishlistFollow) => {
+          result.wishlist = wishlistFollow.wishlist;
+          this.onWishlistFollowChanged.next(result);
+          return result;
         }),
         catchError(this.handleError)
       );

@@ -1,8 +1,15 @@
-import { Component, OnInit, TemplateRef, OnDestroy, ViewChild } from '@angular/core';
+import { WishlistFollow } from './../../../../core/interfaces/Wishlist-Follow.interface';
+import { WishlistFollowService } from './../../../../core/services/wishlist-follow.service';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 
-import { Wishlist } from '../../../../core/interfaces/Wishlist.interface';
 import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import * as moment from 'moment';
@@ -23,27 +30,12 @@ import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 })
 export class WishlistFollowingComponent implements OnInit, OnDestroy {
   //////////////////Private variables///////////
-  private subs = new SubSink();
+  private subs$ = new SubSink();
   //////////////END Private variables //////////
 
   //////////////////Publicly exposed variables///////////
 
-  public defaultWishlist: Wishlist = {
-    name: '',
-    userId: '',
-    preferences: {
-      includePriceWhenSharing: true,
-      markPurchasedItem: false,
-      hideFromMe: false,
-      currencyUnitSymbol: '$',
-      notifyOnAddItem: false,
-      notifyOnRemoveItem: false,
-      notifyOnClose: false
-    },
-    items: []
-  };
-
-  public defaultWishlists: Wishlist[] = [];
+  public defaultWishlists: WishlistFollow[] = [];
 
   public isMobile = true;
 
@@ -53,7 +45,7 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
 
   public user: User;
 
-  public wishlists: Wishlist[] = this.defaultWishlists;
+  public wishlistFollowings: WishlistFollow[] = this.defaultWishlists;
 
   @ViewChild('wishlistFollowModal')
   private wishlistFollowModal: TemplateRef<any>;
@@ -67,7 +59,8 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
     private _store: Store<fromWishlist.WishlistState>,
     private _layoutService: LayoutService,
     private _router: Router,
-    private _modalService: BsModalService
+    private _modalService: BsModalService,
+    private _wishlistFollowService: WishlistFollowService
   ) {}
 
   /////////////////////////////////////
@@ -75,10 +68,19 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   ngOnInit() {
-    this.subs.add(
-      (this.pageIdSubscription = this._route.params.subscribe(params => {
-        this.wishlists = this._route.snapshot.data['wishlists'];
+    this.subs$.add(
+      (this.pageIdSubscription = this._route.params.subscribe((params) => {
+        let t = this._route.snapshot.data['wishlists'];
+        this.wishlistFollowings = this._route.snapshot.data['wishlists'];
       }))
+    );
+
+    this.subs$.add(
+      this._wishlistFollowService.onWishlistFollowChanged.subscribe(
+        (follow) => {
+          this.updateWishlistFollow(follow);
+        }
+      )
     );
 
     this.activate();
@@ -96,15 +98,21 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
     this.bsModalRef.hide();
   }
 
-  public openModal(wishlist: any) {
+  public openModal(wishlistFollow: any) {
     const initialState = {
-      wishlist: wishlist || {
+      wishlist: {
+        _id: wishlistFollow.wishlistId._id,
+        name: wishlistFollow.wishlistId.name
+      },
+      wishlistFollow: wishlistFollow || {
         name: '',
         purchased: false
       }
     };
 
-    this.bsModalRef = this._modalService.show(this.wishlistFollowModal, { initialState });
+    this.bsModalRef = this._modalService.show(this.wishlistFollowModal, {
+      initialState
+    });
   }
 
   public previewWishlist(row: any, wishlist: any) {
@@ -137,7 +145,7 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
     const that = this;
     this.options = {
       dom: 'Bfrtip',
-      data: this.wishlists,
+      data: this.wishlistFollowings,
       columns: [
         {
           data: 'wishlistId.name',
@@ -158,6 +166,7 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
         // (see https://github.com/l-lin/angular-datatables/issues/87)
         jQuery('td', row).unbind('click');
         jQuery('td', row).bind('click', () => {
+        
           self.openModal(data);
           //self.previewWishlist(row, data);
         });
@@ -176,8 +185,8 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
   private activateState() {
     const currentState = this._store.pipe(select(fromAuth.getUser));
 
-    this.subs.add(
-      currentState.subscribe(data => {
+    this.subs$.add(
+      currentState.subscribe((data) => {
         if (!!data) {
           this.user = data.user;
         }
@@ -188,11 +197,29 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
     this.isMobile = this._layoutService.store.isMobile;
   }
 
-  /**
-   * Validate the item
-   */
+  updateWishlistFollow(follow: WishlistFollow) {
+    if (!follow){
+      return;
+    }
+
+    let foundWishlistFollowing = this.wishlistFollowings.find((wishlistFollow) => {
+      return wishlistFollow._id === follow._id;
+    });
+
+    let foundIndex: number = this.wishlistFollowings.findIndex(
+      (x) => x._id === follow._id
+    );
+
+    this.wishlistFollowings[foundIndex] = foundWishlistFollowing;
+
+    let dt = jQuery('#wishlistFollowingDataTable').DataTable();
+    dt.clear().draw();
+    dt.rows.add(this.wishlistFollowings);
+    dt.draw();
+    //dt.columns.adjust().draw();
+  }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    this.subs$.unsubscribe();
   }
 }

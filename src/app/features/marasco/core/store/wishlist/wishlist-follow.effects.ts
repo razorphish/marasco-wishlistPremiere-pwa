@@ -146,10 +146,10 @@ export class WishlistFollowEffects {
   wishlistFollowEditSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.EditWishlistFollowSuccess),
     switchMap((data: any) =>
-      this._wishlistStateService.editFollow(data.payload)
+      this._wishlistFollowStateService.edit(data.payload)
     ),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-    map((_) => new actions.WishlistsPayload(_))
+    map((_) => new actions.WishlistFollowPayload(_))
   );
 
   @Effect()

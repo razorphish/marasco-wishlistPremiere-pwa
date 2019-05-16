@@ -11,7 +11,7 @@ import "script-loader!smartadmin-plugins/datatables/datatables.min.js";
 @Component({
   selector: "sa-datatable",
   template: `
-      <table class="dataTable responsive {{tableClass}}" width="{{width}}">
+      <table class="dataTable responsive {{tableClass}}" width="{{width}}" id="{{tableName}}">
         <ng-content></ng-content>
       </table>
 `,
@@ -26,6 +26,7 @@ export class DatatableComponent implements OnInit {
   @Input() public columnsHide: boolean;
   @Input() public tableClass: string;
   @Input() public width: string = "100%";
+  @Input() public tableName: string = '';
 
   constructor(private el: ElementRef) {}
 

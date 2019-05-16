@@ -68,6 +68,25 @@ export class WishlistFollowStateService {
     });
   }
 
+  edit(wishlistFollow: WishlistFollow) {
+    if (!!wishlistFollow.wishlist) {
+      wishlistFollow.wishlistId = {
+        _id: wishlistFollow.wishlist._id,
+        name: wishlistFollow.wishlist.name
+      };
+    }
+
+    let foundIndex: number = this.wishlistFollows.findIndex(
+      (x) => x._id === wishlistFollow._id
+    );
+
+    this.wishlistFollows[foundIndex] = wishlistFollow;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlistFollows);
+    });
+  }
+
   load(): Promise<any> {
     return new Promise((resolve, reject) => {
       this._storage.get(USER_WISHLIST_FOLLOWS).then(
