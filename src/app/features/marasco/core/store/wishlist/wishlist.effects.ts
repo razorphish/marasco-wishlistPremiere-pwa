@@ -34,7 +34,7 @@ export class WishlistEffects {
   @Effect()
   wishlistsChange$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.WishlistsChange),
-    delay(1500),
+    //delay(1500),
     switchMap((data: any) => data.payload.getWishlists()),
     tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
     map((_) => new actions.WishlistsPayload(_))
@@ -59,7 +59,7 @@ export class WishlistEffects {
   @Effect({ dispatch: false })
   wishlistNull$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.WishlistsNull),
-    delay(1500),
+    //delay(1500),
     tap<Wishlist[]>(
       () =>
         (this._wishlistStateService.wishlists = null)
