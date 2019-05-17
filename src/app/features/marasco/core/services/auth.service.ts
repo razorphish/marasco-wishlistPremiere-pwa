@@ -198,11 +198,6 @@ export class AuthService extends MarascoService {
 
           //Uncomment following lines if refreshtoken returns entire User object
           this.onLoginSuccess.next(true);
-          //Piggy back off of current values
-          credential.user.devices = this._userSource.devices;
-          credential.user.wishlistFollows = this._userSource.wishlistFollows;
-          credential.user.wishlistItemCategories = this._userSource.wishlistItemCategories;
-          credential.user.wishlists = this._userSource.wishlists;
 
           this._userSource = new UserInfo(credential.user);
           this._userSource.token = credential;
