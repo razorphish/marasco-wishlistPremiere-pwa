@@ -102,6 +102,18 @@ export class WishlistComponent implements OnInit, OnDestroy {
     this.bsModalRef.hide();
   }
 
+  /**
+   * @description
+   * @author Antonio Marasco
+   * @date 2019-05-18
+   * @param {*} $event
+   * @param {string} url
+   * @memberof WishlistComponent
+   */
+  public goToUrl($event: any, url: string) {
+    
+  }
+
   public markItemPurchase($event, item: WishlistItem) {
     item.purchased = !item.purchased;
     item.purchasedBy = this.user._id;

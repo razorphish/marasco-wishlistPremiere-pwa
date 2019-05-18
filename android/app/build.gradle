@@ -6,8 +6,8 @@ android {
         applicationId "com.wishlistPremiere.marasco"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 24
-        versionName "1.24"
+        versionCode 26
+        versionName "1.26"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
