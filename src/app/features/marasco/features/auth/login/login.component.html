@@ -26,6 +26,25 @@
               and family<br />
             </h4>
 
+            <div class="row">
+              <div class="col-md-6">
+                <a
+                  href="https://itunes.apple.com/us/app/wishlist-premiere/id1461819820?mt=8"
+                  ><img alt="Get it on iOS"
+                  src="https://linkmaker.itunes.apple.com/en-us/badge-lrg.svg?releaseDate=2019-05-04&kind=iossoftware&bubble=ios_apps"/>
+                </a>
+              </div>
+              <div class="col-md-6">
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.wishlistPremiere.marasco&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+                  ><img
+                    alt="Get it on Google Play"
+                    src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+                    width="150px"
+                /></a>
+              </div>
+            </div>
+
             <div class="login-app-icons">
               <!-- <a routerLink="/dashboard/analytics" class="btn btn-danger btn-sm">Frontend Template</a>&nbsp; -->
               <a routerLink="/" class="btn btn-primary btn-sm">Back Home</a>
@@ -85,7 +104,7 @@
                   />
                   <b class="tooltip tooltip-top-right"
                     ><i class="fa fa-user fa-2x txt-color-teal"></i> Please
-                    enter email/username.  CASE Sensitive</b
+                    enter email/username. CASE Sensitive</b
                   ></label
                 >
               </section>
@@ -153,6 +172,20 @@
                 ><i class="fa fa-linkedin"></i
               ></a>
             </li>
+          </ul>
+        </div>
+
+        <div *ngIf="isMobile">
+          <h5 class="text-center">- mobile stores</h5>
+
+          <ul class="list-inline text-center">
+            <li>
+              <a
+                href="https://itunes.apple.com/us/app/wishlist-premiere/id1461819820?mt=8"
+                style="display:inline-block;overflow:hidden;background:url(https://linkmaker.itunes.apple.com/assets/shared/badges/en-us/appstore-sm.svg) no-repeat;width:60px;height:15px;"
+              ></a>
+            </li>
+            <li></li>
           </ul>
         </div>
 

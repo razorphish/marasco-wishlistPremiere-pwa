@@ -67,6 +67,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   showPopup() {
+    let username = this.user.username || '';
+
     this._notificationService.smartMessageBox(
       {
         title:

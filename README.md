@@ -235,3 +235,5 @@ https://www.joshmorony.com/adding-icons-splash-screens-launch-images-to-capacito
 
 Android release build location
 C:\TFS\Marasco1\Marasco\marasco-wishlistPremiere-pwa\android\app\release
+
+https://linkmaker.itunes.apple.com/en-us/details/1461819820?country=us&mediaType=ios_apps&term=wishlist+premiere&type=ipadsoftware
