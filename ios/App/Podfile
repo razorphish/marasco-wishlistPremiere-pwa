@@ -12,4 +12,6 @@ end
 target 'App' do
   capacitor_pods
   # Add your Pods here
+  use_frameworks!
+  pod 'Branch'
 end
