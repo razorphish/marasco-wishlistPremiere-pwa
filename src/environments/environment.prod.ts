@@ -40,6 +40,7 @@ export const environment = {
   apiUrlAuth: 'https://api.maras.co/oauth/',
   // apiUrl: 'http://localhost:3002/api/',
   // apiUrlAuth: 'http://localhost:3002/oauth/',
+  deepLinkUrl: 'https://marasco-wishlist.app.link/pbaSX2e6WW',
   application: '5c4b1303fc13ae60b4000002',
   devicekey: 'device',
   pushTokenKey: 'pushNotificationToken',

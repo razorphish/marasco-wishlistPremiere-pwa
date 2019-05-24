@@ -237,6 +237,22 @@ Android release build location
 C:\TFS\Marasco1\Marasco\marasco-wishlistPremiere-pwa\android\app\release
 
 http://marasco-wishlist.app.link/pbaSX2e6WW
+https://dashboard.branch.io/start/existing-users/ios/2
 
 
 https://linkmaker.itunes.apple.com/en-us/details/1461819820?country=us&mediaType=ios_apps&term=wishlist+premiere&type=ipadsoftware
+
+Creation date: Aug 12, 2017
+Entry type: PrivateKeyEntry
+Certificate chain length: 1
+Certificate[1]:
+Owner: C=US, O=Android, CN=Android Debug
+Issuer: C=US, O=Android, CN=Android Debug
+Serial number: 1
+Valid from: Sat Aug 12 09:31:41 PDT 2017 until: Mon Aug 05 09:31:41 PDT 2047
+Certificate fingerprints:
+         MD5:  E1:49:37:CF:50:00:E1:DA:28:DF:BC:B1:49:27:F0:C2
+         SHA1: 6D:5D:BD:E3:BD:31:C8:8F:D9:32:B0:A2:E6:D9:64:73:2D:B5:86:D0
+         SHA256: 20:C2:C1:73:25:1C:40:85:54:3F:BC:6C:2B:82:D5:4A:73:0A:B0:61:E7:1F:BD:90:08:EF:12:4E:5A:A4:AF:57
+         Signature algorithm name: SHA1withRSA
+         Version: 1
