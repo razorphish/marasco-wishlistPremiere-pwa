@@ -3,8 +3,8 @@
     package="com.wishlistPremiere.marasco">
 
     <application
+        android:name="CustomApplicationClass"
         android:allowBackup="true"
-        android:name="io.branch.referral.BranchApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -53,8 +53,8 @@
         </activity>
 
         <!-- Branch init -->
-        <meta-data android:name="io.branch.sdk.BranchKey" android:value="undefined" />
-        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="undefined" />
+        <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_naMsmUSMy5mcPZmKeEiKdbehzEaX33IJ" />
+        <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_hbGyaNPKC6ooH0cOeCudrajcqAiW49M7" />
 
         <!-- Branch testing (TestMode "true" to simulate fresh installs on dev environment) -->
         <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
