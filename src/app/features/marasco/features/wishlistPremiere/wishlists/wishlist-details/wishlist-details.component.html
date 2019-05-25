@@ -63,7 +63,7 @@
                   </fieldset>
 
                   <div class="form-actions row">
-                    <div class="col col-md-12 hidden-xs hidden-mobile">
+                    <div class="col col-md-12" *ngIf="!isMobile">
                       <button
                         type="button"
                         (click)="
@@ -118,7 +118,7 @@
                         Save
                       </button>
                     </div>
-                    <div class="col col-md-12 visible-xs visible-mobile">
+                    <div class="col col-md-12" *ngIf="isMobile">
                       <button
                         type="button"
                         (click)="
