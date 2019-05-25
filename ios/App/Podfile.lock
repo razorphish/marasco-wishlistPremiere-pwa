@@ -1,11 +1,19 @@
 PODS:
+  - Branch (0.25.11):
+    - Branch/Core (= 0.25.11)
+  - Branch/Core (0.25.11)
   - Capacitor (1.0.0-beta.21):
     - CapacitorCordova (= 1.0.0-beta.21)
   - CapacitorCordova (1.0.0-beta.21)
 
 DEPENDENCIES:
+  - Branch
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Branch
 
 EXTERNAL SOURCES:
   Capacitor:
@@ -14,9 +22,10 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/ios"
 
 SPEC CHECKSUMS:
+  Branch: 3cc6dcfd726db42ced22c418c0fb09aa5e90a847
   Capacitor: 3ef4e8bed3f5491cc56bfba704e8e78521aea225
   CapacitorCordova: 565e79a19d9ccdf9131f290cbf1a6bdc3f441b5e
 
-PODFILE CHECKSUM: 15e70bb71fc6b0da4e2d94d4b8f02e6bbc0472c6
+PODFILE CHECKSUM: 95c9c33ec8ba0f5962e20f81ac2aad50f5bcf5d7
 
 COCOAPODS: 1.5.3

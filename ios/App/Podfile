@@ -10,8 +10,8 @@ def capacitor_pods
 end
 
 target 'App' do
-  capacitor_pods
-  # Add your Pods here
-  use_frameworks!
-  pod 'Branch'
+    # Add your Pods here
+    use_frameworks!
+    pod 'Branch'
+    capacitor_pods
 end
