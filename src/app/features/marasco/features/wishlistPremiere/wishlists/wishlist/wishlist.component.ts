@@ -59,6 +59,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
     }
   };
 
+  public surpriseMe: boolean = false;
+
   public user: User;
 
   public wishlist: Wishlist = this.defaultWishlist;
@@ -161,6 +163,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   private activate() {
     //Gets current state of the app
     this.activateState();
+
+    if (this.user._id === this.wishlist.userId) {
+      this.surpriseMe = this.wishlist.preferences.hideFromMe;
+    }
   }
 
   private activateState() {

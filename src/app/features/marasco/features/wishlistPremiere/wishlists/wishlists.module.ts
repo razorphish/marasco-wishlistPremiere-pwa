@@ -37,6 +37,9 @@ import {
 } from '../wishlists';
 
 @NgModule({
+  entryComponents: [
+    WishlistOptionsModalComponent
+  ],
   imports: [
     SharedModule,
     SettingsModule,

@@ -16,6 +16,7 @@ import { Wishlist } from '@app/features/marasco/core/interfaces/Wishlist.interfa
 import { ActivityLogSubjectService } from '@app/features/marasco/shared/activitylog.subject-service';
 
 import { SubSink } from 'subsink';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'wishlist-options-modal',
@@ -115,7 +116,7 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
               number: '4',
               sound: false
             });
-            this['settings'].close.emit(true);
+            this['settings'].close.emit(item);
           } else {
             this['settings'].activityLogService.addError(
               'No wishlist present: Update Failed'

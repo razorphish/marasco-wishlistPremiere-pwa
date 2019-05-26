@@ -67,9 +67,8 @@
                       <button
                         type="button"
                         (click)="
-                          openModalSettings(
+                          openOptionsModal(
                             $event,
-                            wishlistOptionsModal,
                             wishlist
                           )
                         "
@@ -122,9 +121,8 @@
                       <button
                         type="button"
                         (click)="
-                          openModalSettings(
+                          openOptionsModal(
                             $event,
-                            wishlistOptionsModal,
                             wishlist
                           )
                         "
@@ -252,7 +250,7 @@
                           &nbsp; -->
                             <span
                               class="label bg-color-red"
-                              *ngIf="item.purchased"
+                              *ngIf="item.purchased && !surpriseMe"
                             >
                               Purchased
                             </span>
@@ -306,10 +304,3 @@
   ></wishlist-item-modal>
 </ng-template>
 
-<ng-template #wishlistOptionsModal>
-  <wishlist-options-modal
-    [wishlistObject]="wishlist"
-    (save)="closeModal()"
-    (close)="onModalClose()"
-  ></wishlist-options-modal>
-</ng-template>

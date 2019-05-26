@@ -185,7 +185,7 @@
                             &nbsp;
 
                             <button
-                              *ngIf="item.purchased"
+                              *ngIf="item.purchased && !surpriseMe"
                               [disabled]="item.purchasedBy !== user._id"
                               class="btn btn-default btn-sm"
                               (click)="markItemPurchase($event, item)"
@@ -195,12 +195,12 @@
                             </button>
 
                             <button
-                              *ngIf="!item.purchased"
+                              *ngIf="!item.purchased && !surpriseMe"
                               class="btn btn-success btn-sm"
                               (click)="markItemPurchase($event, item)"
                             >
                               <i class="fa fa-cart-plus"></i>
-                              Purchased?
+                              I Got it?
                             </button>
                           </div>
                         </div>

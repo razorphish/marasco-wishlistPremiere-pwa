@@ -1,6 +1,5 @@
 import { UserService } from './../../../../core/services/user.service';
 import { WishlistItemSort } from '../../../../core/interfaces/Wishlist-item-sort.interface';
-import { Subject } from 'rxjs';
 import {
   Component,
   OnInit,
@@ -33,6 +32,8 @@ import { SwPush } from '@angular/service-worker';
 import { UserNotification } from '@app/features/marasco/core/interfaces/User-Notification.interface';
 
 import { SubSink } from 'subsink';
+import { WishlistOptionsModalComponent } from './options-modal/options-modal.component';
+import { take } from 'rxjs/operators';
 
 const { Share } = Plugins;
 const { Device } = Plugins;
@@ -75,6 +76,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
   public isMobile = true;
   public isUpdate = true;
   public hasSharing = false;
+  public surpriseMe: boolean = false;
 
   public itemSortOptions = {
     handle: '.handle', // handle's class
@@ -186,6 +188,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   public closeModal() {
+    console.log('you made it!')
     this.bsModalRef.hide();
   }
 
@@ -226,6 +229,25 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     event.preventDefault();
     this.bsModalRef = this._modalService.show(template, { initialState });
   }
+
+  public openOptionsModal(
+    event,
+    wishlist: Wishlist
+  ) {
+    const initialState = {
+      wishlist: wishlist || {
+        name: ''
+      }
+    };
+
+    event.preventDefault();
+    this.bsModalRef = this._modalService.show(WishlistOptionsModalComponent, { initialState });
+    this.bsModalRef.content.close.subscribe((wishlist) => {
+      this.surpriseMe = wishlist.preferences.hideFromMe;
+      this.bsModalRef.hide();
+    });
+  }
+
 
   public onModalClose() {
     this.bsModalRef.hide();
@@ -285,13 +307,18 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     //Set User info
     this.wishlist.userId = this.user._id;
 
+    //Check if browser has navigation share
     this.hasSharing = nav.share ? true : false;
 
+    //Drop down settings
     this.dropdownSettingsStatus = {
       singleSelection: true,
       idField: '_id',
       textField: 'name'
     };
+
+    //Determine if users wants the buttons to be hidden
+    this.surpriseMe = this.wishlist.preferences.hideFromMe;
   }
 
   private activateState() {
