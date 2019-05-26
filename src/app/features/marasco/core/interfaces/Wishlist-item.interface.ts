@@ -4,6 +4,7 @@ export interface WishlistItem {
   _id?: string;
   categoryId?: any;
   wishlistId?: string;
+  userId?: string;
   purchasedBy?: string;
   name: string;
   price?: number;

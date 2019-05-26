@@ -88,11 +88,12 @@ export class WishlistOptionsModalComponent implements OnInit, OnDestroy {
       preferences: {
         //includePriceWhenSharing: $event.elements.includePriceWhenSharing.checked,
         //markPurchasedItem: $event.elements.markPurchasedItem.checked,
-        //hideFromMe: $event.elements.hideFromMe.checked,
+        hideFromMe: $event.elements.hideFromMe.checked,
         currencyUnitSymbol: $event.elements.currencyUnitSymbol.value,
         notifyOnAddItem: $event.elements.notifyOnAddItem.checked,
         notifyOnRemoveItem: $event.elements.notifyOnRemoveItem.checked,
-        notifyOnClose: $event.elements.notifyOnClose.checked
+        notifyOnClose: $event.elements.notifyOnClose.checked,
+        collaborative: $event.elements.collaborative.checked
       }
     };
 

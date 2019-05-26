@@ -28,6 +28,7 @@ import { SubSink } from 'subsink';
 export class WishlistItemModalComponent implements OnInit, OnDestroy {
   //*=================I/O============================= */
   @Input() wishlist: Wishlist;
+  @Input() userId: string;
   @Input() public options = {
     mode: 'popup',
     disabled: false,
@@ -104,7 +105,7 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       // Rules for form validation
       wishlistId: this.wishlist._id,
       wishlistItemId: this.wishlistItem._id,
-      userId: this.wishlist.userId,
+      userId: this.userId || this.wishlist.userId,
       store: this._store,
       rules: {
         name: {
@@ -145,6 +146,7 @@ export class WishlistItemModalComponent implements OnInit, OnDestroy {
       notes: $event.elements.notes.value,
       image: $event.elements.image.value,
       wishlistId: this['settings'].wishlistId,
+      userId: this['settings'].userId,
       _id: this['settings'].wishlistItemId
     };
 

@@ -7,4 +7,5 @@ export interface WishlistPreference {
     notifyOnAddItem: boolean;
     notifyOnRemoveItem: boolean;
     notifyOnClose: boolean;
+    collaborative: boolean;
 }

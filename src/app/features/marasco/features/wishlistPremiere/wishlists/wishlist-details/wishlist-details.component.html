@@ -300,6 +300,7 @@
 <ng-template #wishlistItemModal>
   <wishlist-item-modal
     [wishlist]="wishlist"
+    [userId]="this.user._id"
     (save)="closeModal()"
     (close)="onModalClose()"
   ></wishlist-item-modal>

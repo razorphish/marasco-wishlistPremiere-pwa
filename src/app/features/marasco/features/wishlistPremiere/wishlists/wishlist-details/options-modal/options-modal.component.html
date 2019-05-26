@@ -20,19 +20,7 @@
   >
     <fieldset>
       <!-- <div class="row">
-        <section class="col col-md-6 col-xs-6">
-          <label class="checkbox">
-            <input
-              type="checkbox"
-              name="hideFromMe"
-              id="hideFromMe"
-              [ngModel]="wishlist.preferences.hideFromMe"
-              value="true"
-            />
-            <i></i>
-            Hide From Me?
-          </label>
-        </section>
+
         <section class="col col-md-6 col-xs-6">
           <label class="checkbox">
             <input
@@ -59,19 +47,6 @@
             />
             <i></i>
             Mark Purchased Items?
-          </label>
-        </section>
-        <section class="col col-md-6 col-xs-6">
-          <label class="checkbox">
-            <input
-              type="checkbox"
-              name="notifyOnAddItem"
-              id="notifyOnAddItem"
-              [ngModel]="wishlist.preferences.notifyOnAddItem"
-              value="true"
-            />
-            <i></i>
-            Notify when I add an item?
           </label>
         </section>
       </div> -->
@@ -103,6 +78,36 @@
           </label>
         </section>
       </div>
+
+      <div class="row">
+        <section class="col col-md-6 col-xs-6">
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              name="collaborative"
+              id="collaborative"
+              [ngModel]="wishlist.preferences.collaborative"
+              value="true"
+            />
+            <i></i>
+            Make Collaboritive?
+          </label>
+        </section>
+        <section class="col col-md-6 col-xs-6">
+          <label class="checkbox">
+            <input
+              type="checkbox"
+              name="hideFromMe"
+              id="hideFromMe"
+              [ngModel]="wishlist.preferences.hideFromMe"
+              value="true"
+            />
+            <i></i>
+            Hide From Me?
+          </label>
+        </section>
+      </div>
+
       <div class="row">
         <section class="col col-md-6 col-xs-6">
           <label class="checkbox">

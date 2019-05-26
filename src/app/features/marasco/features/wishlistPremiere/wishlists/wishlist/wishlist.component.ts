@@ -11,7 +11,10 @@ import * as fromWishlist from '@app/features/marasco/core/store/wishlist';
 import * as fromAuth from '@app/features/marasco/core/store/auth';
 import { User } from '@app/features/marasco/core/interfaces/UserInfo.interface';
 import { WishlistItem } from '@app/features/marasco/core/interfaces/Wishlist-item.interface';
-import { LayoutService } from '@app/features/marasco/core/services';
+import {
+  LayoutService,
+  WishlistItemService
+} from '@app/features/marasco/core/services';
 import { Lightbox, IAlbum } from 'ngx-lightbox';
 
 import { SubSink } from 'subsink';
@@ -42,7 +45,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
       currencyUnitSymbol: '$',
       notifyOnAddItem: false,
       notifyOnRemoveItem: false,
-      notifyOnClose: false
+      notifyOnClose: false,
+      collaborative: false
     },
     items: []
   };
@@ -69,7 +73,8 @@ export class WishlistComponent implements OnInit, OnDestroy {
     private _store: Store<fromWishlist.WishlistState>,
     private _modalService: BsModalService,
     private _layoutService: LayoutService,
-    private _lightbox: Lightbox
+    private _lightbox: Lightbox,
+    private _wishlistItemService: WishlistItemService
   ) {}
 
   /////////////////////////////////////
@@ -110,9 +115,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
    * @param {string} url
    * @memberof WishlistComponent
    */
-  public goToUrl($event: any, url: string) {
-    
-  }
+  public goToUrl($event: any, url: string) {}
 
   public markItemPurchase($event, item: WishlistItem) {
     item.purchased = !item.purchased;
@@ -128,6 +131,10 @@ export class WishlistComponent implements OnInit, OnDestroy {
   public openModal(event, template: TemplateRef<any>, wishlist: Wishlist) {
     const initialState = {
       wishlist: wishlist || {
+        name: '',
+        purchased: false
+      },
+      wishlistItem: {
         name: '',
         purchased: false
       }
@@ -182,6 +189,26 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
       this._albums.push(album);
     });
+
+    //Subscribe to wishlist changes
+    this.subs$.add(
+      this._wishlistItemService.onWishlistItemCreated.subscribe(
+        (wishlistItem) => {
+          if (!!wishlistItem) {
+            let price = !!wishlistItem.price ? ` : $${wishlistItem.price}` : '';
+            const album = {
+              thumb: wishlistItem.image || 'assets/icons/icon-72x72_grey_out.png',
+              src: wishlistItem.image || 'assets/icons/icon-384x384.png',
+              caption: `${wishlistItem.name}${price}`
+            };
+
+            this._albums.push(album);
+
+            this.wishlist.items.push(wishlistItem);
+          }
+        }
+      )
+    );
   }
 
   /**

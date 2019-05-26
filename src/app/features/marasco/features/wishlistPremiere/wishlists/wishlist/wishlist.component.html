@@ -37,11 +37,23 @@
                   <button
                     type="button"
                     (click)="openModal($event, wishlistFollowModal, wishlist)"
-                    class="btn btn-primary btn-lg btn-block"
+                    class="btn btn-primary btn-lg"
                   >
                     <i class="fa fa-gift fa-lg"></i>
                     Follow Wishlist
                   </button>
+
+                  &nbsp;
+                  <button
+                    *ngIf="wishlist.preferences.collaborative"
+                    type="button"
+                    (click)="openModal($event, wishlistItemModal)"
+                    class="btn btn-primary btn-lg"
+                  >
+                    <i class="fa fa-plus fa-lg"></i>
+                    Add Item
+                  </button>
+
                   <!-- &nbsp;
                   <button
                     *ngIf="false"
@@ -62,11 +74,22 @@
                   <button
                     type="button"
                     (click)="openModal($event, wishlistFollowModal, wishlist)"
-                    class="btn btn-primary btn-lg btn-block"
+                    class="btn btn-primary btn-lg"
                   >
                     <i class="fa fa-gift fa-lg"></i>
                     Follow Wishlist
                   </button>
+
+                  &nbsp;
+                  <button
+                    *ngIf="wishlist.preferences.collaborative"
+                    type="button"
+                    (click)="openModal($event, wishlistItemModal)"
+                    class="btn btn-primary btn-lg"
+                  >
+                    <i class="fa fa-plus fa-lg"></i>
+                  </button>
+
                   <!-- &nbsp;
                   <button
                     *ngIf="false"
@@ -151,14 +174,14 @@
                       <div class="row">
                         <div class="col col-md-12 col-xs-12">
                           <div class="pull-right">
-                            <a 
+                            <a
                               *ngIf="item.url"
-                              href="{{item.url}}"
+                              href="{{ item.url }}"
                               class="btn btn-primary btn-sm"
                             >
                               <i class="fa fa-external-link"></i>
                               Link
-                          </a>
+                            </a>
                             &nbsp;
 
                             <button
@@ -209,6 +232,15 @@
 <ng-template #wishlistUserFollowModal>
   <wishlist-item-modal
     [wishlist]="wishlist"
+    (save)="closeModal()"
+    (close)="onModalClose()"
+  ></wishlist-item-modal>
+</ng-template>
+
+<ng-template #wishlistItemModal>
+  <wishlist-item-modal
+    [wishlist]="wishlist"
+    [userId]="this.user._id"
     (save)="closeModal()"
     (close)="onModalClose()"
   ></wishlist-item-modal>

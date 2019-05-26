@@ -64,7 +64,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
       currencyUnitSymbol: '$',
       notifyOnAddItem: true,
       notifyOnRemoveItem: true,
-      notifyOnClose: true
+      notifyOnClose: true,
+      collaborative: false
     },
     items: []
   };
