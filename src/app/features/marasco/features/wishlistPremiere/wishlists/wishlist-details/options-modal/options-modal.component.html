@@ -4,7 +4,7 @@
     class="close"
     data-dismiss="modal"
     aria-hidden="true"
-    (click)="close.emit(true)"
+    (click)="close.emit('close')"
   >
     &times;
   </button>
@@ -90,7 +90,7 @@
               value="true"
             />
             <i></i>
-            Make Collaboritive?
+            Make Collaborative?
           </label>
         </section>
         <section class="col col-md-6 col-xs-6">
@@ -143,7 +143,7 @@
           <button
             type="button"
             class="btn btn-default btn-lg"
-            (click)="close.emit(true)"
+            (click)="close.emit('close')"
           >
             Close
           </button>

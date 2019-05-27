@@ -188,7 +188,6 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
   /////////////////////////////////////
 
   public closeModal() {
-    console.log('you made it!')
     this.bsModalRef.hide();
   }
 
@@ -230,10 +229,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     this.bsModalRef = this._modalService.show(template, { initialState });
   }
 
-  public openOptionsModal(
-    event,
-    wishlist: Wishlist
-  ) {
+  public openOptionsModal(event, wishlist: Wishlist) {
     const initialState = {
       wishlist: wishlist || {
         name: ''
@@ -241,13 +237,17 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     };
 
     event.preventDefault();
-    this.bsModalRef = this._modalService.show(WishlistOptionsModalComponent, { initialState });
-    this.bsModalRef.content.close.subscribe((wishlist) => {
-      this.surpriseMe = wishlist.preferences.hideFromMe;
+    this.bsModalRef = this._modalService.show(WishlistOptionsModalComponent, {
+      initialState
+    });
+    this.bsModalRef.content.close.subscribe((result) => {
+      if (result !== 'close') {
+        this.surpriseMe = result.preferences.hideFromMe;
+      }
+
       this.bsModalRef.hide();
     });
   }
-
 
   public onModalClose() {
     this.bsModalRef.hide();
