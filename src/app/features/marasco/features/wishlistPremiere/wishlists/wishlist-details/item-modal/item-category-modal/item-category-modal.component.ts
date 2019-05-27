@@ -32,8 +32,7 @@ export class WishlistItemCategoryModalComponent implements OnInit {
   addCategory($event) {
     let model: WishlistItemCategory = {
       name: $event.elements.name.value,
-      userId: this['settings'].userId,
-      close: this['settings'].close
+      userId: this['settings'].userId
     };
 
     // this['settings'].store.dispatch(
