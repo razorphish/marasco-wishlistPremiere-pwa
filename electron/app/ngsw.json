@@ -1,6 +1,10 @@
 {
   "configVersion": 1,
+<<<<<<< HEAD
   "timestamp": 1559002230191,
+=======
+  "timestamp": 1558970070841,
+>>>>>>> 7cae7cd08c18d59add5b18cbb3868364ffd34ff5
   "index": "/index.html",
   "assetGroups": [
     {
@@ -8,6 +12,7 @@
       "installMode": "prefetch",
       "updateMode": "prefetch",
       "urls": [
+<<<<<<< HEAD
         "/1.961677199fb78a92cfe2.js",
         "/10.0873c88b15575a7f87dc.js",
         "/11.8253d74c2a14927be985.js",
@@ -21,6 +26,21 @@
         "/19.ca0309432ee15ef9ea56.js",
         "/20.d48e3d557e9a5de0f3e7.js",
         "/21.94ad745ca83730bd4419.js",
+=======
+        "/1.e8e6cb88c43ddbb8482b.js",
+        "/10.73dec240bb08f6564e0f.js",
+        "/11.302a4f9a25bacef7a02e.js",
+        "/12.00806330499511664137.js",
+        "/13.62fd428c1a7c451ef808.js",
+        "/14.42799721191ce1dd1d83.js",
+        "/15.8ccd1cdd6571ad74a732.js",
+        "/16.4c170b96746436379cb7.js",
+        "/17.423b47d06beba8161693.js",
+        "/18.267c66091e667b008c4b.js",
+        "/19.8b45f4755c76b6534a12.js",
+        "/20.64713369e0af409d5cf6.js",
+        "/21.9d93190050df44e7f911.js",
+>>>>>>> 7cae7cd08c18d59add5b18cbb3868364ffd34ff5
         "/22.5dc7bf4117110e842795.js",
         "/3.e57051c203ad45787548.js",
         "/4.83bd471849cff9ffaab6.js",
@@ -30,7 +50,11 @@
         "/index.html",
         "/main.af1b4472345adace81cc.js",
         "/polyfills.cefe07c754ab7c8f6a29.js",
+<<<<<<< HEAD
         "/runtime.41a4ee489f040df3c428.js",
+=======
+        "/runtime.ddfc4bf720ca1396bd2d.js",
+>>>>>>> 7cae7cd08c18d59add5b18cbb3868364ffd34ff5
         "/styles.aca9bed3d5efd39e615a.css"
       ],
       "patterns": []
@@ -200,6 +224,7 @@
   ],
   "dataGroups": [],
   "hashTable": {
+<<<<<<< HEAD
     "/1.961677199fb78a92cfe2.js": "63e70e98d9a574c7f418e724739f4717897e8f2a",
     "/10.0873c88b15575a7f87dc.js": "5116c49954e27f9d3b0ceb25ea6e99e210311bf3",
     "/11.8253d74c2a14927be985.js": "237e448dabc39d3263e4d80fbffbf7df0122eb94",
@@ -213,6 +238,21 @@
     "/19.ca0309432ee15ef9ea56.js": "949fcf92be9459ef48b854a7843512bf6a8576c8",
     "/20.d48e3d557e9a5de0f3e7.js": "f6dfa26f08adb3b5022a826dbdcb82bc29fff6c7",
     "/21.94ad745ca83730bd4419.js": "7480195229e9a5fac0821b61194090e68bb77ff6",
+=======
+    "/1.e8e6cb88c43ddbb8482b.js": "63e70e98d9a574c7f418e724739f4717897e8f2a",
+    "/10.73dec240bb08f6564e0f.js": "5116c49954e27f9d3b0ceb25ea6e99e210311bf3",
+    "/11.302a4f9a25bacef7a02e.js": "237e448dabc39d3263e4d80fbffbf7df0122eb94",
+    "/12.00806330499511664137.js": "7ced344d88c5f51529f6b17786e9fd6cb1414dc5",
+    "/13.62fd428c1a7c451ef808.js": "7b0555e0c9124138af4290488bae88a5b2724748",
+    "/14.42799721191ce1dd1d83.js": "88d5b53608b5bf48a0be5c795b98393b0a92a26a",
+    "/15.8ccd1cdd6571ad74a732.js": "63bea8c3e5f1d2705f6d7096ccb74df58de6703b",
+    "/16.4c170b96746436379cb7.js": "f7a97a7a8268b69213207a6eaf5a50dd6e8339ea",
+    "/17.423b47d06beba8161693.js": "ec1a9321bdaaab7d58af7fdd2f882d0172d456d9",
+    "/18.267c66091e667b008c4b.js": "56e3518bd292243511d32ebce2b86b3e5059d423",
+    "/19.8b45f4755c76b6534a12.js": "949fcf92be9459ef48b854a7843512bf6a8576c8",
+    "/20.64713369e0af409d5cf6.js": "f6dfa26f08adb3b5022a826dbdcb82bc29fff6c7",
+    "/21.9d93190050df44e7f911.js": "7480195229e9a5fac0821b61194090e68bb77ff6",
+>>>>>>> 7cae7cd08c18d59add5b18cbb3868364ffd34ff5
     "/22.5dc7bf4117110e842795.js": "71bef291262b76a5c61209c0b8b71786de30e37b",
     "/3.e57051c203ad45787548.js": "dcfca928c3d5060af245dabc1039245214900384",
     "/4.83bd471849cff9ffaab6.js": "bf4a39f97c54ed3b86c99e80d2fe9ce2f98aed69",
@@ -369,14 +409,23 @@
     "/assets/sound/voice_on.ogg": "a4dd7d4e3d9c9aa4ae9a632acda51c0661d6a4a1",
     "/assets/src - Shortcut.lnk": "b6afccfcc57592f8e5b48048ccf2f44cbed3209a",
     "/close.d9d2d0b1308cb694aa81.png": "3ca48361cfe0e41163023d03c26296f375bb3eac",
+<<<<<<< HEAD
     "/common.e61381b56c75ae29a201.js": "5dbd1e4856367eee87debb18333ae68b39010671",
     "/index.html": "821336da4fa76a63f1aa21bf4449901e9c84092c",
+=======
+    "/common.9ca895f6f4a0ce31210f.js": "5dbd1e4856367eee87debb18333ae68b39010671",
+    "/index.html": "6265ab1c04f4550bbc71a61fe463cd4d6072b1df",
+>>>>>>> 7cae7cd08c18d59add5b18cbb3868364ffd34ff5
     "/loading.2299ad0b3f63413f026d.gif": "cf720b50cf8dde0e1a84ce1c6a77788bfc5882d5",
     "/main.af1b4472345adace81cc.js": "ee1044697ba4c7b7d65830521de7662bc8cfd5e2",
     "/next.31f15875975aab690854.png": "777e92c050f600b4519299c3d786b8f2f459fea4",
     "/polyfills.cefe07c754ab7c8f6a29.js": "5cfc995a617b5e9efcf71043d34862fb4f9b029f",
     "/prev.84b76dee6b27b795e89e.png": "6640a3432f7ba7aea6129cdf7a5d3eabd47c295c",
+<<<<<<< HEAD
     "/runtime.41a4ee489f040df3c428.js": "3ce25a9d713c43835c7751aa7f8f315e75a9df31",
+=======
+    "/runtime.ddfc4bf720ca1396bd2d.js": "ba8e186094ac934b552bbd3c323cecb59d457c46",
+>>>>>>> 7cae7cd08c18d59add5b18cbb3868364ffd34ff5
     "/styles.aca9bed3d5efd39e615a.css": "39abdc9fecadc8a3d72abd899956796a17e8e682"
   },
   "navigationUrls": [
