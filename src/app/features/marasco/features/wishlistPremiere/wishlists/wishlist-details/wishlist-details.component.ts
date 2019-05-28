@@ -168,7 +168,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subs$.add(
-      this._route.params.subscribe((params) => {
+      this._route.params.subscribe(params => {
         const id = params['id'];
         if (id !== '0') {
           this.wishlist = this._route.snapshot.data['wishlist'];
@@ -240,7 +240,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     this.bsModalRef = this._modalService.show(WishlistOptionsModalComponent, {
       initialState
     });
-    this.bsModalRef.content.close.subscribe((result) => {
+    this.bsModalRef.content.close.subscribe(result => {
       if (result !== 'close') {
         this.surpriseMe = result.preferences.hideFromMe;
       }
@@ -274,12 +274,12 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
         .share({
           title: 'Check out my new wishlist!',
           text: 'Click on the link to follow my new wishlist!',
-          url: `${environment.deepLinkUrl}/wishlistPremiere/wishlists/${
+          url: `${environment.deepLinkUrlWeb}/wishlistPremiere/wishlists/${
             this.wishlist._id
           }`
         })
         .then(() => console.log('Successful share'))
-        .catch((error) => console.log('Error sharing', error));
+        .catch(error => console.log('Error sharing', error));
     }
   }
 
@@ -287,9 +287,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     let shareRet = await Share.share({
       title: 'Check out my new wishlist!',
       text: 'Click on the link to follow my new wishlist!',
-      url: `${environment.deepLinkUrl}/wishlistPremiere/wishlists/${
-        this.wishlist._id
-      }`,
+      url: `${environment.deepLinkUrl}${this.wishlist._id}`,
       dialogTitle: 'Share with friends and family'
     });
   }
@@ -325,7 +323,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     const currentState = this._store.pipe(select(fromAuth.getUser));
 
     this.subs$.add(
-      currentState.subscribe((data) => {
+      currentState.subscribe(data => {
         if (!!data) {
           this.user = data.user;
         }
@@ -336,7 +334,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     this.isMobile = this._layoutService.store.isMobile;
 
     this.subs$.add(
-      this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
+      this._wishlistService.onWishlistChanged.subscribe(wishlist => {
         if (!!wishlist && wishlist._id === this.wishlist._id) {
           this.wishlist = wishlist;
         }
@@ -353,7 +351,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
    * @memberof WishlistDetailsComponent
    */
   addDevice(deviceInfo: DeviceInfo) {
-    let device = this.user.devices.find((result) => {
+    let device = this.user.devices.find(result => {
       return result.uuid === deviceInfo.uuid;
     });
 
@@ -373,7 +371,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
             //Do Nothing
           }
         },
-        (err) => {
+        err => {
           this._activityLogService.addError(err);
         },
         () => {
@@ -388,7 +386,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
       .requestSubscription({
         serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
       })
-      .then((pushSubscription) => {
+      .then(pushSubscription => {
         // Save to
         //console.log(pushSubscription.toJSON());
         const notification: UserNotification = Object.assign(
@@ -403,7 +401,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
           this._userService
             .addNotification(this.user._id, this.user.notifications)
             .subscribe(
-              (item) => {
+              item => {
                 if (item) {
                   //TODO: Add update to user store HERE
                   //this._store.dispatch(new actions.AuthUserChange(this.user));
@@ -411,7 +409,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
                   //Do Nothing
                 }
               },
-              (err) => {
+              err => {
                 this._activityLogService.addError(err);
               },
               () => {
@@ -420,7 +418,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
             )
         );
       })
-      .catch((error) => {
+      .catch(error => {
         // Do Nothing
       });
   }
@@ -445,7 +443,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     this.wishlist.statusId = this.selectedStatus[0];
     this.subs$.add(
       this._wishlistService.insert(this.wishlist).subscribe(
-        (item) => {
+        item => {
           if (item) {
             this._activityLogService.addInserts(
               `Inserted wishlist ${item._id}`
@@ -477,7 +475,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
             });
           }
         },
-        (errInfo) => {
+        errInfo => {
           this._activityLogService.addError(errInfo);
           this._notificationService.bigBox({
             title: 'Oops!  there is an issue with the call to create',
@@ -503,7 +501,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
     this.subs$.add(
       this._wishlistService.update(this.wishlist).subscribe(
-        (item) => {
+        item => {
           if (item) {
             this._activityLogService.addUpdate(`Updated wishlist ${item._id}`);
             this._notificationService.smallBox({
@@ -531,7 +529,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
             });
           }
         },
-        (err) => {
+        err => {
           this._activityLogService.addError(err);
           this._notificationService.bigBox({
             title: 'Oops!  there is an issue with the call to update',
