@@ -42,12 +42,32 @@ public class MainActivity extends BridgeActivity {
           // params will be empty if no data found
           // ... insert custom logic here ...
           Log.i("BRANCH SDK", referringParams.toString());
+
+          // option 2: save data to be used later
+          // SharedPreferences preferences = .getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+          // SharedPreferences.Editor editor = preferences.edit();
+          // editor.putString("branchData", referringParams.toString(2));
+          // editor.commit();
+
+          // option 3: navigate to page
+          //Intent intent = new Intent(MainActivity.this, OtherActivity.class);
+          //intent.putExtra("branchData", referringParams.toString(2));
+          //startActivity(intent);
+
+          // option 4: display data
+          //Toast.makeText(this, referringParams.toString(2), Toast.LENGTH_LONG).show();
         } else {
           Log.i("BRANCH SDK", error.getMessage());
         }
       }
     }, this.getIntent().getData(), this);
   }
+
+  // latest
+  JSONObject sessionParams = Branch.getInstance().getLatestReferringParams();
+
+  // first
+  JSONObject installParams = Branch.getInstance().getFirstReferringParams();
 
   @Override
   public void onNewIntent(Intent intent) {
