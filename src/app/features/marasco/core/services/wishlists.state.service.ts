@@ -95,24 +95,9 @@ export class WishlistStateService {
     });
   }
 
-  deleteFollow(wishlistFollow: WishlistFollow) {
-    let foundWishlist = this.wishlists.find((wishlist) => {
-      return wishlist._id === wishlistFollow.wishlistId;
-    });
+  delete(wishlist: Wishlist){
 
-    let foundIndex: number = this.wishlists.findIndex(
-      (x) => x._id === wishlistFollow.wishlistId
-    );
-
-    //find item
-    let foundItemIndex: number = foundWishlist.follows.findIndex(
-      (x) => x._id === wishlistFollow._id
-    );
-
-    foundWishlist.follows.splice(foundItemIndex, 1);
-
-    this.wishlists[foundIndex] = foundWishlist;
-
+    //TODO
     return new Promise((resolve) => {
       resolve(this.wishlists);
     });

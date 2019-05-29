@@ -106,7 +106,7 @@ export class WishlistFollowEffects {
         },
         (ButtonPressed) => {
           if (ButtonPressed === 'Yes') {
-            this._wishlistFollowService.delete(wishlistFollow).subscribe(
+            this._wishlistFollowService.unfollow(wishlistFollow).subscribe(
               (result: any) => {
                 if (!!result.error) {
                   this.dispatchErrorNotification(result.error);
@@ -148,7 +148,7 @@ export class WishlistFollowEffects {
     switchMap((data: any) =>
       this._wishlistFollowStateService.edit(data.payload)
     ),
-    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    tap<WishlistFollow[]>((_) => (this._wishlistFollowStateService.wishlistFollows = _)),
     map((_) => new actions.WishlistFollowPayload(_))
   );
 
@@ -156,10 +156,10 @@ export class WishlistFollowEffects {
   wishlistFollowDeleteSuccess$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.DeleteWishlistFollowSuccess),
     switchMap((data: any) =>
-      this._wishlistStateService.deleteFollow(data.payload)
+      this._wishlistFollowStateService.delete(data.payload)
     ),
-    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-    map((_) => new actions.WishlistsPayload(_))
+    tap<WishlistFollow[]>((_) => (this._wishlistFollowStateService.wishlistFollows = _)),
+    map((_) => new actions.WishlistFollowPayload(_))
   );
 
   dispatchErrorNotification(error: any) {

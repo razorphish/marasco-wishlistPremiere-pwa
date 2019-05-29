@@ -18,4 +18,5 @@ export interface WishlistFollow {
   wishlist?: Wishlist;
   pushToken?: any;
   schemaType?: string;
+  statusId? : string;
 }

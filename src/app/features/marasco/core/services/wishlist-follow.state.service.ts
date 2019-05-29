@@ -68,6 +68,37 @@ export class WishlistFollowStateService {
     });
   }
 
+  /**
+   * @description Deletes wishlist follow from state
+   * @author Antonio Marasco
+   * @date 2019-05-29
+   * @param {WishlistFollow} wishlistFollow
+   * @returns New list of wishlist follow in a promise
+   * @memberof WishlistFollowStateService
+   */
+  delete(wishlistFollow: WishlistFollow) {
+    //find item
+    let foundItemIndex: number = this.wishlistFollows.findIndex(
+      (x) => x._id === wishlistFollow._id
+    );
+
+    if (foundItemIndex > -1) {
+      this.wishlistFollows.splice(foundItemIndex, 1);
+    }
+
+    return new Promise((resolve) => {
+      resolve(this.wishlistFollows);
+    });
+  }
+
+  /**
+   * @description Edits a wishlist
+   * @author Antonio Marasco
+   * @date 2019-05-29
+   * @param {WishlistFollow} wishlistFollow
+   * @returns List of wishlist follows with newly updated one in a promise
+   * @memberof WishlistFollowStateService
+   */
   edit(wishlistFollow: WishlistFollow) {
     if (!!wishlistFollow.wishlist) {
       wishlistFollow.wishlistId = {

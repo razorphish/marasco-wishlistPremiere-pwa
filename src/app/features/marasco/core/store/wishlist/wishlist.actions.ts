@@ -11,6 +11,7 @@ export enum WishlistActionTypes {
   CreateWishlistAction = '[Wishlist] Create Wishlist Action',
   CreateWishlistSuccess = '[Wishlist] Create Wishlist Success',
   DeleteWishlistAction = '[Wishlist] Delete Wishlist Action',
+  DeleteWishlistSuccess = '[Wishlist] Delete Wishlist Success',
   EditWishlistAction = '[Wishlist] Edit Wishlist Action',
   EditWishlistSuccess = '[Wishlist] Edit Wishlist Success',
 
@@ -85,6 +86,11 @@ export class CreateWishlistSuccess implements Action {
 
 export class DeleteWishlistAction implements Action {
   readonly type = WishlistActionTypes.DeleteWishlistAction;
+  constructor(readonly payload: any) {}
+}
+
+export class DeleteWishlistSuccess implements Action {
+  readonly type = WishlistActionTypes.DeleteWishlistSuccess;
   constructor(readonly payload: any) {}
 }
 
@@ -245,6 +251,7 @@ export type WishlistActions =
   | CreateWishlistAction
   | CreateWishlistSuccess
   | DeleteWishlistAction
+  | DeleteWishlistSuccess
   | EditWishlistAction
   | EditWishlistSuccess
   //==============[END] Wishlist Actions===================///

@@ -56,14 +56,19 @@ export class WishlistEffects {
     map((_) => new actions.WishlistsPayload(_))
   );
 
+  @Effect()
+  wishlistDeleteSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.DeleteWishlistSuccess),
+    switchMap((data: any) => this._wishlistStateService.delete(data.payload)),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+
   @Effect({ dispatch: false })
   wishlistNull$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.WishlistsNull),
     //delay(1500),
-    tap<Wishlist[]>(
-      () =>
-        (this._wishlistStateService.wishlists = null)
-    )
+    tap<Wishlist[]>(() => (this._wishlistStateService.wishlists = null))
   );
 
   dispatchErrorNotification(error: any) {
@@ -149,6 +154,12 @@ export class WishlistEffects {
     this._wishlistService.onWishlistChanged.subscribe((wishlist) => {
       if (!!wishlist) {
         this._store.dispatch(new actions.EditWishlistSuccess(wishlist));
+      }
+    });
+
+    this._wishlistService.onWishlistDeleted.subscribe((wishlist) => {
+      if (!!wishlist) {
+        this._store.dispatch(new actions.DeleteWishlistSuccess(wishlist));
       }
     });
   }

@@ -22,7 +22,7 @@ export class WishlistResolve implements Resolve<any> {
 
   resolve(route: ActivatedRouteSnapshot) {
     const id = route.paramMap.get('id');
-    this._activityLogService.addGet(`Getting user id: ${id}`);
+    this._activityLogService.addGet(`Getting wishlist id: ${id}`);
 
     if (id === '0') {
       return of('0');

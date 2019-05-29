@@ -22,6 +22,10 @@ export class WishlistService extends MarascoService {
     this._wishlistSource
   );
 
+  public onWishlistDeleted = new BehaviorSubject<Wishlist>(
+    this._wishlistSource
+  );
+
   constructor(private _authHttp: AuthHttpService) {
     super();
   }
@@ -65,7 +69,10 @@ export class WishlistService extends MarascoService {
    */
   delete(id: string): Observable<any> {
     return this._authHttp.delete(`${this._url}${id}`).pipe(
-      map((result: any) => result),
+      map((result: any) => {
+        this.onWishlistDeleted.next(result);
+        return result;
+      }),
       catchError(this.handleError)
     );
   }

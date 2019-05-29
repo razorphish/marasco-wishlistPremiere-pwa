@@ -401,7 +401,63 @@ export class WishlistFollowModalComponent implements OnInit, OnDestroy {
     );
   }
 
-  unfollow() {}
+  unfollow($event) {
+
+    let model: WishlistFollow = this.wishlistFollow;
+
+    // Save to
+    this.subs$.add(
+      this._wishlistFollowService.unfollow(model).subscribe(
+        (item) => {
+          if (item) {
+            this._activityLogService.addUpdate(
+              `Updated wishlist follow -> Unfollowed${item._id}`
+            );
+
+            this._notificationService.smallBox({
+              title: 'Wishlist UnFollow Success!',
+              content: 'Sorry to see you go! ',
+              color: '#739E73',
+              timeout: 2000,
+              icon: 'fa fa-check',
+              number: '4',
+              sound: false
+            });
+            this.close.emit(true);
+          } else {
+            this._activityLogService.addError(
+              'No wishlist present: Update Failed'
+            );
+            this._notificationService.bigBox({
+              title: 'Oops! the database has returned an error',
+              content:
+                'No follow returned which means that the follow was not updated',
+              color: '#C46A69',
+              icon: 'fa fa-warning shake animated',
+              number: '1',
+              timeout: 3000, // 3 seconds
+              sound: false
+            });
+          }
+        },
+        (err) => {
+          this._activityLogService.addError(err);
+          this._notificationService.bigBox({
+            title: 'Oops!  there is an issue with the call to update',
+            content: err,
+            color: '#C46A69',
+            icon: 'fa fa-warning shake animated',
+            number: '1',
+            timeout: 3000, // 3 seconds
+            sound: false
+          });
+        },
+        () => {
+          // Clean up
+        }
+      )
+    );
+  }
 
   ngOnDestroy() {
     this.subs$.unsubscribe();

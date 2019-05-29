@@ -83,6 +83,14 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
       )
     );
 
+    this.subs$.add(
+      this._wishlistFollowService.onWishlistFollowDeleted.subscribe(
+        (follow) => {
+          this.deleteWishlistFollow(follow);
+        }
+      )
+    );
+
     this.activate();
   }
 
@@ -166,7 +174,6 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
         // (see https://github.com/l-lin/angular-datatables/issues/87)
         jQuery('td', row).unbind('click');
         jQuery('td', row).bind('click', () => {
-        
           self.openModal(data);
           //self.previewWishlist(row, data);
         });
@@ -197,14 +204,54 @@ export class WishlistFollowingComponent implements OnInit, OnDestroy {
     this.isMobile = this._layoutService.store.isMobile;
   }
 
-  updateWishlistFollow(follow: WishlistFollow) {
-    if (!follow){
+  /**
+   * @description Subscribes to unfollow event and redraws table
+   * @author Antonio Marasco
+   * @date 2019-05-29
+   * @private
+   * @param {WishlistFollow} follow
+   * @returns void
+   * @memberof WishlistFollowingComponent
+   */
+  private deleteWishlistFollow(follow: WishlistFollow) {
+    if (!follow) {
       return;
     }
 
-    let foundWishlistFollowing = this.wishlistFollowings.find((wishlistFollow) => {
-      return wishlistFollow._id === follow._id;
-    });
+    let foundIndex: number = this.wishlistFollowings.findIndex(
+      (x) => x._id === follow._id
+    );
+
+    if (foundIndex > -1) {
+      this.wishlistFollowings.splice(foundIndex, 1);
+    }
+
+    let dt = jQuery('#wishlistFollowingDataTable').DataTable();
+    dt.clear().draw();
+    dt.rows.add(this.wishlistFollowings);
+    dt.draw();
+    //dt.columns.adjust().draw();
+  }
+
+  /**
+   * @description Subscribes to wishlist update event and redraws table
+   * @author Antonio Marasco
+   * @date 2019-05-29
+   * @private
+   * @param {WishlistFollow} follow
+   * @returns
+   * @memberof WishlistFollowingComponent
+   */
+  private updateWishlistFollow(follow: WishlistFollow) {
+    if (!follow) {
+      return;
+    }
+
+    let foundWishlistFollowing = this.wishlistFollowings.find(
+      (wishlistFollow) => {
+        return wishlistFollow._id === follow._id;
+      }
+    );
 
     let foundIndex: number = this.wishlistFollowings.findIndex(
       (x) => x._id === follow._id

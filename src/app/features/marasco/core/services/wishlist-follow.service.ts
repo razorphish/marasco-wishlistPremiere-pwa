@@ -54,10 +54,10 @@ export class WishlistFollowService extends MarascoService {
    * @returns {Observable<any>}
    * @memberof WishlistFollowService
    */
-  delete(wishlistFollow: WishlistFollow): Observable<any> {
+  unfollow(wishlistFollow: WishlistFollow): Observable<any> {
     return this._authHttp
       .delete(
-        `${this._url}/${wishlistFollow.wishlistId}/item/${wishlistFollow._id}`,
+        `${this._url}/${wishlistFollow.wishlistId}/follow/${wishlistFollow._id}/unfollow`,
         JSON.stringify(wishlistFollow)
       )
       .pipe(
