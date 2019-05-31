@@ -16,6 +16,33 @@ import { Wishlist } from '../../interfaces/Wishlist.interface';
 
 @Injectable()
 export class WishlistEffects {
+  //==============Wishlist Collection Effects===================///
+  @Effect()
+  wishlistsChange$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.WishlistsChange),
+    //delay(1500),
+    switchMap((data: any) => data.payload.getWishlists()),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+
+  @Effect({ dispatch: false })
+  wishlistsNull$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.WishlistsNull),
+    //delay(1500),
+    tap<Wishlist[]>(() => (this._wishlistStateService.wishlists = null))
+  );
+
+  @Effect()
+  wishlistsSyncSuccess$ = this._actions$.pipe(
+    ofType(actions.WishlistActionTypes.WishlistsSyncSuccess),
+    switchMap((data: any) => this._wishlistStateService.sync(data.payload)),
+    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
+    map((_) => new actions.WishlistsPayload(_))
+  );
+  //==============[\END] Wishlist Collection Effects=============///
+
+  //==============Wishlist  Effects==============================///
   @Effect({ dispatch: false })
   createWishlist$ = this._actions$.pipe(
     ofType(actions.WishlistActionTypes.CreateWishlistAction),
@@ -29,15 +56,6 @@ export class WishlistEffects {
         }
       );
     })
-  );
-
-  @Effect()
-  wishlistsChange$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.WishlistsChange),
-    //delay(1500),
-    switchMap((data: any) => data.payload.getWishlists()),
-    tap<Wishlist[]>((_) => (this._wishlistStateService.wishlists = _)),
-    map((_) => new actions.WishlistsPayload(_))
   );
 
   @Effect()
@@ -64,12 +82,7 @@ export class WishlistEffects {
     map((_) => new actions.WishlistsPayload(_))
   );
 
-  @Effect({ dispatch: false })
-  wishlistNull$ = this._actions$.pipe(
-    ofType(actions.WishlistActionTypes.WishlistsNull),
-    //delay(1500),
-    tap<Wishlist[]>(() => (this._wishlistStateService.wishlists = null))
-  );
+  //==============[/END] Wishlist  Effects==============================///
 
   dispatchErrorNotification(error: any) {
     if (!error.code) {
@@ -142,6 +155,12 @@ export class WishlistEffects {
       } else {
         this._wishlistStateService.wishlists = null;
         this._store.dispatch(new actions.WishlistsNull());
+      }
+    });
+
+    this._wishlistService.onWishlistSync.subscribe((wishlists) => {
+      if (!!wishlists) {
+        this._store.dispatch(new actions.WishlistsSyncSuccess(wishlists));
       }
     });
 

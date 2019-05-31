@@ -43,35 +43,6 @@ export class WishlistStateService {
     });
   }
 
-  addFollow(wishlistFollow: WishlistFollow) {
-    var foundWishlist = this.wishlists.find((wishlist) => {
-      return wishlist._id === wishlistFollow.wishlistId;
-    });
-
-    if (!foundWishlist) {
-      return new Promise((resolve) => {
-        resolve(this.wishlists);
-      });
-    }
-
-    let foundIndex: number = this.wishlists.findIndex(
-      (x) => x._id === wishlistFollow.wishlistId
-    );
-
-    //Add item
-    if (foundWishlist.items) {
-      foundWishlist.follows.push(wishlistFollow);
-    } else {
-      foundWishlist.follows = [wishlistFollow];
-    }
-
-    this.wishlists[foundIndex] = foundWishlist;
-
-    return new Promise((resolve) => {
-      resolve(this.wishlists);
-    });
-  }
-
   addItem(wishlistItem: WishlistItem) {
     var foundWishlist = this.wishlists.find((wishlist) => {
       return wishlist._id === wishlistItem.wishlistId;
@@ -95,8 +66,7 @@ export class WishlistStateService {
     });
   }
 
-  delete(wishlist: Wishlist){
-
+  delete(wishlist: Wishlist) {
     //TODO
     return new Promise((resolve) => {
       resolve(this.wishlists);
@@ -132,29 +102,6 @@ export class WishlistStateService {
     );
 
     this.wishlists[foundIndex] = wishlist;
-
-    return new Promise((resolve) => {
-      resolve(this.wishlists);
-    });
-  }
-
-  editFollow(wishlistFollow: WishlistFollow) {
-    let foundWishlist = this.wishlists.find((wishlist) => {
-      return wishlist._id === wishlistFollow.wishlistId;
-    });
-
-    let foundIndex: number = this.wishlists.findIndex(
-      (x) => x._id === wishlistFollow.wishlistId
-    );
-
-    //find item index
-    let foundItemIndex: number = foundWishlist.follows.findIndex(
-      (x) => x._id === wishlistFollow._id
-    );
-
-    foundWishlist.follows[foundItemIndex] = wishlistFollow;
-
-    this.wishlists[foundIndex] = foundWishlist;
 
     return new Promise((resolve) => {
       resolve(this.wishlists);
@@ -244,6 +191,14 @@ export class WishlistStateService {
 
   get wishlists(): Wishlist[] {
     return this._wishlistsSubject.value;
+  }
+
+  sync(wishlists: Wishlist[]) {
+    this.wishlists = wishlists;
+
+    return new Promise((resolve) => {
+      resolve(this.wishlists);
+    });
   }
 
   /*///////////////////////////////////////////////

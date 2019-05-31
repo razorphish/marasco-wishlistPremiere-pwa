@@ -13,6 +13,11 @@ import { MarascoService } from './MarascoService';
 export class WishlistService extends MarascoService {
   private _url: string = `${environment.apiUrl}wishlist/`;
   private _wishlistSource: Wishlist;
+  private _wishlistsSource: Wishlist[];
+
+  public onWishlistSync = new BehaviorSubject<Wishlist[]>(
+    this._wishlistsSource
+  );
 
   public onWishlistChanged = new BehaviorSubject<Wishlist>(
     this._wishlistSource
@@ -105,6 +110,24 @@ export class WishlistService extends MarascoService {
       map((wishlist: Wishlist) => {
         this.onWishlistCreated.next(wishlist);
         return wishlist;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * @description Syncs users wishlists
+   * @author Antonio Marasco
+   * @date 2019-05-30
+   * @param {string} userId
+   * @returns {Observable<Wishlist[]>}
+   * @memberof WishlistService
+   */
+  syncByUserId(userId: string): Observable<Wishlist[]> {
+    return this._authHttp.get(`${this._url}sync/${userId}`).pipe(
+      map((wishlists: any) => {
+        this.onWishlistSync.next(wishlists);
+        return wishlists;
       }),
       catchError(this.handleError)
     );

@@ -52,6 +52,18 @@
 
         </activity>
 
+        <!--  Activity for banner and Interstitial Ads
+        <activity
+            android:name='com.appyjump.sdk.InAppWebView'
+            android:configChanges='keyboardHidden|orientation|screenSize'/>
+        -->
+
+        <!-- activity for Interstitial Ads
+        <activity
+            android:name='com.appyjump.sdk.Interstitial'
+            android:configChanges='keyboardHidden|orientation|screenSize' />
+        -->
+
         <!-- Branch init -->
         <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_naMsmUSMy5mcPZmKeEiKdbehzEaX33IJ" />
         <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_hbGyaNPKC6ooH0cOeCudrajcqAiW49M7" />
@@ -97,4 +109,9 @@
     <!-- Audio -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <!-- Add permission for AppyJump Ads
+    <uses-permission android:name='android.permission.INTERNET' />
+    <uses-permission android:name='android.permission.ACCESS_COARSE_LOCATION' />
+    <uses-permission android:name='android.permission.ACCESS_FINE_LOCATION' /> -->
 </manifest>

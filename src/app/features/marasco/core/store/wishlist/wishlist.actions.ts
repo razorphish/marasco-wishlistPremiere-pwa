@@ -1,13 +1,16 @@
 import { Action } from '@ngrx/store';
 
 export enum WishlistActionTypes {
-  ///Wishlist Actions
+  ///Wishlist Collection Action Types
   WishlistsLoad = '[Wishlists] Load wishlists',
   WishlistsRestore = '[Wishlists] Wishlists Restore',
   WishlistsChange = '[Wishlists] Wishlists Change',
   WishlistsPayload = '[Wishlists] Wishlists Payload',
   WishlistsNull = '[Wishlist] Wishlists Null',
+  WishlistsSyncAction = '[Wishlist] Sync Wishlists Action',
+  WishlistsSyncSuccess = '[Wishlist] Sync Wishlists Success',
 
+  ///Wishlist Action Types
   CreateWishlistAction = '[Wishlist] Create Wishlist Action',
   CreateWishlistSuccess = '[Wishlist] Create Wishlist Success',
   DeleteWishlistAction = '[Wishlist] Delete Wishlist Action',
@@ -49,7 +52,7 @@ export enum WishlistActionTypes {
   CreateWishlistItemCategorySuccess = '[WishlistItemCategory] Create Wishlist Item Category Success'
 }
 
-//==============Wishlist Actions===================///
+//==============Wishlist Collection Actions===================///
 export class WishlistsLoad implements Action {
   readonly type = WishlistActionTypes.WishlistsLoad;
   constructor(readonly payload: any) {}
@@ -74,6 +77,18 @@ export class WishlistsNull implements Action {
   readonly type = WishlistActionTypes.WishlistsNull;
 }
 
+export class WishlistsSyncAction implements Action {
+  readonly type = WishlistActionTypes.WishlistsSyncAction;
+  constructor(readonly payload: any) {}
+}
+
+export class WishlistsSyncSuccess implements Action {
+  readonly type = WishlistActionTypes.WishlistsSyncSuccess;
+  constructor(readonly payload: any) {}
+}
+//==============[END]Wishlist Collection Actions===================///
+
+//==============Wishlist Actions===================///
 export class CreateWishlistAction implements Action {
   readonly type = WishlistActionTypes.CreateWishlistAction;
   constructor(readonly payload: any) {}
@@ -242,12 +257,17 @@ export class CreateWishlistItemCategorySuccess implements Action {
 //==============[END] Wishlist Item Category Actions====///
 
 export type WishlistActions =
-  //==============Wishlist Actions========================///
+  //==============Wishlist Collection Actions========================///
   | WishlistsLoad
   | WishlistsRestore
   | WishlistsChange
   | WishlistsPayload
   | WishlistsNull
+  | WishlistsSyncAction
+  | WishlistsSyncSuccess
+  //==============[END] Wishlist Collection Actions===================///
+
+  //==============Wishlists Actions========================///
   | CreateWishlistAction
   | CreateWishlistSuccess
   | DeleteWishlistAction

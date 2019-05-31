@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+//import com.appyjump.sdk.AppyjumpAds;
 import com.getcapacitor.BridgeActivity;
 import com.getcapacitor.Plugin;
 
@@ -32,6 +33,9 @@ public class MainActivity extends BridgeActivity {
   public void onStart() {
     super.onStart();
     Branch branch = Branch.getInstance();
+
+    //AppyjumpAds appyjumpAds=new AppyjumpAds(this.getApplicationContext(), "c22775663dc50e5fad3d3404c027efd5", AppyjumpAds.BANNER);
+    //appyjumpAds.show();
 
     // Branch init
     branch.initSession(new Branch.BranchReferralInitListener() {
