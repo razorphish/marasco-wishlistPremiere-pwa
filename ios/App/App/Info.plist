@@ -29,6 +29,11 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>4</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<<array>
+		<string>com.marasco.wishlistPremiere</string>
+		<string>marascowishlist</string>
+	</array>>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

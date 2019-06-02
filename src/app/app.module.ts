@@ -1,6 +1,9 @@
+import { Router } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
+import * as urlParse from 'url-parse';
+
 import {
   SocialLoginModule,
   AuthServiceConfig,
@@ -17,9 +20,14 @@ import {
   Plugins,
   PushNotification,
   PushNotificationActionPerformed,
-  PushNotificationToken
+  PushNotificationToken,
+  AppState,
+  AppUrlOpen
 } from '@capacitor/core';
+
 const { Device } = Plugins;
+const { PushNotifications } = Plugins;
+const { App } = Plugins;
 
 //https://developers.facebook.com/apps/872380819606437/dashboard/
 const fbLoginOptions: LoginOpt = {
@@ -68,8 +76,6 @@ import { MatSnackBarModule } from '@angular/material';
 import { environment } from '../environments/environment';
 import { LayoutService } from './features/marasco/core/services';
 
-const { PushNotifications } = Plugins;
-
 @NgModule({
   declarations: [MarascoComponent],
   imports: [
@@ -96,9 +102,63 @@ const { PushNotifications } = Plugins;
 export class AppModule {
   notifications: any = [];
 
-  constructor(private _layoutService: LayoutService) {
-    this.initDevice();
+  constructor(private _layoutService: LayoutService, private _router: Router) {
+    this.initializeApp();
+  }
+
+  initializeApp() {
     this.initPushNotifications();
+    this.initDevice();
+  }
+
+  async initAndroidAppState() {
+    App.addListener('appStateChange', (state: AppState) => {
+      // state.isActive contains the active state
+      // console.log('1. App state changed. Is active?', state.isActive);
+
+      if (state.isActive) {
+        //Do something when app is in foreground
+      } else {
+        //Do something whe app is in background
+      }
+    });
+
+    var ret = await App.canOpenUrl({ url: 'com.wishlistPremiere.marasco' });
+    // console.log('2. Can open url: ', ret.value);
+
+    //If app can open with url
+    if (ret.value) {
+      var getLaunchUrl = await App.getLaunchUrl();
+      if (ret && getLaunchUrl.url) {
+        this.navigate(getLaunchUrl.url);
+      }
+    }
+
+    //var openUrl = await App.openUrl({
+    //  url: 'com.wishlistPremiere.marasco://wishlistPremiere/wishlists/5cd0a071c7d3825528f732a7'
+    //});
+    //console.log('3. Open url response: ', openUrl);
+    //alert(`3. Open url response: ${JSON.stringify(openUrl)}`);
+
+    // var getLaunchUrl = await App.getLaunchUrl();
+    // if (ret && getLaunchUrl.url) {
+    //   console.log('4. App opened with URL: ' + getLaunchUrl.url);
+    //   alert(`4. App opened with URL: ${getLaunchUrl.url}`);
+    // }
+
+    // console.log('5. Launch url: ', getLaunchUrl);
+    // alert(`5. Launch url: ${JSON.stringify(getLaunchUrl)}`);
+
+    App.addListener('appUrlOpen', (urlOpen: AppUrlOpen) => {
+      //console.log('6. App opened with URL: ', urlOpen);
+      //alert(`6. App opened with URL: ${JSON.stringify(urlOpen)}`);
+      this.navigate(urlOpen.url);
+    });
+
+    // App.addListener('appRestoredResult', (data: any) => {
+    //   alert(`7. Restored state: ${JSON.stringify(data)}`);
+    //   console.log('7. Restored state:', data);
+    // });
   }
 
   async initDevice() {
@@ -118,6 +178,43 @@ export class AppModule {
     };
 
     localStorage.setItem(environment.devicekey, JSON.stringify(device));
+
+    switch (device.platform) {
+      case 'ios':
+        this.initiOSAppState();
+        break;
+      case 'android':
+        this.initAndroidAppState();
+        break;
+    }
+  }
+
+  async initiOSAppState() {
+    App.addListener('appStateChange', (state: AppState) => {
+      // state.isActive contains the active state
+
+      if (state.isActive) {
+        //Do something when app is in foreground
+      } else {
+        //Do something whe app is in background
+      }
+    });
+
+    var ret = await App.canOpenUrl({ url: 'com.marasco.wishlistPremiere' });
+
+    //If app can open with url
+    if (ret.value) {
+      var getLaunchUrl = await App.getLaunchUrl();
+      if (ret && getLaunchUrl.url) {
+        this.navigate(getLaunchUrl.url);
+      }
+    }
+
+    App.addListener('appUrlOpen', (urlOpen: AppUrlOpen) => {
+      //console.log('6. App opened with URL: ', urlOpen);
+      //alert(`6. App opened with URL: ${JSON.stringify(urlOpen)}`);
+      this.navigate(urlOpen.url);
+    });
   }
 
   initPushNotifications() {
@@ -152,36 +249,14 @@ export class AppModule {
       );
     }
   }
+
+  navigate(uri: string) {
+    let serialized = urlParse(uri);
+    let pathname = serialized.pathname;
+    let s = pathname.substring(
+      pathname.indexOf(environment.deepLinkId) + environment.deepLinkId.length,
+      pathname.length
+    );
+    this._router.navigate([s]);
+  }
 }
-
-//constructor(swUpdate: SwUpdate, swPush: SwPush, snackbar: MatSnackBar){
-// swUpdate.available.subscribe((update) => {
-
-//   environment.log.auth &&
-//         console.log('update available', update);
-
-//   // Allow the user to refresh
-//   const snack = snackbar.open('Update Available', 'Reload');
-
-//   snack
-//     .onAction()
-//     .subscribe(() => {
-//       window.location.reload();
-//     });
-
-//   swPush.messages.subscribe((message) => {
-//     console.log(message);
-//     snackbar.open(JSON.stringify(message));
-//   });
-
-//   environment.log.auth &&
-//     console.log('public key', environment.serviceWorkerOptions.vap.publicKey);
-
-//   swPush.requestSubscription({
-//     serverPublicKey: environment.serviceWorkerOptions.vap.publicKey
-//   })
-//     .then(pushSubscription => {
-//       // Save to
-//       console.log(pushSubscription.toJSON());
-//     });
-// });
