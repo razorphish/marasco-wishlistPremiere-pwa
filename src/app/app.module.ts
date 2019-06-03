@@ -118,6 +118,7 @@ export class AppModule {
 
       if (state.isActive) {
         //Do something when app is in foreground
+        alert(`Url is : ${this._router.url}`);
       } else {
         //Do something whe app is in background
       }
@@ -195,8 +196,10 @@ export class AppModule {
 
       if (state.isActive) {
         //Do something when app is in foreground
+        alert(state.isActive)
       } else {
         //Do something whe app is in background
+        alert(state.isActive);
       }
     });
 
@@ -206,13 +209,13 @@ export class AppModule {
     if (ret.value) {
       var getLaunchUrl = await App.getLaunchUrl();
       if (ret && getLaunchUrl.url) {
+        alert(getLaunchUrl.url);
         this.navigate(getLaunchUrl.url);
       }
     }
 
     App.addListener('appUrlOpen', (urlOpen: AppUrlOpen) => {
-      //console.log('6. App opened with URL: ', urlOpen);
-      //alert(`6. App opened with URL: ${JSON.stringify(urlOpen)}`);
+      alert(`AppUrlOpen ${urlOpen.url}`)
       this.navigate(urlOpen.url);
     });
   }
