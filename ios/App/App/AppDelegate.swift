@@ -10,15 +10,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    let branch: Branch = Branch.getInstance()
-    branch.initSession(launchOptions: launchOptions, andRegisterDeepLinkHandler: {params, error in
-        if error == nil {
-            // params are the deep linked params associated with the link that the user clicked -> was re-directed to this app
-            // params will be empty if no data found
-            // ... insert custom logic here ...
-            print("params: %@", params as? [String: AnyObject] ?? {})
-        }
-    })
+    // if you are using the TEST key
+    // Branch.setUseTestBranchKey(false)
+    // listener for Branch Deep Link data
+    Branch.getInstance().initSession(launchOptions: launchOptions) { (params, error) in
+        // do stuff with deep link data (nav to page, display content, etc)
+        print(params as? [String: AnyObject] ?? {})
+    }
     return true
   }
 
@@ -61,6 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    Branch.getInstance().application(app, open: url, options: options)
     // Called when the app was launched with a url. Feel free to add additional processing here,
     // but if you want the App API to support tracking app url opens, make sure to keep this call
     return CAPBridge.handleOpenUrl(url, options)
@@ -86,6 +85,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   #if USE_PUSH
+    
+  func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping
+    (UIBackgroundFetchResult) -> Void) {
+    // handler for Push Notifications
+    Branch.getInstance().handlePushNotification(userInfo)
+  }
 
   func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
     NotificationCenter.default.post(name: Notification.Name(CAPNotifications.DidRegisterForRemoteNotificationsWithDeviceToken.name()), object: deviceToken)

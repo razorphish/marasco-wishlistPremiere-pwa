@@ -196,7 +196,7 @@ export class AppModule {
 
       if (state.isActive) {
         //Do something when app is in foreground
-        alert(state.isActive)
+        alert(`Url is : ${this._router.url} [${state.isActive}]`);
       } else {
         //Do something whe app is in background
         alert(state.isActive);
@@ -204,6 +204,23 @@ export class AppModule {
     });
 
     var ret = await App.canOpenUrl({ url: 'com.marasco.wishlistPremiere' });
+    alert(`2. Can open url [com.marasco.wishlistPremiere]: ${ret.value}`);
+
+
+    var ret2 = await App.canOpenUrl({ url: 'marascowishlist' });
+    alert(`2. Can open url [marascowishlist]: ${ret2.value}`);
+
+    var ret3 = await App.canOpenUrl({ url: 'com.wishlistPremiere.marasco' });
+    alert(`2. Can open url [com.wishlistPremiere.marasco]: ${ret3.value}`);
+
+    var ret4 = await App.canOpenUrl({ url: 'https:' });
+    alert(`2. Can open url [https]:  ${ret4.value}`);
+
+    var getLaunchUrl = await App.getLaunchUrl();
+    if (ret && getLaunchUrl.url) {
+      console.log('4. App opened with URL: ' + getLaunchUrl.url);
+      alert(`4. App opened with URL: ${getLaunchUrl.url}`);
+    }
 
     //If app can open with url
     if (ret.value) {
