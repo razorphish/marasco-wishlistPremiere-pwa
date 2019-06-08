@@ -21,9 +21,11 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.marasco.wishlistPremiere</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>marascowishlist</string>
+				<string>com.marasco.wishlistPremiere</string>
 			</array>
 		</dict>
 	</array>
@@ -85,6 +87,6 @@
 	<key>branch_app_domain</key>
 	<string>marasco-wishlist.app.link</string>
 	<key>branch_key</key>
-	<string>key_live_naMsmUSMy5mcPZmKeEiKdbehzEaX33IJ</string>
+	<string>undefined</string>
 </dict>
 </plist>

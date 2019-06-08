@@ -59,7 +59,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-    Branch.getInstance().application(app, open: url, options: options)
     // Called when the app was launched with a url. Feel free to add additional processing here,
     // but if you want the App API to support tracking app url opens, make sure to keep this call
     return CAPBridge.handleOpenUrl(url, options)
