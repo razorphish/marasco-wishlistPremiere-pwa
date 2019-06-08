@@ -118,7 +118,7 @@ export class AppModule {
 
       if (state.isActive) {
         //Do something when app is in foreground
-        alert(`Url is : ${this._router.url}`);
+        //alert(`Url is : ${this._router.url}`);
       } else {
         //Do something whe app is in background
       }
@@ -196,43 +196,43 @@ export class AppModule {
 
       if (state.isActive) {
         //Do something when app is in foreground
-        alert(`Url is : ${this._router.url} [${state.isActive}]`);
+        //alert(`Url is : ${this._router.url} [${state.isActive}]`);
       } else {
         //Do something whe app is in background
-        alert(state.isActive);
+        //alert(state.isActive);
       }
     });
 
-    var ret = await App.canOpenUrl({ url: 'com.marasco.wishlistPremiere' });
-    alert(`2. Can open url [com.marasco.wishlistPremiere]: ${ret.value}`);
+    //var ret = await App.canOpenUrl({ url: 'com.marasco.wishlistPremiere' });
+    //alert(`2. Can open url [com.marasco.wishlistPremiere]: ${ret.value}`);
 
 
-    var ret2 = await App.canOpenUrl({ url: 'marascowishlist' });
-    alert(`2. Can open url [marascowishlist]: ${ret2.value}`);
+    //var ret2 = await App.canOpenUrl({ url: 'marascowishlist' });
+    //alert(`2. Can open url [marascowishlist]: ${ret2.value}`);
 
-    var ret3 = await App.canOpenUrl({ url: 'com.wishlistPremiere.marasco' });
-    alert(`2. Can open url [com.wishlistPremiere.marasco]: ${ret3.value}`);
+    //var ret3 = await App.canOpenUrl({ url: 'com.wishlistPremiere.marasco' });
+    //alert(`2. Can open url [com.wishlistPremiere.marasco]: ${ret3.value}`);
 
-    var ret4 = await App.canOpenUrl({ url: 'https:' });
-    alert(`2. Can open url [https]:  ${ret4.value}`);
+    var ret = await App.canOpenUrl({ url: 'http:' });
+    //alert(`2. Can open url [https]:  ${ret4.value}`);
 
-    var getLaunchUrl = await App.getLaunchUrl();
-    if (ret && getLaunchUrl.url) {
-      console.log('4. App opened with URL: ' + getLaunchUrl.url);
-      alert(`4. App opened with URL: ${getLaunchUrl.url}`);
-    }
+    //var getLaunchUrl = await App.getLaunchUrl();
+    //if (ret && getLaunchUrl.url) {
+      //console.log('4. App opened with URL: ' + getLaunchUrl.url);
+      //alert(`4. App opened with URL: ${getLaunchUrl.url}`);
+    //}
 
     //If app can open with url
     if (ret.value) {
       var getLaunchUrl = await App.getLaunchUrl();
       if (ret && getLaunchUrl.url) {
-        alert(getLaunchUrl.url);
+        //alert(getLaunchUrl.url);
         this.navigate(getLaunchUrl.url);
       }
     }
 
     App.addListener('appUrlOpen', (urlOpen: AppUrlOpen) => {
-      alert(`AppUrlOpen ${urlOpen.url}`)
+      //alert(`AppUrlOpen ${urlOpen.url}`)
       this.navigate(urlOpen.url);
     });
   }
