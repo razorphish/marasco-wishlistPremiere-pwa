@@ -227,13 +227,13 @@ export class AppModule {
       var getLaunchUrl = await App.getLaunchUrl();
       if (ret && getLaunchUrl.url) {
         //alert(getLaunchUrl.url);
-        this.navigate(getLaunchUrl.url);
+        this.navigateiOS(getLaunchUrl.url);
       }
     }
 
     App.addListener('appUrlOpen', (urlOpen: AppUrlOpen) => {
       //alert(`AppUrlOpen ${urlOpen.url}`)
-      this.navigate(urlOpen.url);
+      this.navigateiOS(urlOpen.url);
     });
   }
 
@@ -277,6 +277,15 @@ export class AppModule {
       pathname.indexOf(environment.deepLinkId) + environment.deepLinkId.length,
       pathname.length
     );
+    this._router.navigate([s]);
+  }
+
+  navigateiOS(uri:string){
+    let s = uri.substring(
+      uri.indexOf(environment.deepLinkId) + environment.deepLinkId.length,
+      uri.length
+    );
+
     this._router.navigate([s]);
   }
 }

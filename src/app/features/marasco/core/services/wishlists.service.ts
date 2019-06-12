@@ -146,7 +146,12 @@ export class WishlistService extends MarascoService {
       .put(`${this._url}${wishlist._id}`, JSON.stringify(wishlist))
       .pipe(
         map((result: Wishlist) => {
-          this.onWishlistChanged.next(wishlist);
+          if (wishlist.statusId === 'deleted'){
+            this.onWishlistDeleted.next(wishlist);
+          } else {
+            this.onWishlistChanged.next(wishlist);
+          }
+          
           return wishlist;
         }),
         catchError(this.handleError)
