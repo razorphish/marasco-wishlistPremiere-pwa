@@ -67,7 +67,16 @@ export class WishlistStateService {
   }
 
   delete(wishlist: Wishlist) {
-    //TODO
+    // let foundWishlist = this.wishlists.find((wishlist) => {
+    //   return wishlist._id === wishlist._id;
+    // });
+
+    let foundIndex: number = this.wishlists.findIndex(
+      (x) => x._id === wishlist._id
+    );
+
+    this.wishlists.splice(foundIndex, 1);
+
     return new Promise((resolve) => {
       resolve(this.wishlists);
     });

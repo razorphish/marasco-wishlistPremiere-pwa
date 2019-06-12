@@ -33,7 +33,6 @@ import { UserNotification } from '@app/features/marasco/core/interfaces/User-Not
 
 import { SubSink } from 'subsink';
 import { WishlistOptionsModalComponent } from './options-modal/options-modal.component';
-import { take } from 'rxjs/operators';
 
 const { Share } = Plugins;
 const { Device } = Plugins;
@@ -73,6 +72,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
 
   public dropdownSettingsStatus = {};
 
+  public isDeleted: boolean;
   public isMobile = true;
   public isUpdate = true;
   public hasSharing = false;
@@ -497,8 +497,11 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
    * Update item
    */
   private update() {
-    this.wishlist.statusId = this.selectedStatus[0];
-
+    //this.wishlist.statusId = this.selectedStatus[0];
+    if (this.isDeleted) {
+      this.wishlist.statusId = 'deleted'
+    }
+    
     this.subs$.add(
       this._wishlistService.update(this.wishlist).subscribe(
         item => {
@@ -513,6 +516,10 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
               number: '4',
               sound: false
             });
+
+            if (this.isDeleted) {
+              this._router.navigate(['/home/landing']);
+            }
           } else {
             this._activityLogService.addError(
               'No wishlist present: Update Failed'
