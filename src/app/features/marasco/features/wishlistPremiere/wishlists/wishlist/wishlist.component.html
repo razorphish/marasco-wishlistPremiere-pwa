@@ -75,6 +75,7 @@
                     type="button"
                     (click)="openModal($event, wishlistFollowModal, wishlist)"
                     class="btn btn-primary btn-lg"
+                    *ngIf="!isFollowed"
                   >
                     <i class="fa fa-gift fa-lg"></i>
                     Follow Wishlist

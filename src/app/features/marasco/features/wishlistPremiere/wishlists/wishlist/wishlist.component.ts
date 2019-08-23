@@ -52,7 +52,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
   };
 
   public isMobile = true;
-
+  public isFollowed : boolean = false;
   public state: any = {
     tabs: {
       demo1: 0
@@ -166,6 +166,11 @@ export class WishlistComponent implements OnInit, OnDestroy {
 
     if (this.user._id === this.wishlist.userId) {
       this.surpriseMe = this.wishlist.preferences.hideFromMe;
+      this.wishlist.follows.forEach((follow, index)=> {
+        if (follow.userId === this.user._id) {
+          this.isFollowed = true;
+        }
+      });
     }
   }
 

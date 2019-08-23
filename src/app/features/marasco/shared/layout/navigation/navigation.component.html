@@ -57,9 +57,9 @@
             </a>
           </li>
           <li routerLinkActive="active" *ngIf="wishlists.length === 0">
-            <a routerLink="/wishlistPremiere/wishlists/details/0" (click)="onClick($event)">
+            <a routerLink="" (click)="onClick($event)">
               <i class="fa fa-lg fa-fw fa-gift"></i>
-              Create New
+              New
             </a>
           </li>
         </ul>
@@ -69,6 +69,12 @@
         <a routerLinkActive="active" routerLink="/wishlistPremiere/wishlists/following" title="Following">
           <i class="fa fa-lg fa-fw fa-user-plus"></i> <span
             class="menu-item-parent">{{'Following' | i18n}}</span></a>
+      </li>
+
+      <li>
+        <a routerLinkActive="active" routerLink="/wishlistPremiere/wishlists/details/0" title="Create new wishlist">
+          <i class="fa fa-lg fa-fw fa-gift"></i> <span
+            class="menu-item-parent">{{'New Wishlist' | i18n}}</span></a>
       </li>
 
       <!-- <li aside-chat></li> -->

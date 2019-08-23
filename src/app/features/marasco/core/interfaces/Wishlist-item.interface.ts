@@ -18,4 +18,5 @@ export interface WishlistItem {
   dateCreated?: Date;
   dateModifed?: Date;
   onSuccessCreate?: any;
+  afterItemInsert?: any;
 }

@@ -213,7 +213,7 @@ export class AppModule {
     //var ret3 = await App.canOpenUrl({ url: 'com.wishlistPremiere.marasco' });
     //alert(`2. Can open url [com.wishlistPremiere.marasco]: ${ret3.value}`);
 
-    var ret = await App.canOpenUrl({ url: 'http:' });
+    var ret = await App.canOpenUrl({ url: 'https:' });
     //alert(`2. Can open url [https]:  ${ret4.value}`);
 
     //var getLaunchUrl = await App.getLaunchUrl();
@@ -226,7 +226,7 @@ export class AppModule {
     if (ret.value) {
       var getLaunchUrl = await App.getLaunchUrl();
       if (ret && getLaunchUrl.url) {
-        //alert(getLaunchUrl.url);
+        alert(getLaunchUrl.url);
         this.navigateiOS(getLaunchUrl.url);
       }
     }

@@ -206,7 +206,8 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
     const initialState = {
       wishlistItem: wishlistItem || {
         name: '',
-        purchased: false
+        purchased: false,
+        categoryId: 0
       }
     };
 

@@ -3,7 +3,7 @@
 <div id="content">
   <div class="row">
     <sa-big-breadcrumbs
-      [items]="[wishlist.name || 'Wishlist', 'Details']"
+      [items]="[wishlist.name || 'Create New Wishlist']"
       icon="gift"
       class="col-xs-12 col-sm-7 col-md-7 col-lg-4"
     ></sa-big-breadcrumbs>
@@ -93,7 +93,7 @@
                         *ngIf="isUpdate"
                       >
                         <i class="fa fa-plus fa-lg"></i>
-                        Add Item
+                        Item
                       </button>
                       &nbsp;
                       <button
@@ -103,7 +103,7 @@
                         *ngIf="isUpdate"
                       >
                         <i class="fa fa-eye fa-lg"></i>
-                        Preview
+                        View
                       </button>
 
                       <div *ngIf="hasSharing">
