@@ -1,5 +1,4 @@
 <aside id="left-panel">
-
   <!-- User info -->
   <sa-login-info></sa-login-info>
   <!-- end user info -->
@@ -12,17 +11,19 @@
 
     <ul saSmartMenu>
       <li>
-        <a routerLink="/home/landing" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span
-            class="menu-item-parent">{{'Home' | i18n}}</span></a>
+        <a routerLink="/home/landing" title="Dashboard"
+          ><i class="fa fa-lg fa-fw fa-home"></i>
+          <span class="menu-item-parent">{{ 'Home' | i18n }}</span></a
+        >
       </li>
 
       <li>
-          <!-- <a routerLink="/home/search" title="Discover"><i class="fa fa-lg fa-fw fa-search"></i> <span
+        <!-- <a routerLink="/home/search" title="Discover"><i class="fa fa-lg fa-fw fa-search"></i> <span
               class="menu-item-parent">{{'Discover' | i18n}}</span></a>
         </li> -->
 
-      <!--Wishlist-->
-      <!-- <li>
+        <!--Wishlist-->
+        <!-- <li>
         <a href="#"><i class="fa fa-lg fa-fw fa-list"></i> <span
           class="menu-item-parent">{{'Wishlist' | i18n}}</span></a>
         <ul>
@@ -41,23 +42,37 @@
         </ul>
       </li> -->
 
-      <!-- <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
+        <!-- <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
         <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}" title="{{wishlist.name}}"><i
             class="fa fa-lg fa-fw fa-list-alt"></i><span class="menu-item-parent">{{wishlist.name}}</span></a>
       </li> -->
+      </li>
 
       <li>
-        <a href="#"><i class="fa fa-lg fa-fw fa-list"></i> <span
-            class="menu-item-parent">{{'My Lists' | i18n}}</span></a>
+        <a href="#"
+          ><i class="fa fa-lg fa-fw fa-list"></i>
+          <span class="menu-item-parent">{{ 'My Lists' | i18n }}</span></a
+        >
         <ul>
-          <li routerLinkActive="active" *ngFor='let wishlist of wishlists; index as i'>
-            <a routerLink="/wishlistPremiere/wishlists/details/{{wishlist._id}}" (click)="onClick($event)">
+          <li
+            routerLinkActive="active"
+            *ngFor="let wishlist of wishlists; index as i"
+          >
+            <a
+              routerLink="/wishlistPremiere/wishlists/details/{{
+                wishlist._id
+              }}"
+              (click)="onClick($event)"
+            >
               <i class="fa fa-lg fa-fw fa-gift"></i>
-              {{wishlist.name}}
+              {{ wishlist.name }}
             </a>
           </li>
           <li routerLinkActive="active" *ngIf="wishlists.length === 0">
-            <a routerLink="" (click)="onClick($event)">
+            <a
+              routerLink="/wishlistPremiere/wishlists/details/0"
+              (click)="onClick($event)"
+            >
               <i class="fa fa-lg fa-fw fa-gift"></i>
               New
             </a>
@@ -66,22 +81,32 @@
       </li>
 
       <li>
-        <a routerLinkActive="active" routerLink="/wishlistPremiere/wishlists/following" title="Following">
-          <i class="fa fa-lg fa-fw fa-user-plus"></i> <span
-            class="menu-item-parent">{{'Following' | i18n}}</span></a>
+        <a
+          routerLinkActive="active"
+          routerLink="/wishlistPremiere/wishlists/following"
+          (click)="onClick($event)"
+          title="Following"
+        >
+          <i class="fa fa-lg fa-fw fa-user-plus"></i>
+          <span class="menu-item-parent">{{ 'Following' | i18n }}</span></a
+        >
       </li>
 
       <li>
-        <a routerLinkActive="active" routerLink="/wishlistPremiere/wishlists/details/0" title="Create new wishlist">
-          <i class="fa fa-lg fa-fw fa-gift"></i> <span
-            class="menu-item-parent">{{'New Wishlist' | i18n}}</span></a>
+        <a
+          routerLinkActive="active"
+          routerLink="/wishlistPremiere/wishlists/details/0"
+          (click)="onClick($event)"
+          title="Create new wishlist"
+        >
+          <i class="fa fa-lg fa-fw fa-gift"></i>
+          <span class="menu-item-parent">{{ 'New Wishlist' | i18n }}</span></a
+        >
       </li>
 
       <!-- <li aside-chat></li> -->
     </ul>
-
   </nav>
 
   <sa-minify-menu></sa-minify-menu>
-
 </aside>

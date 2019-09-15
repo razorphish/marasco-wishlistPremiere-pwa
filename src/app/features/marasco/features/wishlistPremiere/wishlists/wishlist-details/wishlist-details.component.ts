@@ -175,6 +175,7 @@ export class WishlistDetailsComponent implements OnInit, OnDestroy {
           this.selectedStatus.push(this.wishlist.statusId);
           this.isUpdate = true;
         } else {
+          this.wishlist = this.defaultWishlist;
           this.isUpdate = false;
         }
       })
